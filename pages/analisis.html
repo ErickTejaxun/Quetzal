@@ -61,65 +61,7 @@
     <div class="row row-cols-10">                        
         <div class="mb-3">
             <label for="default" class="form-label"></label>
-            <textarea class="codemirror-textarea form-control" name="inpt" id="inpt" cols="30" rows="10">println(&#34;--------------Pruebas desarrollo&#34;);
-println(&#34;--------------Sumas------------------&#34;);
-println(2 + 3.3);
-println(2.3 + 8);
-println(1.2 + 5.4);
-println(2+3);
-
-
-println(&#34;--------------Restas------------------&#34;);
-println(2 - 3.3 );
-println(2.3 - 8 );
-println(1.2 - 5.4 );
-println(2-3 );
-
-
-#JOLC Compiladores 2 USAC 2021
-println(&#34;--------------Literales------------------&#34;);
-println(10);
-println(10.3);
-println(10.3333333333333333);
-println(nothing);
-println(true);
-println(false);
-println(nothing);
-println(&#39;3333433&#39;);
-println(-3);
-println(23+6.66+66);
-
-
-#Multiplicacion
-#JOLC Compiladores 2 USAC 2021
-println(&#34;--------------Multiplicacion------------------&#34;);
-println(-10+333+10);
-println(&#34;Hola&#34; * &#34;Mundo&#34;);
-
-
-val1 = 1::Int64;
-val2 = 10::Int64;
-val3 = 2021.2020::Float64;
-
-println(&#34;Probando declaracion de variables&#34;);
-println(val1, &#34; &#34;, val2, &#34; &#34;, val3);
-println(&#34;---------------------------------&#34;);
-# COMENTARIO DE UNA LINEA
-val1 = val1 + 41 - 123 * 4 / (2 + 2 * 2) - (10 + (125 % 5)) * 2 ^ 2;
-val2 = 11 * (11 % (12 + -10)) + 22 / 2;
-val3 = 2 ^ (2 * 12 / 6) + 25 / 5#= COMENTARIO
-MULTILINEA =#;
-println(&#34;Probando asignación de variables y aritmeticas&#34;);
-println(val1, &#34; &#34;, val2, &#34; &#34;, val3);
-println(&#34;---------------------------------&#34;);
-
-rel1 = (((val1 - val2) == 24) &amp;&amp; (true &amp;&amp; (false || 5 &gt;= 5))) || ((7*7) != (15+555) || -61 &gt; 51);
-rel2 = (7*7) &lt;= (15+555) &amp;&amp; 1 &lt; 2;
-rel3 = ((0 == 0) != ((532 &gt; 532)) == (&#34;Hola&#34; == &#34;Hola&#34;)) &amp;&amp; (false || (false == true));
-println(&#34;Probando relacionales y logicas&#34;);
-
-
-</textarea>
+            <textarea class="codemirror-textarea form-control" name="inpt" id="inpt" cols="30" rows="10"></textarea>
             <div id="posicion" name="posicion" class="form-text">Posición</div>
         </div>                             
     </div>   
@@ -129,52 +71,29 @@ println(&#34;Probando relacionales y logicas&#34;);
     </div>       
 </main>
 
+<script> var exports = {}; </script>
 <script src="../static/codemirror/lib/codemirror.js"></script>
+<script src="../static/codemirror/mode/julia/julia.js"></script>
 <script src="../static/codemirror/mode/julia/julia.js"></script>
 <script src="../static/codemirror/mode/shell/shell.js"></script>
 <script src="../static/codemirror/mode/javascript/javascript.js"></script>
 <script src="../static/js/editor_conf.js"></script>
+<script src="../quetzal/core/gramatica.js"></script>
+<script src="../quetzal/core/NodoAST.js"></script>
+<script src="../quetzal/core/Utilidades.js"></script>
+
 
 
 <script type="text/javascript">  
     // Primero limpiamos la consola de salida
     
     function analyze()
-    {        
+    {       
         var code = editorInput.getValue();
-        $.ajax({
-            type: "POST",
-            url: '/analyze',
-            dataType: "json",
-            data: {inpt:code},            
-            success: function(response)
-            {                
-                var salida = undefined;
-                (response.output).forEach(element => 
-                {                                        
-                    salida = salida == undefined ? element : salida + '\n' + element;
-                });                 
-                salida = salida == undefined ? ' ' : salida;
-                editorOutput.setValue(salida);                                  
-                if(response.errores!=true)
-                {
-                    toastr.info('Ejecución exitosa');
-                }
-                else
-                {
-                    toastr.warning('Se han encontrado errores. Por favor vea el área de reportes');
-                }
-            },
-            error: function(error)
-            {            
-                editorOutput.setValue(''); 
-                toastr.error('Error al conectar con el servidor');
-            }
-
-        });
+        toastr.error(code);
+        gramatica.parse(code); 
+        // Aquí mandamos a llamar nuestro parser.
     }
-</script><script type=""
-
+</script>
 </body>
-
 </html>

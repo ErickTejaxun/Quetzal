@@ -16,7 +16,6 @@ var editorOutput = CodeMirror.fromTextArea(document.getElementById("output"),{
     matchBrackets: true  
 });
 
-
 CodeMirror.on(editorInput, "cursorActivity", (instance, obj)=>{        
     var posicion = document.getElementById("posicion");
     var cursor = instance.doc.getCursor();

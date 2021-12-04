@@ -13,6 +13,40 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+/* Area de utilidades */
+var Utilidades = /** @class */ (function () {
+    function Utilidades() {
+        this.listaErrores = new Array();
+        this.consolaSalida = new Array();
+    }
+    /* Area de manejo de errores. */
+    Utilidades.prototype.registrarErrorLexico = function (linea, columna, id, descripcion, archivo) {
+        var nuevoError = new error(linea, columna, id, descripcion, archivo);
+        nuevoError.setTipoLexico();
+        this.listaErrores.push(nuevoError);
+    };
+    Utilidades.prototype.registrarErrorSintactico = function (linea, columna, id, descripcion, archivo) {
+        var nuevoError = new error(linea, columna, id, descripcion, archivo);
+        nuevoError.setTipoSintactico();
+        this.listaErrores.push(nuevoError);
+    };
+    Utilidades.prototype.registrarErrorSemantico = function (linea, columna, id, descripcion, archivo) {
+        var nuevoError = new error(linea, columna, id, descripcion, archivo);
+        nuevoError.setTipoSemantico();
+        this.listaErrores.push(nuevoError);
+    };
+    /* Area de manejo de consola de salida */
+    Utilidades.prototype.imprimirEnConsola = function (cadena) {
+        this.consolaSalida.push(cadena);
+    };
+    /* Area de iniciacion */
+    Utilidades.prototype.iniciacion = function () {
+        this.consolaSalida = new Array();
+        this.listaErrores = new Array();
+    };
+    return Utilidades;
+}());
+var global_utilidades = new Utilidades();
 //áre de manejo de errores. 
 var TipoError;
 (function (TipoError) {
@@ -27,7 +61,27 @@ var error = /** @class */ (function () {
         this.id = id;
         this.descripcion = descripcion;
         this.archivo = archivo;
+        this.tipo = TipoError.SINTACTICO;
     }
+    error.prototype.setTipoLexico = function () {
+        this.tipo = TipoError.LEXICO;
+    };
+    error.prototype.setTipoSintactico = function () {
+        this.tipo = TipoError.SINTACTICO;
+    };
+    error.prototype.setTipoSemantico = function () {
+        this.tipo = TipoError.SEMANTICO;
+    };
+    error.prototype.getCadenaTipo = function () {
+        switch (this.tipo) {
+            case TipoError.LEXICO:
+                return "Léxico";
+            case TipoError.SINTACTICO:
+                return "Sintáctico";
+            case TipoError.SEMANTICO:
+                return "Semántico";
+        }
+    };
     return error;
 }());
 //Fin manejo de errores
@@ -149,3 +203,62 @@ var Expresion = /** @class */ (function (_super) {
     }
     return Expresion;
 }(NodoAST));
+var Entero = /** @class */ (function (_super) {
+    __extends(Entero, _super);
+    function Entero(linea, columna, valor) {
+        var _this = _super.call(this, linea, columna) || this;
+        _this.valor = valor;
+        return _this;
+    }
+    Entero.prototype.getTipo = function (entorno) {
+        return new Tipo(TipoPrimitivo.INT);
+    };
+    Entero.prototype.getValor = function (entorno) {
+        return this.valor;
+    };
+    return Entero;
+}(Expresion));
+/* Implementación de las instrucciones */
+var Instruccion = /** @class */ (function (_super) {
+    __extends(Instruccion, _super);
+    function Instruccion() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Instruccion;
+}(NodoAST));
+var Bloque = /** @class */ (function (_super) {
+    __extends(Bloque, _super);
+    function Bloque(linea, columna) {
+        var _this = _super.call(this, linea, columna) || this;
+        _this.instrucciones = new Array();
+        return _this;
+    }
+    Bloque.prototype.registrarInstruccion = function (instruccion) {
+        this.instrucciones.push(instruccion);
+    };
+    Bloque.prototype.ejecutar = function (entorno) {
+        this.instrucciones.forEach(function (instruccion) {
+            instruccion.ejecutar(entorno);
+        });
+    };
+    return Bloque;
+}(Instruccion));
+var Imprimir = /** @class */ (function (_super) {
+    __extends(Imprimir, _super);
+    function Imprimir(linea, columna, expresion) {
+        var _this = _super.call(this, linea, columna) || this;
+        _this.expresion = expresion;
+        return _this;
+    }
+    Imprimir.prototype.ejecutar = function (entorno) {
+        var tipo = this.expresion.getTipo(entorno);
+        var valor = this.expresion.getValor(entorno);
+        /*Implementar verificación de tipos para imprimir de forma diferente el valor
+        1. En arreglos
+        2. En structs
+        */
+        // En caso contrario, solamente imprimimos		
+        global_utilidades.imprimirEnConsola("".concat(valor));
+    };
+    return Imprimir;
+}(Instruccion));

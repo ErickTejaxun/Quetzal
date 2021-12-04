@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",     
+    "rootDir": ".",
+    "outDir": "../dist/",
+  },
+  "files": [],
+  "references": [
+    { "path": "./core" }
+  ]
+}
