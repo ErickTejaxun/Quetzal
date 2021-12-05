@@ -350,6 +350,67 @@ class Suma
                 }
             }
             return new Tipo(TipoPrimitivo.ERROR);        
+        }        
+
+        this.getValor= function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '+','Error de tipos en operación suma. '+this.expresionI.getTipo(entorno).getNombreTipo()+' + '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+
+            var valorI = this.expresionI.getValor(entorno);
+            var valorD = this.expresionD.getValor(entorno);
+            if(tipo.esCadena())
+            {
+                return valorI.toString() + valorD.toString();
+            }
+            if(tipo.esDouble())
+            {
+                return parseFloat(valorI) +parseFloat(valorD);
+            }
+            if(tipo.esEntero())
+            {
+                return parseInt(valorI) +parseInt(valorD);
+            }            
+        }
+    }
+}
+
+
+class Resta
+{
+    constructor(linea, columna, expresionI, expresionD)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresionI = expresionI;
+        this.expresionD = expresionD;
+        this.getTipo = function(entorno)
+        {
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+           
+            if(tipoI.esCadena() || tipoD.esCadena())
+            {
+                return new Tipo(TipoPrimitivo.STRING);
+            }
+            if(tipoI.esDouble() || tipoD.esDouble())
+            {
+                return new Tipo(TipoPrimitivo.DOUBLE);
+            }
+
+            if(tipoI.esEntero() || tipoI.esChar())
+            {
+                if(tipoD.esEntero() || tipoD.esChar())
+                {
+                    return new Tipo(TipoPrimitivo.INT);
+                }
+            }
+            return new Tipo(TipoPrimitivo.ERROR);        
         }
 
         this.getValor= function(entorno)
@@ -358,7 +419,7 @@ class Suma
             if(tipo.esError())
             {
                 //Registramos el error
-                Utils.registrarErrorLexico(this.linea, this.columna, '+','Error de tipos en operación suma. '+this.expresionI.getTipo(entorno).getNombreTipo()+' + '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                Utils.registrarErrorSemantico(this.linea, this.columna, '-','Error de tipos en operación resta. '+this.expresionI.getTipo(entorno).getNombreTipo()+' - '+ this.expresionD.getTipo(entorno).getNombreTipo());
                 return;
             }
 
@@ -431,7 +492,7 @@ class Print
             {
                 Utils.imprimirConsola(valor);
             }            
-        }
+        }        
     }
 }
 

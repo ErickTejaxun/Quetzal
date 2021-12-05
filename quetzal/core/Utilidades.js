@@ -101,9 +101,7 @@ class Utilidades
         {
             this.listaErrores = new Array;
             this.consolaSalida = new Array;            
-        }
-
-        
+        }        
     }
 }
 

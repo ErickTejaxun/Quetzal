@@ -150,19 +150,16 @@ PRINT : print '(' E ')' ';'
 E   : '(' E ')'
 	{
 		$$ = $1;		
-	}
-	
+	}	
     | E '+' E
 	{
 		$$ = new Suma(@1.first_line-1,@1.first_column-1,$1,$3);	
-	}
-	/*
+	}	
     | E '-' E
 	{
-		$$ = crearNodo("-",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
+		$$ = new Resta(@1.first_line-1,@1.first_column-1,$1,$3);
 	}
+	/*
     | E '*' E
 	{
 		$$ = crearNodo("*",@1.first_line-1,@1.first_column-1);
