@@ -55,21 +55,101 @@
     <button type="button" class="btn btn-secondary">Mirilla</button>
     <button type="button" class="btn btn-success">Bloque</button> 
 
-    <div class="row-cols-10">
-        <h1 class="display-4">Área de edición</h1>
+    <div role="main-contenedores" class="container">
+        <div class="row-cols-10">
+            <h1 class="display-4">Quetzal</h1>
+        </div>      
+        <div class="row row-cols-10">        
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="consola-tab" data-bs-toggle="tab" data-bs-target="#consola" type="button" role="tab" aria-controls="consola" aria-selected="true">Área de edición</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link  id="tabla-simbolos-tab" data-bs-toggle="tab" data-bs-target="#tabla-simbolos" type="button" role="tab" aria-controls="tabla-simbolos" aria-selected="true">Tabla símbolos</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="tabla-errores-tab" data-bs-toggle="tab" data-bs-target="#tabla-errores" type="button" role="tab" aria-controls="tabla-errores" aria-selected="false">Tabla de errores</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="reporte-ast-tab" data-bs-toggle="tab" data-bs-target="#reporte-ast" type="button" role="tab" aria-controls="reporte-ast" aria-selected="false">Reporte AST</button>
+                </li>
+              </ul>
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="consola" role="tabpanel" aria-labelledby="consola-tab">                
+                    <div class="row row-cols-10">                        
+                        <div class="mb-3">
+                            <label for="default" class="form-label"></label>
+                            <textarea class="codemirror-textarea form-control" name="inpt" id="inpt" cols="30" rows="10"></textarea>
+                            <div id="posicion" name="posicion" class="form-text">Posición</div>
+                        </div>                             
+                    </div>   
+                    <div class="row row-cols-10">        
+                        <h1 class="display-4">Consola de salida</h1>
+                        <textarea class="codemirror-textarea" name="output" id="output" cols="30" rows="10"></textarea>              
+                    </div>
+                </div>                  
+                <div class="tab-pane fade show active" id="tabla-simbolos" role="tabpanel" aria-labelledby="tabla-simbolos-tab">
+                  <div class="container">
+                    <div class="row">
+                      <h3 class="display-4">Tabla de símbolos</h3>
+                    </div>
+                    <div class="row">
+                      <table id="tablaSimbolos"  class="display" style="width:100%" >
+                        <thead>
+                          <tr>
+                            <th>Número</th>
+                            <th>Id</th>
+                            <th>Tipo</th>
+                            <th>Rol</th>
+                            <th>Ámbito</th>
+                            <th>Línea</th>
+                            <th>Columna</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="tabla-errores" role="tabpanel" aria-labelledby="tabla-errores-tab">
+                  <div class="container">
+                    <div class="row">
+                      <h3 class="display-4">Lista de errores</h3>
+                    </div>
+                    <div class="row">
+                      <table id="tablaErrores"  class="display" style="width:100%">
+                        <thead>
+                          <tr>
+                            <th>Número</th>
+                            <th>ID</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Línea</th>
+                            <th>Columnas</th>
+                            <th>Hora</th>
+                            <th>Archivo</th>                        
+                          </tr>
+                        </thead>                    
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="reporte-ast" role="tabpanel" aria-labelledby="reporte-ast-tab">              
+                  <div class="card" style="width: 18rem;">
+                    <form action="/descargar" method="post">
+                      <div class="form-group">
+                        <label for="exampleInputEmail1">Descargar como pdf</label>                    
+                      </div>
+                      <button type="submit" class="btn btn-primary">Descargar</button>
+                    </form>
+                  </div>              
+                </div>
+              </div>
+        </div>       
     </div>
-    <div class="row row-cols-10">                        
-        <div class="mb-3">
-            <label for="default" class="form-label"></label>
-            <textarea class="codemirror-textarea form-control" name="inpt" id="inpt" cols="30" rows="10"></textarea>
-            <div id="posicion" name="posicion" class="form-text">Posición</div>
-        </div>                             
-    </div>   
-    <div class="row row-cols-10">        
-        <h1 class="display-4">Consola de salida</h1>
-        <textarea class="codemirror-textarea" name="output" id="output" cols="30" rows="10"></textarea>              
-    </div>       
 </main>
+
+
+
 
 <script> var exports = {}; </script>
 <script src="../static/codemirror/lib/codemirror.js"></script>
@@ -78,31 +158,72 @@
 <script src="../static/codemirror/mode/shell/shell.js"></script>
 <script src="../static/codemirror/mode/javascript/javascript.js"></script>
 <script src="../static/js/editor_conf.js"></script>
+
 <script src="../quetzal/core/gramatica.js"></script>
 <script src="../quetzal/core/core.js"></script>
 <script src="../quetzal/core/Utilidades.js"></script>
 
 
-
 <script type="text/javascript">  
-    // Primero limpiamos la consola de salida
-    
+    var tablaErrores = $('#tablaErrores').DataTable();
+    var tablaSimbolos = $('#tablaSimbolos').DataTable();       
     function analyze()
     {       
-        var code = editorInput.getValue();
-        toastr.error(code);
-        var raiz = gramatica.parse(code);         
-        //console.log(raiz);        
-        if(raiz!= null && raiz != undefined)
-        {
-            var entornoGlobal = new Entorno(null);
-            raiz.ejecutar(entornoGlobal);
-            // Revisamos las salidas de la variable global 'Utils'
-            var cadenaSalida = Utils.getCadenaSalida();
-            editorOutput.setValue(cadenaSalida);
+        editorOutput.setValue(' ');
+        Utils.LimpiarTodo();
+        var code = editorInput.getValue();   
+        try {     
+            tablaErrores.clear().draw(); //Limpiamos la tabla con datos.
+            tablaSimbolos.clear().draw(); //Limpiamos la tabla con datos.
+            var raiz = gramatica.parse(code);                 
+            if(raiz!= null && raiz != undefined)
+            {            
+                var entornoGlobal = new Entorno(null);
+                raiz.ejecutar(entornoGlobal);
+                var cadenaSalida = Utils.getCadenaSalida();
+                var listaErrores = Utils.getErrores();
+                if(listaErrores.length>0)
+                {
+                    toastr.warning('Se han encontrado '+ listaErrores.length.toString()+' errores. Ver reporte.');
+                    //Agregamos la lista de errores en nuestra tabla.                    
+                    var contador = 1;
+                    listaErrores.forEach(item => {
+                        tablaErrores.row.add([contador, item.id, item.getCadenaTipo(),item.descripcion, item.linea, item.columna, item.fecha, item.archivo]);
+                    });  
+                    tablaErrores.draw();                
+                }            
+                else
+                {
+                    toastr.success('Ejecución exitosa');
+                }
+                editorOutput.setValue(cadenaSalida); 
+            }
+            else
+            {
+                toastr.error('Ha ocurrido algún error.');
+            }  
         }
-        // Aquí mandamos a llamar nuestro parser.
-    }
+        catch (error) 
+        {
+            var listaErrores = Utils.getErrores();
+            if(listaErrores.length>0)
+            {
+                toastr.warning('Se han encontrado '+ listaErrores.length.toString()+' errores. Ver reporte.');
+                //Agregamos la lista de errores en nuestra tabla.
+                tablaErrores.clear().draw(); //Limpiamos la tabla con datos.
+                var contador = 1;
+                listaErrores.forEach(item => {
+                    tablaErrores.row.add([contador, item.id, item.getCadenaTipo(),item.descripcion, item.linea, item.columna, item.fecha, item.archivo]);
+                });  
+                tablaErrores.draw();             
+            }            
+            else
+            {
+                toastr.success('Ejecución exitosa');
+            }            
+            console.log(error);
+        }              
+    }  
 </script>
 </body>
 </html>

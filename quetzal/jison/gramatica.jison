@@ -1,5 +1,14 @@
 
 %{	
+
+	var debugMode = false;
+	function debugPrint(valor)
+	{
+		if(debugMode)
+		{
+			debugPrint(valor);
+		}
+	}
 %}
 %lex
 %options case-insensitive
@@ -17,137 +26,64 @@
 [0-9]+"."[0-9]+	 	  return 'double'
 [0-9]+				  return 'entero'
 \"(\\.|[^"])*\" 	  return 'texto'
-\'(\\.|[^'])*\' 	  return 'textosimple'
+\'(\\.|[^'])\' 	      return 'caracter'
 
 //AUMENTO DECREMENTO
-"++"                  %{ console.log('++');return '++'; %}
-"--"                  %{ console.log('--');return '--'; %}
+"++"                  %{ debugPrint('++');return '++'; %}
+"--"                  %{ debugPrint('--');return '--'; %}
 //asignacion y Eeracion
-"+="                  %{ console.log('+=');return '+='; %}
-"*="                  %{ console.log('*-');return '*-'; %}
-"-="                  %{ console.log('-=');return '-='; %}
-"/="                  %{ console.log('/=k');return '/='; %}
+"+="                  %{ debugPrint('+=');return '+='; %}
+"*="                  %{ debugPrint('*-');return '*-'; %}
+"-="                  %{ debugPrint('-=');return '-='; %}
+"/="                  %{ debugPrint('/=k');return '/='; %}
 //Eeradores relacionales
-">="                  %{ console.log('>=');return '>='; %}
-"<="                  %{ console.log('<=');return '<='; %}
-"=="                  %{ console.log('==');return '=='; %}
-"!="                  %{ console.log('!=');return '!='; %}
+">="                  %{ debugPrint('>=');return '>='; %}
+"<="                  %{ debugPrint('<=');return '<='; %}
+"=="                  %{ debugPrint('==');return '=='; %}
+"!="                  %{ debugPrint('!=');return '!='; %}
 
 //Eeradores Logicos
-"||"                  %{ console.log('||');return '||'; %}
-"??"                  %{ console.log('??');return '??'; %}
-"&&"                  %{ console.log('&&');return '&&'; %}
-"!"                   %{ console.log('!');return '!'; %}
+"||"                  %{ debugPrint('||');return '||'; %}
+"??"                  %{ debugPrint('??');return '??'; %}
+"&&"                  %{ debugPrint('&&');return '&&'; %}
+"!"                   %{ debugPrint('!');return '!'; %}
 //Eeradores aritmeticos
-"*"                   %{ console.log('*');return '*'; %}
-"->"                 %{ console.log('->');return 'flecha'; %} 
-"/"                   %{ console.log('/');return '/'; %}
-"-"                   %{ console.log('-');return '-'; %}
-"+"                   %{ console.log('+');return '+'; %}
-"^"                   %{ console.log('^');return '^'; %}
-"="                   %{ console.log('=');return '='; %}
+"*"                   %{ debugPrint('*');return '*'; %}
+"->"                 %{ debugPrint('->');return 'flecha'; %} 
+"/"                   %{ debugPrint('/');return '/'; %}
+"-"                   %{ debugPrint('-');return '-'; %}
+"+"                   %{ debugPrint('+');return '+'; %}
+"^"                   %{ debugPrint('^');return '^'; %}
+"="                   %{ debugPrint('=');return '='; %}
 //signos de agrupacion
-"("                   %{ console.log('(');return '('; %}
-")"                   %{ console.log(')');return ')'; %}
-"{"                   %{ console.log('{');return '{'; %}
-"}"                   %{ console.log('}');return '}'; %}
-"["                   %{ console.log('[');return '['; %}
-"]"                   %{ console.log(']');return ']'; %}
+"("                   %{ debugPrint('(');return '('; %}
+")"                   %{ debugPrint(')');return ')'; %}
+"{"                   %{ debugPrint('{');return '{'; %}
+"}"                   %{ debugPrint('}');return '}'; %}
+"["                   %{ debugPrint('[');return '['; %}
+"]"                   %{ debugPrint(']');return ']'; %}
 //otros signitos culeros
 
-">"                   %{ console.log('>');return '>'; %}
-"<"                   %{ console.log('<');return '<'; %}
-","                   %{ console.log(',');return ','; %}
-"."                   %{ console.log('.');return '.'; %}
+">"                   %{ debugPrint('>');return '>'; %}
+"<"                   %{ debugPrint('<');return '<'; %}
+","                   %{ debugPrint(',');return ','; %}
+"."                   %{ debugPrint('.');return '.'; %}
 					  
-":"                   %{ console.log(':');return ':'; %}
-";"                   %{ console.log(';');return ';'; %}
-//PALABRAS RESERVADAS
-"entero"              %{ console.log(yytext);return 'entero'; %}
-"booleano"            %{ console.log(yytext);return 'booleano'; %}
-"decimal"             %{ console.log(yytext);return 'decimal'; %}
-"caracter"            %{ console.log(yytext);return 'caracter'; %}
-"tamanio"             %{ console.log(yytext);return 'tamanio'; %}
-"concatenar"          %{ console.log(yytext);return 'concatenar'; %}
-"convertiracadena"    %{ console.log(yytext);return 'convertiracadena'; %}
-"convertiraentero"    %{ console.log(yytext);return 'convertiraentero'; %}
-"println"		      %{ console.log(yytext);return 'println'; %}
-"print"		      	  %{ console.log(yytext);return 'print'; %}
-//CLASE
-"clase"     		  %{ console.log(yytext);return 'clase'; %}
-"este"			      %{ console.log(yytext);return 'este'; %}
-//VISIBILIDAD
-"publico"       	  %{ console.log(yytext);return 'publico'; %}
-"protegido"      	  %{ console.log(yytext);return 'protegido'; %}
-"privado"    		  %{ console.log(yytext);return 'privado'; %}
-//HERENCIA
-"hereda_de"           %{ console.log(yytext);return 'hereda_de'; %}
-//FUNCIONES Y PROCEDIMIENTOS
-"vacio"               %{ console.log(yytext);return 'vacio'; %}
-"retorno"             %{ console.log(yytext);return 'retorno'; %}
-"funcion"		      %{ console.log(yytext);return 'funcion'; %}
-//SOBREESCRIBIR
-"@sobrescribir"       %{ console.log(yytext);return 'sobrescribir'; %}
-//PROCEDIMIENTO PRINCIPAL
-"principal"           %{ console.log(yytext);return 'principal'; %}
-//PUNTEROS
-"crearpuntero"        %{ console.log(yytext);return 'crearPuntero'; %}
-"reservarmemoria"     %{ console.log(yytext);return 'reservarMemoria'; %}
-"consultartamanio"    %{ console.log(yytext);return 'consultartamanio'; %}
-"destruirPuntero"     %{ console.log(yytext);return 'destruirPuntero'; %}
+":"                   %{ debugPrint(':');return ':'; %}
+";"                   %{ debugPrint(';');return ';'; %}
 
+"null"		      %{ debugPrint(yytext);return 'nulo'; %}
+"true"		      %{ debugPrint(yytext);return 'verdadero'; %}
+"false"		      %{ debugPrint(yytext);return 'falso'; %}
+"println"		      %{ debugPrint(yytext);return 'println'; %}
+"print"		      	  %{ debugPrint(yytext);return 'print'; %}
+"typeof"		      	  %{ debugPrint(yytext);return 'tipode'; %}
 
-"obtenerDireccion"    %{ console.log(yytext);return 'obtenerDireccion'; %}
-//SENTENCIAS
-"importar"			  %{ console.log(yytext);return 'importar'; %}
-"nuevo"               %{ console.log(yytext);return 'nuevo'; %}
-"'\0'"                %{ console.log(yytext);return 'nulo'; %}
-"nada"				  %{ console.log(yytext);return 'nada'; %}
-//ROMPER CICLOS
-"romper"              %{ console.log(yytext);return 'romper'; %}
-"continuar"           %{ console.log(yytext);return 'continuar'; %}
-//ESTRUCTURAS
-"estructura"          %{ console.log(yytext);return 'estructura'; %}
-"lista"               %{ console.log(yytext);return 'lista'; %}
-"insertar"            %{ console.log(yytext);return 'insertar'; %}
-"obtener"			  %{ console.log(yytext);return 'obtener'; %}
-"buscar"			  %{ console.log(yytext);return 'buscar'; %}
-//PILA -- COLA
-"pila"		      	  %{ console.log(yytext);return 'pila'; %}
-"apilar"		      %{ console.log(yytext);return 'apilar'; %}
-"desapilar"		      %{ console.log(yytext);return 'desapilar'; %}
-"cola"		      	  %{ console.log(yytext);return 'cola'; %}
-"encolar"		      %{ console.log(yytext);return 'encolar'; %}
-"desencolar"	      %{ console.log(yytext);return 'desencolar'; %}
-//SENTENCIAS DE CONTROL
-"si"                  %{ console.log(yytext);return 'si'; %}
-"es_verdadero"        %{ console.log(yytext);return 'esverdadero'; %}
-"es_falso"            %{ console.log(yytext);return 'esfalso'; %}
-"fin-si"		      %{ console.log(yytext);return 'finsi'; %}
-"evaluar_si"          %{ console.log(yytext);return 'evaluarsi'; %}
-"es_igual_a"          %{ console.log(yytext);return 'esiguala'; %}
-"repetir_mientras"    %{ console.log(yytext);return 'repetirmientras'; %}
-"hacer"               %{ console.log(yytext);return 'hacer'; %}
-"mientras"            %{ console.log(yytext);return 'mientras'; %}
-"ciclo_doble_condicion"       %{ console.log(yytext);return 'ciclodoble'; %}
-"repetir"		      %{ console.log(yytext);return 'repetir'; %}
-"hasta_que"		      %{ console.log(yytext);return 'hastaque'; %}
-"repetir_contando"    %{ console.log(yytext);return 'repetircontando'; %}
-"variable"            %{ console.log(yytext);return 'variable'; %}
-"desde"               %{ console.log(yytext);return 'desde'; %}
-"hasta"               %{ console.log(yytext);return 'hasta'; %}
-"enciclar"            %{ console.log(yytext);return 'enciclar'; %}
-"contador"            %{ console.log(yytext);return 'contador'; %}
-"defecto"             %{ console.log(yytext);return 'defecto'; %}
-"true"                %{ console.log(yytext);return 'verdadero'; %}
-"false"               %{ console.log(yytext);return 'falso'; %}
-//ENTRADA Y LECTURA DE DATOS
-"leer_teclado"        %{ console.log(yytext);return 'leerteclado'; %}
-([a-zA-Z]|"_"|"$")([a-zA-Z]|[0-9]|"_"|"$")* %{ console.log(yytext);
+([a-zA-Z]|"_"|"$")([a-zA-Z]|[0-9]|"_"|"$")* %{ debugPrint(yytext);
 					  return 'id'; %}
 
 <<EOF>>               return 'EOF'
-.                     return 'INVALIDO'
+.                  %{  Utils.registrarErrorLexico(yylloc.first_line, yylloc.first_column, yytext, 'Caracter no válido.'); return 'INVALIDO' %}
 /lex
 
 /* Eerator associations and precedence */
@@ -180,12 +116,22 @@ INICIO	:  INSTRUCCIONES EOF{
 };
 
 INSTRUCCIONES : 
-              INSTRUCCIONES INSTRUCCION { $$ = $1; $$.registrarInstruccion($2);}
-			| INSTRUCCION { $$ = new Bloque(@1.first_line-1,@1.first_column-1); $$.registrarInstruccion($1); }
+              INSTRUCCIONES INSTRUCCION { 
+				  	$$ = $1; 
+					$$.registrarInstruccion($2);
+				}
+			| INSTRUCCION { 
+							$$ = new Bloque(@1.first_line-1,@1.first_column-1); 
+							if($1!=null){$$.registrarInstruccion($1);} // Si es nulo, viene de un error manejado en otras producciones.
+						  }
 ;
 
 INSTRUCCION:  PRINTLN { $$ = $1;}
-			| PRINT { $$ = $1;}
+			| PRINT { $$ = $1;}		
+			| error { 	
+						Utils.registrarErrorSintactico(@1.first_line-1,@1.first_column-1, $1, $1);
+						$$ = null;						
+					}				
 ;
 
 PRINTLN : println '(' E ')' ';'
@@ -201,24 +147,16 @@ PRINT : print '(' E ')' ';'
 		}
 ;
 
-E :  entero
-	{
-		$$ = new Entero(@1.first_line,@1.first_columna, parseInt($1));		
-	}
-;
-
-/*
 E   : '(' E ')'
 	{
-		$$ = crearHoja("EXPRESION",@1.first_line,@1.first_column-1);
-		$$.add($2);
+		$$ = $1;		
 	}
+	
     | E '+' E
 	{
-		$$ = crearNodo("+",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
+		$$ = new Suma(@1.first_line-1,@1.first_column-1,$1,$3);	
 	}
+	/*
     | E '-' E
 	{
 		$$ = crearNodo("-",@1.first_line-1,@1.first_column-1);
@@ -326,31 +264,43 @@ E   : '(' E ')'
 		$$ = crearNodo("Expresion",@1.first_line,@1.first_column);
 		$$.add($1);
 		$$.add($2);
-	}
-    | numero
+	}*/
+    | entero
 	{
-		$$ = Entero(@1.first_line,@1.first_columna, parseInt($1));
+		$$ = new Entero(@1.first_line,@1.first_column, parseInt($1));		
 	}	
 	| double
 	{
-		$$ = crearHoja("DOUBLE",$1,@1.first_line,@1.first_columna);
+		$$ = new Double(@1.first_line,@1.first_column, parseFloat($1));
 	}
     | id 
     {
-		$$ = crearHoja("ID",$1,@1.first_line,@1.first_columna);
+		$$ = new ExpVariable(@1.first_line,@1.first_column,$1);
 	}
 	| texto
 	{
-		$$ = crearHoja("TEXTO",$1,@1.first_line,@1.first_columna);
+		$$ = new ExpString(@1.first_line,@1.first_column,$1);
 		
 	}
-    | textosimple
+    | caracter
 	{
-		$$ = crearHoja("TEXTO",$1,@1.first_line,@1.first_columna);
+		$$ = new ExpString(@1.first_line,@1.first_column,$1);
 	}
 	| nulo
 	{
-		$$ = crearHoja("NULO",$1,@1.first_line,@1.first_columna);
+		$$ = new Nulo(@1.first_line,@1.first_column);
+	}
+	| verdadero
+	{
+		$$ = new ExpBooleana(@1.first_line,@1.first_column, true);
+	}
+	| falso
+	{
+		$$ = new ExpBooleana(@1.first_line,@1.first_column, false);
+	}	
+	| tipode '(' E ')'
+	{
+		$$ = new TipoDe(@1.first_line,@1.first_column,$3);
 	}
 	;
-*/
+

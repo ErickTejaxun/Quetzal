@@ -8,12 +8,17 @@ var TipoError;
 class error
 {
     constructor(linea, columna, id, descripcion, archivo="")
-    {
+    {            
         this.linea = linea;
         this.columna = columna;
         this.id = id;
         this.descripcion = descripcion;
-        this.archivo = archivo;
+        this.archivo = archivo;        
+        // Calculo de timestapm
+        var hoy = new Date();
+        var fecha = hoy.getFullYear()+'-'+(hoy.getMonth()+1)+'-'+hoy.getDate();
+        var hora = hoy.getHours() + ":" + hoy.getMinutes() + ":" + hoy.getSeconds();
+        this.fecha = fecha+' '+hora;                
 
         this.setTipoLexico = function()
         {
@@ -54,21 +59,21 @@ class Utilidades
 
         this.registrarErrorLexico=function(linea, columna, id, descripcion, archivo)
         {
-            var nuevoError = new Error(linea, columna, id, descripcion, archivo);
+            var nuevoError = new error(linea, columna, id, descripcion, archivo);
             nuevoError.setTipoLexico();
             this.listaErrores.push(nuevoError);
         }
 
         this.registrarErrorSintactico=function(linea, columna, id, descripcion, archivo)
         {
-            var nuevoError = new Error(linea, columna, id, descripcion, archivo);
+            var nuevoError = new error(linea, columna, id, descripcion, archivo);
             nuevoError.setTipoSintactico();
             this.listaErrores.push(nuevoError);
         }
 
         this.registrarErrorSemantico=function(linea, columna, id, descripcion, archivo)
         {
-            var nuevoError = new Error(linea, columna, id, descripcion, archivo);
+            var nuevoError = new error(linea, columna, id, descripcion, archivo);
             nuevoError.setTipoSemantico();
             this.listaErrores.push(nuevoError);
         } 
@@ -82,10 +87,23 @@ class Utilidades
         {
             var cadenaSalida = '';
             this.consolaSalida.forEach(function(linea){
-                cadenaSalida = cadenaSalida == ''? (linea):(cadenaSalida+'\n'+linea);
+                cadenaSalida = cadenaSalida == ''? (linea):(cadenaSalida+linea);
             });
             return cadenaSalida;
         }
+
+        this.getErrores = function()
+        {
+            return this.listaErrores;
+        }
+
+        this.LimpiarTodo = function()
+        {
+            this.listaErrores = new Array;
+            this.consolaSalida = new Array;            
+        }
+
+        
     }
 }
 

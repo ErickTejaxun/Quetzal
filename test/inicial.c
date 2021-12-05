@@ -1,0 +1,12 @@
+println(10);
+println(3.33);
+println("hola");
+println(true);
+println(false);
+println('a');
+println(typeof(10));
+println(3.33);
+println("hola");
+println(true);
+println(false);
+println('a');

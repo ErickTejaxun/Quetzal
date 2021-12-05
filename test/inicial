@@ -1,0 +1,17 @@
+println(10);
+println(3.33);;
+println("hola");
+println(true);
+println(false);
+println('a');
+println(typeof(10));
+
+println(typeof(3.33));
+println(typeof("hola"));
+println(typeof(true));
+println(typeof(false));
+println(typeof('a'));
+
+println(5+2+3+3);
+println(5+2+3+3.3);
+println("Hola" + " " + "mundo!");
