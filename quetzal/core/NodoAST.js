@@ -262,3 +262,22 @@ var Imprimir = /** @class */ (function (_super) {
     };
     return Imprimir;
 }(Instruccion));
+var ImprimirLn = /** @class */ (function (_super) {
+    __extends(ImprimirLn, _super);
+    function ImprimirLn(linea, columna, expresion) {
+        var _this = _super.call(this, linea, columna) || this;
+        _this.expresion = expresion;
+        return _this;
+    }
+    ImprimirLn.prototype.ejecutar = function (entorno) {
+        var tipo = this.expresion.getTipo(entorno);
+        var valor = this.expresion.getValor(entorno);
+        /*Implementar verificación de tipos para imprimir de forma diferente el valor
+        1. En arreglos
+        2. En structs
+        */
+        // En caso contrario, solamente imprimimos		
+        global_utilidades.imprimirEnConsola("".concat(valor));
+    };
+    return ImprimirLn;
+}(Instruccion));

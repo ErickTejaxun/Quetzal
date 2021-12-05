@@ -72,21 +72,19 @@
   }
 */
 var gramatica = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[5,6];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,7],$V2=[5,9,14],$V3=[1,13];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"INICIO":3,"INSTRUCCIONES":4,"EOF":5,"INSTRUCCION":6,"IMPRIMIR":7,"imprimir":8,"(":9,"E":10,")":11,";":12,"+":13,"-":14,"*":15,"/":16,"^":17,"!":18,">=":19,"<=":20,"==":21,"!=":22,">":23,"<":24,"||":25,"&&":26,"??":27,"verdadero":28,"falso":29,"++":30,"--":31,"numero":32,"double":33,"id":34,"texto":35,"textosimple":36,"nulo":37,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"INSTRUCCION",8:"imprimir",9:"(",11:")",12:";",13:"+",14:"-",15:"*",16:"/",17:"^",18:"!",19:">=",20:"<=",21:"==",22:"!=",23:">",24:"<",25:"||",26:"&&",27:"??",28:"verdadero",29:"falso",30:"++",31:"--",32:"numero",33:"double",34:"id",35:"texto",36:"textosimple",37:"nulo"},
-productions_: [0,[3,2],[4,2],[4,1],[7,5],[10,3],[10,3],[10,3],[10,3],[10,3],[10,3],[10,2],[10,2],[10,3],[10,3],[10,3],[10,3],[10,3],[10,3],[10,3],[10,3],[10,3],[10,1],[10,1],[10,2],[10,2],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1]],
+symbols_: {"error":2,"INICIO":3,"INSTRUCCIONES":4,"EOF":5,"INSTRUCCION":6,"PRINTLN":7,"PRINT":8,"println":9,"(":10,"E":11,")":12,";":13,"print":14,"entero":15,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",9:"println",10:"(",12:")",13:";",14:"print",15:"entero"},
+productions_: [0,[3,2],[4,2],[4,1],[6,1],[6,1],[7,5],[8,5],[11,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-
-	var entorno = Core.Entorno(None);
-	$$[$0-1].ejecutar(entorno);
+		
 	return $$[$0-1]; 
 
 break;
@@ -94,181 +92,33 @@ case 2:
  this.$ = $$[$0-1]; this.$.registrarInstruccion($$[$0]);
 break;
 case 3:
- this.$ = Core.Bloque(_$[$0].first_line-1,_$[$0].first_column-1); this.$.registrarInstruccion($$[$0]); 
+ this.$ = new Bloque(_$[$0].first_line-1,_$[$0].first_column-1); this.$.registrarInstruccion($$[$0]); 
 break;
-case 4:
-
-			this.$ = Core.Imprimir(_$[$0-4].first_line-1,_$[$0-4].first_column-1, $$[$0-2]);
-		
-break;
-case 5:
-
-		this.$ = crearHoja("EXPRESION",_$[$0-2].first_line,_$[$0-2].first_column-1);
-		this.$.add($$[$0-1]);
-	
+case 4: case 5:
+ this.$ = $$[$0];
 break;
 case 6:
 
-		this.$ = crearNodo("+",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
+			this.$ = new Println(_$[$0-4].first_line-1,_$[$0-4].first_column-1, $$[$0-2]);
+			console.log(typeof(this.$));
+		
 break;
 case 7:
 
-		this.$ = crearNodo("-",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
+			this.$ = new Print(_$[$0-4].first_line-1,_$[$0-4].first_column-1, $$[$0-2]);
+			console.log(typeof(this.$));
+		
 break;
 case 8:
 
-		this.$ = crearNodo("*",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
-break;
-case 9:
-
-		this.$ = crearNodo("/",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
-break;
-case 10:
-
-		this.$ = crearNodo("^",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
-break;
-case 11:
-
-		this.$ = crearNodo("!",_$[$0].first_line-1,_$[$0].first_column-1);
-		this.$.add($$[$0-1]);
-	
-break;
-case 12:
-
-		this.$ = crearNodo("-",_$[$0-1].first_line-1,_$[$0-1].first_column-1);
-		this.$.add($$[$0-1]);
-	
-break;
-case 13:
-
-		this.$ = crearNodo(">=",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
-break;
-case 14:
-
-		this.$ = crearNodo("<=",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
-break;
-case 15:
-
-		this.$ = crearNodo("==",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
-break;
-case 16:
-
-		this.$ = crearNodo("!=",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
-break;
-case 17:
-
-		this.$ = crearNodo(">",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
-break;
-case 18:
-
-		this.$ = crearNodo("<",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
-break;
-case 19:
-
-		this.$ = crearNodo("||",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
-break;
-case 20:
-
-		this.$ = crearNodo("&&",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
-break;
-case 21:
-
-		this.$ = crearNodo("??",_$[$0-2].first_line-1,_$[$0-2].first_column-1);
-		this.$.add($$[$0-2]);
-		this.$.add($$[$0]);
-	
-break;
-case 22:
-
-		this.$ = crearNodo("Verdadero",_$[$0].first_line,_$[$0].first_column);
-	
-break;
-case 23:
-
-		this.$ = crearNodo("falso",_$[$0].first_line,_$[$0].first_column);
-	
-break;
-case 24: case 25:
-
-		this.$ = crearNodo("Expresion",_$[$0-1].first_line,_$[$0-1].first_column);
-		this.$.add($$[$0-1]);
-		this.$.add($$[$0]);
-	
-break;
-case 26:
-
-		this.$ = Core.Entero(_$[$0].first_line,_$[$0].first_columna, parseInt($$[$0]));
-	
-break;
-case 27:
-
-		this.$ = crearHoja("DOUBLE",$$[$0],_$[$0].first_line,_$[$0].first_columna);
-	
-break;
-case 28:
-
-		this.$ = crearHoja("ID",$$[$0],_$[$0].first_line,_$[$0].first_columna);
-	
-break;
-case 29:
-
-		this.$ = crearHoja("TEXTO",$$[$0],_$[$0].first_line,_$[$0].first_columna);
-		
-	
-break;
-case 30:
-
-		this.$ = crearHoja("TEXTO",$$[$0],_$[$0].first_line,_$[$0].first_columna);
-	
-break;
-case 31:
-
-		this.$ = crearHoja("NULO",$$[$0],_$[$0].first_line,_$[$0].first_columna);
+		this.$ = new Entero(_$[$0].first_line,_$[$0].first_columna, parseInt($$[$0]));
+		console.log(typeof(this.$));
 	
 break;
 }
 },
-table: [{3:1,4:2,6:[1,3]},{1:[3]},{5:[1,4],6:[1,5]},o($V0,[2,3]),{1:[2,1]},o($V0,[2,2])],
-defaultActions: {4:[2,1]},
+table: [{3:1,4:2,6:3,7:4,8:5,9:$V0,14:$V1},{1:[3]},{5:[1,8],6:9,7:4,8:5,9:$V0,14:$V1},o($V2,[2,3]),o($V2,[2,4]),o($V2,[2,5]),{10:[1,10]},{10:[1,11]},{1:[2,1]},o($V2,[2,2]),{11:12,15:$V3},{11:14,15:$V3},{12:[1,15]},{12:[2,8]},{12:[1,16]},{13:[1,17]},{13:[1,18]},o($V2,[2,6]),o($V2,[2,7])],
+defaultActions: {8:[2,1],13:[2,8]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -415,8 +265,7 @@ parse: function parse(input) {
     }
     return true;
 }};
-
-
+	
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -757,17 +606,17 @@ case 4:return;
 break;
 case 5:return;
 break;
-case 6:return 33
+case 6:return 'double'
 break;
-case 7:return 32
+case 7:return 15
 break;
-case 8:return 35
+case 8:return 'texto'
 break;
-case 9:return 36
+case 9:return 'textosimple'
 break;
-case 10: console.log('++');return 30; 
+case 10: console.log('++');return '++'; 
 break;
-case 11: console.log('--');return 31; 
+case 11: console.log('--');return '--'; 
 break;
 case 12: console.log('+=');return '+='; 
 break;
@@ -777,39 +626,39 @@ case 14: console.log('-=');return '-=';
 break;
 case 15: console.log('/=k');return '/='; 
 break;
-case 16: console.log('>=');return 19; 
+case 16: console.log('>=');return '>='; 
 break;
-case 17: console.log('<=');return 20; 
+case 17: console.log('<=');return '<='; 
 break;
-case 18: console.log('==');return 21; 
+case 18: console.log('==');return '=='; 
 break;
-case 19: console.log('!=');return 22; 
+case 19: console.log('!=');return '!='; 
 break;
-case 20: console.log('||');return 25; 
+case 20: console.log('||');return '||'; 
 break;
-case 21: console.log('??');return 27; 
+case 21: console.log('??');return '??'; 
 break;
-case 22: console.log('&&');return 26; 
+case 22: console.log('&&');return '&&'; 
 break;
-case 23: console.log('!');return 18; 
+case 23: console.log('!');return '!'; 
 break;
-case 24: console.log('*');return 15; 
+case 24: console.log('*');return '*'; 
 break;
 case 25: console.log('->');return 'flecha'; 
 break;
-case 26: console.log('/');return 16; 
+case 26: console.log('/');return '/'; 
 break;
-case 27: console.log('-');return 14; 
+case 27: console.log('-');return '-'; 
 break;
-case 28: console.log('+');return 13; 
+case 28: console.log('+');return '+'; 
 break;
-case 29: console.log('^');return 17; 
+case 29: console.log('^');return '^'; 
 break;
 case 30: console.log('=');return '='; 
 break;
-case 31: console.log('(');return 9; 
+case 31: console.log('(');return 10; 
 break;
-case 32: console.log(')');return 11; 
+case 32: console.log(')');return 12; 
 break;
 case 33: console.log('{');return '{'; 
 break;
@@ -819,9 +668,9 @@ case 35: console.log('[');return '[';
 break;
 case 36: console.log(']');return ']'; 
 break;
-case 37: console.log('>');return 23; 
+case 37: console.log('>');return '>'; 
 break;
-case 38: console.log('<');return 24; 
+case 38: console.log('<');return '<'; 
 break;
 case 39: console.log(',');return ','; 
 break;
@@ -829,9 +678,9 @@ case 40: console.log('.');return '.';
 break;
 case 41: console.log(':');return ':'; 
 break;
-case 42: console.log(';');return 12; 
+case 42: console.log(';');return 13; 
 break;
-case 43: console.log(yy_.yytext);return 'entero'; 
+case 43: console.log(yy_.yytext);return 15; 
 break;
 case 44: console.log(yy_.yytext);return 'booleano'; 
 break;
@@ -847,9 +696,9 @@ case 49: console.log(yy_.yytext);return 'convertiracadena';
 break;
 case 50: console.log(yy_.yytext);return 'convertiraentero'; 
 break;
-case 51: console.log(yy_.yytext);return 'println'; 
+case 51: console.log(yy_.yytext);return 9; 
 break;
-case 52: console.log(yy_.yytext);return 'print'; 
+case 52: console.log(yy_.yytext);return 14; 
 break;
 case 53: console.log(yy_.yytext);return 'clase'; 
 break;
@@ -887,7 +736,7 @@ case 69: console.log(yy_.yytext);return 'importar';
 break;
 case 70: console.log(yy_.yytext);return 'nuevo'; 
 break;
-case 71: console.log(yy_.yytext);return 37; 
+case 71: console.log(yy_.yytext);return 'nulo'; 
 break;
 case 72: console.log(yy_.yytext);return 'nada'; 
 break;
@@ -955,14 +804,14 @@ case 103: console.log(yy_.yytext);return 'contador';
 break;
 case 104: console.log(yy_.yytext);return 'defecto'; 
 break;
-case 105: console.log(yy_.yytext);return 28; 
+case 105: console.log(yy_.yytext);return 'verdadero'; 
 break;
-case 106: console.log(yy_.yytext);return 29; 
+case 106: console.log(yy_.yytext);return 'falso'; 
 break;
 case 107: console.log(yy_.yytext);return 'leerteclado'; 
 break;
 case 108: console.log(yy_.yytext);
-					  return 34; 
+					  return 'id'; 
 break;
 case 109:return 5
 break;

@@ -79,7 +79,7 @@
 <script src="../static/codemirror/mode/javascript/javascript.js"></script>
 <script src="../static/js/editor_conf.js"></script>
 <script src="../quetzal/core/gramatica.js"></script>
-<script src="../quetzal/core/NodoAST.js"></script>
+<script src="../quetzal/core/core.js"></script>
 <script src="../quetzal/core/Utilidades.js"></script>
 
 
@@ -91,7 +91,16 @@
     {       
         var code = editorInput.getValue();
         toastr.error(code);
-        gramatica.parse(code); 
+        var raiz = gramatica.parse(code);         
+        //console.log(raiz);        
+        if(raiz!= null && raiz != undefined)
+        {
+            var entornoGlobal = new Entorno(null);
+            raiz.ejecutar(entornoGlobal);
+            // Revisamos las salidas de la variable global 'Utils'
+            var cadenaSalida = Utils.getCadenaSalida();
+            editorOutput.setValue(cadenaSalida);
+        }
         // Aquí mandamos a llamar nuestro parser.
     }
 </script>

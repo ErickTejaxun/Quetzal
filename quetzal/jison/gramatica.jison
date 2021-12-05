@@ -15,7 +15,7 @@
 "/*"[^"*"]~"*/"         return;
 
 [0-9]+"."[0-9]+	 	  return 'double'
-[0-9]+				  return 'numero'
+[0-9]+				  return 'entero'
 \"(\\.|[^"])*\" 	  return 'texto'
 \'(\\.|[^'])*\' 	  return 'textosimple'
 
@@ -175,24 +175,39 @@
 %% /* language grammar */
 
 
-INICIO	:  INSTRUCCIONES EOF{
-	var entorno = Core.Entorno(None);
-	$1.ejecutar(entorno);
+INICIO	:  INSTRUCCIONES EOF{		
 	return $1; 
 };
 
 INSTRUCCIONES : 
               INSTRUCCIONES INSTRUCCION { $$ = $1; $$.registrarInstruccion($2);}
-			| INSTRUCCION { $$ = Core.Bloque(@1.first_line-1,@1.first_column-1); $$.registrarInstruccion($1); }
+			| INSTRUCCION { $$ = new Bloque(@1.first_line-1,@1.first_column-1); $$.registrarInstruccion($1); }
 ;
 
-IMPRIMIR : imprimir '(' E ')' ';'
+INSTRUCCION:  PRINTLN { $$ = $1;}
+			| PRINT { $$ = $1;}
+;
+
+PRINTLN : println '(' E ')' ';'
 		{
-			$$ = Core.Imprimir(@1.first_line-1,@1.first_column-1, $3);
+			$$ = new Println(@1.first_line-1,@1.first_column-1, $3);			
 		}
 ;
 
 
+PRINT : print '(' E ')' ';'
+		{
+			$$ = new Print(@1.first_line-1,@1.first_column-1, $3);			
+		}
+;
+
+E :  entero
+	{
+		$$ = new Entero(@1.first_line,@1.first_columna, parseInt($1));		
+	}
+;
+
+/*
 E   : '(' E ')'
 	{
 		$$ = crearHoja("EXPRESION",@1.first_line,@1.first_column-1);
@@ -314,7 +329,7 @@ E   : '(' E ')'
 	}
     | numero
 	{
-		$$ = Core.Entero(@1.first_line,@1.first_columna, parseInt($1));
+		$$ = Entero(@1.first_line,@1.first_columna, parseInt($1));
 	}	
 	| double
 	{
@@ -338,3 +353,4 @@ E   : '(' E ')'
 		$$ = crearHoja("NULO",$1,@1.first_line,@1.first_columna);
 	}
 	;
+*/

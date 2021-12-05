@@ -356,6 +356,30 @@ class Imprimir extends Instruccion
 
 		// En caso contrario, solamente imprimimos		
 		global_utilidades.imprimirEnConsola(`${valor}`);
+	}	
+}
+
+
+class ImprimirLn extends Instruccion
+{
+	expresion : Expresion;	
+
+	constructor(linea: bigint, columna : bigint, expresion: Expresion)
+	{
+		super(linea, columna);
+		this.expresion = expresion;
 	}
-	
+
+	ejecutar(entorno: Entorno) 
+	{
+		var tipo = this.expresion.getTipo(entorno);
+		var valor = this.expresion.getValor(entorno);		
+		/*Implementar verificación de tipos para imprimir de forma diferente el valor
+		1. En arreglos 
+		2. En structs
+		*/
+
+		// En caso contrario, solamente imprimimos		
+		global_utilidades.imprimirEnConsola(`${valor}`);
+	}	
 }
