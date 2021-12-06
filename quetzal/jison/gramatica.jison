@@ -72,6 +72,7 @@
 ":"                   %{ debugPrint(':');return ':'; %}
 ";"                   %{ debugPrint(';');return ';'; %}
 
+
 "null"		      %{ debugPrint(yytext);return 'nulo'; %}
 "true"		      %{ debugPrint(yytext);return 'verdadero'; %}
 "false"		      %{ debugPrint(yytext);return 'falso'; %}
@@ -79,8 +80,14 @@
 "print"		      	  %{ debugPrint(yytext);return 'print'; %}
 "typeof"		      	  %{ debugPrint(yytext);return 'tipode'; %}
 
-([a-zA-Z]|"_"|"$")([a-zA-Z]|[0-9]|"_"|"$")* %{ debugPrint(yytext);
-					  return 'id'; %}
+/*Tipos */
+"int"   			 %{ debugPrint(yytext);return 'tint'; %}
+"double"   			 %{ debugPrint(yytext);return 'tdouble'; %}
+"string"   			 %{ debugPrint(yytext);return 'tstring'; %}
+"char"			 %{ debugPrint(yytext);return 'tchar'; %}
+"boolean"   		 %{ debugPrint(yytext);return 'boolean'; %}
+"void"   			 %{ debugPrint(yytext);return 'tvoid'; %}
+([a-zA-Z]|"_"|"$")([a-zA-Z]|[0-9]|"_"|"$")* %{ debugPrint(yytext); return 'id'; %}
 
 <<EOF>>               return 'EOF'
 .                  %{  Utils.registrarErrorLexico(yylloc.first_line, yylloc.first_column, yytext, 'Caracter no válido.'); return 'INVALIDO' %}
@@ -111,9 +118,26 @@
 %% /* language grammar */
 
 
-INICIO	:  INSTRUCCIONES EOF{		
-	return $1; 
+INICIO	:  INSTRUCCIONESG EOF{		
+	return new Raiz($1.linea, $1.columna, $1); 
 };
+
+/*G de global*/
+INSTRUCCIONESG: INSTRUCCIONESG  INSTRUCCIONG
+				{ 
+				  	$$ = $1; 
+					$$.registrarInstruccion($2);
+				}
+				|INSTRUCCIONG
+				{ 
+					$$ = new Bloque(@1.first_line-1,@1.first_column-1); 
+					if($1!=null){$$.registrarInstruccion($1);} // Si es nulo, viene de un error manejado en otras producciones.
+				}
+;
+
+INSTRUCCIONG : 
+			  FUNCION { $$ = $1;}
+;
 
 INSTRUCCIONES : 
               INSTRUCCIONES INSTRUCCION { 
@@ -127,25 +151,49 @@ INSTRUCCIONES :
 ;
 
 INSTRUCCION:  PRINTLN { $$ = $1;}
-			| PRINT { $$ = $1;}		
+			| PRINT { $$ = $1;}					
 			| error { 	
 						Utils.registrarErrorSintactico(@1.first_line-1,@1.first_column-1, $1, $1);
 						$$ = null;						
 					}				
 ;
 
+
+FUNCION : tvoid id '(' LPARAMETROS ')' BLOQUE 
+			{ $$ = new Funcion(@1.first_line-1,@1.first_column-1, null/*Tipo*/, $2, $4,$6);}
+		| tvoid id '('  ')' BLOQUE 
+			{ $$ = new Funcion(@1.first_line-1,@1.first_column-1, null/*Tipo*/, $2, null, $5);}			
+;
+
+LPARAMETROS: LPARAMETROS PARAMETRO 
+			| PARAMETRO 
+;
+
+PARAMETRO : TIPO id { $$ = new Parametro(@1.first_line-1,@1.first_column-1, $1, $2);}
+;
+
+TIPO :  tint { $$ = new Tipo(TipoPrimitivo.INT);}
+		| tdouble { $$ = new Tipo(TipoPrimitivo.DOUBLE);}
+		| tstring { $$ = new Tipo(TipoPrimitivo.STRING);}
+		| tchar { $$ = new Tipo(TipoPrimitivo.CHAR);}
+		;
+
+BLOQUE: '{' INSTRUCCIONES '}' 
+		{$$ = $2; }
+		;
+
 PRINTLN : println '(' E ')' ';'
 		{
 			$$ = new Println(@1.first_line-1,@1.first_column-1, $3);			
 		}
-;
+		;
 
 
 PRINT : print '(' E ')' ';'
 		{
 			$$ = new Print(@1.first_line-1,@1.first_column-1, $3);			
 		}
-;
+		;
 
 E   : '(' E ')'
 	{
@@ -155,11 +203,12 @@ E   : '(' E ')'
 	{
 		$$ = new Suma(@1.first_line-1,@1.first_column-1,$1,$3);	
 	}	
+	/*
     | E '-' E
 	{
 		$$ = new Resta(@1.first_line-1,@1.first_column-1,$1,$3);
 	}
-	/*
+	
     | E '*' E
 	{
 		$$ = new Multiplicacion(@1.first_line-1,@1.first_column-1,$1,$3);
