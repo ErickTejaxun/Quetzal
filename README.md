@@ -6,9 +6,8 @@
 
 
 ## Autor
-- Erick Tejaxun
-- 201213050
-- erickteja@gmail.com
+- 201213050 Erick Tejaxun 
+- 201602890	Josue Abelarde Perez
 
 # Licencia 
 MIT 

@@ -94,6 +94,32 @@ class Utilidades
             return cadenaSalida;
         }
 
+
+        this.getCadenaSalida3D = function()
+        {
+            var cadenaSalida = '';
+
+            cadenaSalida += '#include <stdio.h> //Importar para el uso de Printf\n';
+            cadenaSalida += 'float heap[100000];\n';
+            cadenaSalida += 'float stack[100000];\n';
+            cadenaSalida += 'float H = 0.00;\n';
+            cadenaSalida += 'float P = 0.00;\n';
+    
+            cadenaSalida += 'float t0';
+            for(var i = 1; i < Utils.contadorTemporales ; i++)
+            {
+                cadenaSalida += ', t'+i.toString();
+            }
+            cadenaSalida += ';// temporales\n';            
+
+            
+            this.consolaSalida.forEach(function(linea){
+                cadenaSalida = cadenaSalida == ''? (linea):(cadenaSalida+linea);
+            });
+            return cadenaSalida;
+        }
+
+
         this.getErrores = function()
         {
             return this.listaErrores;
@@ -119,7 +145,9 @@ class Utilidades
             var etiqueta = 'L'+this.contadorEtiquetas;
             this.contadorEtiquetas += 1;
             return etiqueta;
-        }        
+        } 
+        
+        
     }
 }
 

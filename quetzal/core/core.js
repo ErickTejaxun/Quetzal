@@ -8,7 +8,7 @@ var TipoPrimitivo;
     TipoPrimitivo[TipoPrimitivo["STRING"] = 5] = "STRING";    
     TipoPrimitivo[TipoPrimitivo["STRUCT"] = 6] = "ARREGLO";
     TipoPrimitivo[TipoPrimitivo["STRUCT"] = 7] = "STRUCT";
-    TipoPrimitivo[TipoPrimitivo["ERROR"] = 10] = "ERROR";
+    TipoPrimitivo[TipoPrimitivo["ERROR"] = 10] = "ERROR";    
 })(TipoPrimitivo || (TipoPrimitivo = {}));
 
 
@@ -138,6 +138,96 @@ class Entorno
             }     
             this.tabla.append(simbolo);
         }
+
+        this.getTamanioEntorno = function()
+        {
+            return this.tabla.size;
+        }
+
+        this.getStringTamanioEntorno = function()
+        {
+            return this.tabla.size.toString();
+        }        
+    }
+}
+
+
+class Raiz 
+{
+    constructor(linea, columna, bloqueInstrucciones)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.bloqueInstrucciones = bloqueInstrucciones;
+
+        this.ejecutar = function(entorno)
+        {
+            // Primero hacemos lo de afuera y luego ejecutamos el main            
+            this.bloqueInstrucciones.instrucciones.forEach(function (instruccion) 
+            {
+                if (instruccion instanceof Funcion)
+                {
+                    if(instruccion.id!='main')
+                    {
+                        instruccion.ejecutar(entorno);
+                    }
+                }
+                else
+                {
+                    instruccion.ejecutar(entorno);
+                }                
+            });
+
+
+            // De último ejecutamos la función main
+            this.bloqueInstrucciones.instrucciones.forEach(function (instruccion) 
+            {
+                if (instruccion instanceof Funcion)
+                {
+                    if(instruccion.id=='main')
+                    {
+                        instruccion.ejecutar(entorno);
+                    }
+                }             
+            });            
+
+        }
+
+        this.generar3D = function(entorno)
+        {
+            // Primero generamos lo del entorno global 
+            // Y de ultimo generamos el codigo para la funcion main
+
+            this.bloqueInstrucciones.instrucciones.forEach(function (instruccion) 
+            {
+                if (instruccion instanceof Funcion)
+                {
+                    if(instruccion.id!='main')
+                    {
+                        instruccion.generar3D(entorno);
+                    }
+                }
+                else
+                {
+                    instruccion.generar3D(entorno);
+                }                
+            });
+
+
+            // De último ejecutamos la función main
+            this.bloqueInstrucciones.instrucciones.forEach(function (instruccion) 
+            {
+                if (instruccion instanceof Funcion)
+                {
+                    if(instruccion.id=='main')
+                    {
+                        Utils.imprimirConsola('\n\nvoid main(){\n');
+                        instruccion.generar3D(entorno);
+                        Utils.imprimirConsola('}//Fin main\n');
+                    }
+                }             
+            });            
+        }
     }
 }
 
@@ -221,11 +311,13 @@ class ExpString
             Utils.imprimirConsola(t0+'=H;// Inicio de la nueva cadena\n');
             Utils.imprimirConsola(t1+'=H;// puntero\n');
 
-            var array = this.valor.split('');
+            var array = Array.from(this.valor);
             array.forEach(caracter =>
             {
-                Utils.imprimirConsola('heap['+t1+']='+ parseInt(caracter) +'; // ' + caracter+'\n'); // Caracter a
+                Utils.imprimirConsola('heap[(int)'+t1+']='+ caracter.charCodeAt() +'; // ' + caracter+'\n'); // Caracter a
                 Utils.imprimirConsola('H=H+1; // Reservando espacio \n');
+                Utils.imprimirConsola(t1+'='+t1+'+1; // Actualizando puntero \n');
+                
             });  
             
             //Agregar caracter de final de cadena
@@ -470,6 +562,57 @@ class Resta
 
 /*Instrucciones---------------------------------------->*/
 
+
+
+class Funcion 
+{
+    constructor(linea, columna, tipo, id, parametrosFormales, bloqueInstrucciones)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.tipo = tipo;
+        this.id = id;
+        this.parametrosFormales = parametrosFormales;
+        this.bloqueInstrucciones = bloqueInstrucciones;
+
+        this.ejecutar= function(entorno)
+        {
+            // Codigo para guardar esta funcion en el entorno actual.            
+        }
+
+        this.generar3D = function(entorno)
+        {
+            // Codigo para codigo del método.
+        }
+    }
+}
+
+class Parametro
+{
+    /**Este nodo AST lo que hará es una declaracion
+     * En el nuevo entorno que se induzca cuando se llama la funcion
+     */
+    constructor(linea, columna, tipo/* Instancia de clase Tipo */, id)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.tipo = tipo ;
+        this.id = id;
+        this.valor = null; // Este valor se tiene que setear al llamar la funcion
+
+        this.ejecutar = function(entorno)
+        {
+            /* Codigo para crear variable*/
+
+        }
+
+        this.generar3D = function(entorno)
+        {
+            /*Codigo para generar la instanciación y seteo de variable */
+        }
+    }
+}
+
 class Bloque
 {
     constructor(linea, columna)
@@ -558,13 +701,15 @@ class Println
 
         this.generar3D = function(entorno)
         {
-            /*
-            */
-           var valorExpresion = this.expresion.generar3D(entorno);
-           var t0 = Utils.generarTemporal();
-           Utils.imprimirConsola('llamar imprimir');
-            return t0;
-
+            var valorExpresion = this.expresion.generar3D(entorno);
+            var t0 = Utils.generarTemporal();
+            var t1 = Utils.generarTemporal();
+            Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';//Simulacion de cambio de entorno\n');
+            Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+            Utils.imprimirConsola('stack[(int)'+t1+']='+valorExpresion+';//Paso parametro\n');
+            Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+            Utils.imprimirConsola('Nativa_Impresion();\n');
+            Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Retomar entorno\n');
         }        
     }
 }
