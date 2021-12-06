@@ -203,6 +203,36 @@ class ExpString
         {
             return this.valor;
         }
+
+        this.generar3D = function(entorno)
+        {
+            /*
+            t0=H; // Inicio de la cadena
+            t1=H; // Puntero caracter
+            heap[t1]= 32; // Caracter a
+            H=H+1; // Reservando espacio
+            t1=t1+1;
+            heap[t1] = 33; // Caracter b
+             */
+
+            var t0 = Utils.generarTemporal();
+            var t1 = Utils.generarTemporal();
+
+            Utils.imprimirConsola(t0+'=H;// Inicio de la nueva cadena\n');
+            Utils.imprimirConsola(t1+'=H;// puntero\n');
+
+            var array = this.valor.split('');
+            array.forEach(caracter => 
+            {
+                Utils.imprimirConsola('heap['+t1+']='+ parseInt(caracter) +'; // ' + caracter+'\n'); // Caracter a
+                Utils.imprimirConsola('H=H+1; // Reservando espacio \n');
+            });  
+            
+            //Agregar caracter de final de cadena
+
+            return t0;
+
+        }
     }
 }
 
@@ -466,6 +496,14 @@ class Bloque
                 this.instrucciones.push(instruccion);
             }           
         }
+         
+        this.generar3D=function(entorno)
+        {
+            this.instrucciones.forEach(function (instruccion) 
+            {
+                instruccion.generar3D(entorno);
+            });
+        }
     }
 }
 
@@ -519,6 +557,18 @@ class Println
                 Utils.imprimirConsola('\n'+valor);
             }                                    
         }
+
+
+        this.generar3D = function(entorno)
+        {
+            /*
+            */
+           var valorExpresion = this.expresion.generar3D(entorno);
+           var t0 = Utils.generarTemporal();
+           Utils.imprimirConsola('llamar imprimir');
+            return t0;
+
+        }        
     }
 }
 

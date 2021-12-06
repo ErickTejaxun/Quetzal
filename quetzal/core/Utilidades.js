@@ -56,6 +56,8 @@ class Utilidades
     {
         this.listaErrores = new Array;
         this.consolaSalida = new Array;
+        this.contadorTemporales = 0;
+        this.contadorEtiquetas =0;
 
         this.registrarErrorLexico=function(linea, columna, id, descripcion, archivo)
         {
@@ -100,7 +102,23 @@ class Utilidades
         this.LimpiarTodo = function()
         {
             this.listaErrores = new Array;
-            this.consolaSalida = new Array;            
+            this.consolaSalida = new Array;
+            this.contadorEtiquetas=0;
+            this.contadorTemporales = 0;          
+        }
+        
+        this.generarTemporal = function()
+        {
+            var temporal = 't'+this.contadorTemporales;
+            this.contadorTemporales += 1;
+            return temporal;
+        }
+
+        this.genenerarEtiqueta = function()
+        {
+            var etiqueta = 'L'+this.contadorEtiquetas;
+            this.contadorEtiquetas += 1;
+            return etiqueta;
         }        
     }
 }

@@ -52,7 +52,7 @@
 <main role="main" class="container">
     <br>
     <button class="btn btn-primary" onclick="analyze()">Analizar</button>  
-    <button type="button" class="btn btn-secondary">Mirilla</button>
+    <button type="button" class="btn btn-secondary" onclick="generar3d()">Generar 3D</button>
     <button type="button" class="btn btn-success">Bloque</button> 
 
     <div role="main-contenedores" class="container">
@@ -225,6 +225,65 @@
             console.log(error);
         }              
     }  
+
+
+    function generar3d()
+    {       
+        editorOutput.setValue(' ');
+        Utils.LimpiarTodo();
+        var code = editorInput.getValue();   
+        try {     
+            tablaErrores.clear().draw(); //Limpiamos la tabla con datos.
+            tablaSimbolos.clear().draw(); //Limpiamos la tabla con datos.
+            var raiz = gramatica.parse(code);                 
+            if(raiz!= null && raiz != undefined)
+            {            
+                var entornoGlobal = new Entorno(null);
+                raiz.generar3D(entornoGlobal);
+                var cadenaSalida = Utils.getCadenaSalida();
+                var listaErrores = Utils.getErrores();
+                if(listaErrores.length>0)
+                {
+                    toastr.warning('Se han encontrado '+ listaErrores.length.toString()+' errores. Ver reporte.');
+                    //Agregamos la lista de errores en nuestra tabla.                    
+                    var contador = 1;
+                    listaErrores.forEach(item => {
+                        tablaErrores.row.add([contador, item.id, item.getCadenaTipo(),item.descripcion, item.linea, item.columna, item.fecha, item.archivo]);
+                    });  
+                    tablaErrores.draw();                
+                }            
+                else
+                {
+                    toastr.success('Ejecución exitosa');
+                }
+                editorOutput.setValue(cadenaSalida); 
+            }
+            else
+            {
+                toastr.error('Ha ocurrido algún error.');
+            }  
+        }
+        catch (error) 
+        {
+            var listaErrores = Utils.getErrores();
+            if(listaErrores.length>0)
+            {
+                toastr.warning('Se han encontrado '+ listaErrores.length.toString()+' errores. Ver reporte.');
+                //Agregamos la lista de errores en nuestra tabla.
+                tablaErrores.clear().draw(); //Limpiamos la tabla con datos.
+                var contador = 1;
+                listaErrores.forEach(item => {
+                    tablaErrores.row.add([contador, item.id, item.getCadenaTipo(),item.descripcion, item.linea, item.columna, item.fecha, item.archivo]);
+                });  
+                tablaErrores.draw();             
+            }            
+            else
+            {
+                toastr.success('Ejecución exitosa');
+            }            
+            console.log(error);
+        }              
+    }      
 </script>
 </body>
 </html>
