@@ -162,31 +162,19 @@ E   : '(' E ')'
 	/*
     | E '*' E
 	{
-		$$ = crearNodo("*",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
+		$$ = new Multiplicacion(@1.first_line-1,@1.first_column-1,$1,$3);
 	}
     | E '/' E
 	{
-		$$ = crearNodo("/",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
+		$$ = new Division(@1.first_line-1,@1.first_column-1,$1,$3);
 	}
     | E '^' E
 	{
-		$$ = crearNodo("^",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
-	}
-    | E '!'
-	{
-		$$ = crearNodo("!",@2.first_line-1,@2.first_column-1);
-		$$.add($1);
+		$$ = new Potencia(@1.first_line-1,@1.first_column-1,$1,$3);
 	}
     | '-' E %prec UMINUS
 	{
-		$$ = crearNodo("-",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
+		$$ = new Menos(@1.first_line-1,@1.first_column-1,$2);
 	}
     | E '>=' E
 	{

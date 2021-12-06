@@ -222,7 +222,7 @@ class ExpString
             Utils.imprimirConsola(t1+'=H;// puntero\n');
 
             var array = this.valor.split('');
-            array.forEach(caracter => 
+            array.forEach(caracter =>
             {
                 Utils.imprimirConsola('heap['+t1+']='+ parseInt(caracter) +'; // ' + caracter+'\n'); // Caracter a
                 Utils.imprimirConsola('H=H+1; // Reservando espacio \n');
@@ -244,9 +244,6 @@ class Caracter
         this.columna=columna;
         this.valor = valor.substring(1,valor.length-1);      
         this.tipo = new Tipo(TipoPrimitivo.CHAR);
-        /* Falta la implementación de verificación del tamaño, debe ser solamente 1. 
-        -Podemos arreglaro con la gramatica 
-        -Aquí también habría que hacer una comprobación */
 
         this.getTipo=function()
         {            
