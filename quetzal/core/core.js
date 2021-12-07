@@ -9,6 +9,7 @@ var TipoPrimitivo;
     TipoPrimitivo[TipoPrimitivo["STRUCT"] = 6] = "ARREGLO";
     TipoPrimitivo[TipoPrimitivo["STRUCT"] = 7] = "STRUCT";
     TipoPrimitivo[TipoPrimitivo["ERROR"] = 10] = "ERROR";    
+    TipoPrimitivo[TipoPrimitivo["VOID"] = 11] = "VOID";  
 })(TipoPrimitivo || (TipoPrimitivo = {}));
 
 
@@ -108,6 +109,28 @@ class Variable
 }
 
 
+class SimboloFuncion
+{
+    constructor(linea, columna, id, tipo, listaParametrosFormales, bloqueInstrucciones)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.id = id;
+        this.tipo = tipo;
+        this.listaParametrosFormales = listaParametrosFormales;
+        this.bloqueInstrucciones = bloqueInstrucciones;
+        this.rol = 'FUNCION';
+
+        this.getTipo = function()
+        {
+            return this.tipo;
+        }
+
+    }    
+}
+
+
+
 
 
 class Entorno
@@ -119,7 +142,7 @@ class Entorno
 
         this.getSimbolo= function(id)
         {
-            var simbolo = this.tabla['id'];
+            var simbolo = this.tabla.get(id);
             // Falta implementar busqueda en profundidad.
             if (simbolo ==null  || simbolo == undefined)
             {
@@ -136,7 +159,7 @@ class Entorno
                 console.log('Error. Ya existe un simbolo con el nombre '+ id+' en el entorno actual.');
                 return;
             }     
-            this.tabla.append(simbolo);
+            this.tabla.set(simbolo.id,simbolo);
         }
 
         this.getTamanioEntorno = function()
@@ -165,31 +188,13 @@ class Raiz
             // Primero hacemos lo de afuera y luego ejecutamos el main            
             this.bloqueInstrucciones.instrucciones.forEach(function (instruccion) 
             {
-                if (instruccion instanceof Funcion)
-                {
-                    if(instruccion.id!='main')
-                    {
-                        instruccion.ejecutar(entorno);
-                    }
-                }
-                else
-                {
-                    instruccion.ejecutar(entorno);
-                }                
+                instruccion.ejecutar(entorno);               
             });
 
 
             // De último ejecutamos la función main
-            this.bloqueInstrucciones.instrucciones.forEach(function (instruccion) 
-            {
-                if (instruccion instanceof Funcion)
-                {
-                    if(instruccion.id=='main')
-                    {
-                        instruccion.ejecutar(entorno);
-                    }
-                }             
-            });            
+            var LLamadaMain = new Llamada(this.linea, this.columna, "main",null);
+            LLamadaMain.getValor(entorno);
 
         }
 
@@ -197,6 +202,9 @@ class Raiz
         {
             // Primero generamos lo del entorno global 
             // Y de ultimo generamos el codigo para la funcion main
+
+
+            Utils.generarNativas();
 
             this.bloqueInstrucciones.instrucciones.forEach(function (instruccion) 
             {
@@ -220,10 +228,8 @@ class Raiz
                 if (instruccion instanceof Funcion)
                 {
                     if(instruccion.id=='main')
-                    {
-                        Utils.imprimirConsola('\n\nvoid main(){\n');
-                        instruccion.generar3D(entorno);
-                        Utils.imprimirConsola('}//Fin main\n');
+                    {                        
+                        instruccion.generar3D(entorno);                        
                     }
                 }             
             });            
@@ -318,9 +324,11 @@ class ExpString
                 Utils.imprimirConsola('H=H+1; // Reservando espacio \n');
                 Utils.imprimirConsola(t1+'='+t1+'+1; // Actualizando puntero \n');
                 
-            });  
+            });              
             
             //Agregar caracter de final de cadena
+            Utils.imprimirConsola('heap[(int)'+t1+']='+ Utils.obtenerFinCadena() +'; // Fin de cadena. \n'); // Caracter a
+            Utils.imprimirConsola('H=H+1; // Reservando espacio \n');           
 
             return t0;
 
@@ -560,7 +568,38 @@ class Resta
     }
 }
 
+class Llamada
+{
+    constructor(linea, columna, id, parametros)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.id = id;
+        this.parametros = parametros;
+
+        this.getValor = function(entorno)
+        {
+            var idBuscado = id ; 
+            //
+
+            var funcionBuscada = entorno.getSimbolo(this.id);
+            if(funcionBuscada != null || funcionBuscada!= undefined)
+            {
+                var nuevoEntorno = new Entorno(null);// Cambiar null por global.
+                funcionBuscada.bloqueInstrucciones.ejecutar(entorno);
+            }
+        }
+
+        this.getTipo = function(entorno)
+        {
+
+        }
+    }
+}
+
 /*Instrucciones---------------------------------------->*/
+
+
 
 
 
@@ -577,12 +616,17 @@ class Funcion
 
         this.ejecutar= function(entorno)
         {
-            // Codigo para guardar esta funcion en el entorno actual.            
+            // Codigo para guardar esta funcion en el entorno actual. 
+            var nuevaFuncion = new SimboloFuncion(this.id, this.columna, this.id, this.tipo, this.parametrosFormales, this.bloqueInstrucciones);            
+            entorno.registrarSimbolo(nuevaFuncion);        
         }
 
         this.generar3D = function(entorno)
         {
-            // Codigo para codigo del método.
+            // Codigo para codigo del método. 
+            Utils.imprimirConsola('\n\nvoid '+this.id+'() {\n');
+            this.bloqueInstrucciones.generar3D(entorno);
+            Utils.imprimirConsola('}//Fin main\n');                       
         }
     }
 }
@@ -625,7 +669,15 @@ class Bloque
         {
             this.instrucciones.forEach(function (instruccion) 
             {
-                instruccion.ejecutar(entorno);
+                if (instruccion instanceof Llamada)
+                {
+                    instruccion.getValor(entorno);
+                }
+                else
+                {
+                    instruccion.ejecutar(entorno);
+                }
+                
             });
         }
 
@@ -708,7 +760,7 @@ class Println
             Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
             Utils.imprimirConsola('stack[(int)'+t1+']='+valorExpresion+';//Paso parametro\n');
             Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
-            Utils.imprimirConsola('Nativa_Impresion();\n');
+            Utils.imprimirConsola('Nativa_ImpresionLn();\n');
             Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Retomar entorno\n');
         }        
     }

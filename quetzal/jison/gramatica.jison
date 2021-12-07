@@ -137,6 +137,7 @@ INSTRUCCIONESG: INSTRUCCIONESG  INSTRUCCIONG
 
 INSTRUCCIONG : 
 			  FUNCION { $$ = $1;}
+			  /*Declaracion y Struct*/
 ;
 
 INSTRUCCIONES : 
@@ -151,7 +152,8 @@ INSTRUCCIONES :
 ;
 
 INSTRUCCION:  PRINTLN { $$ = $1;}
-			| PRINT { $$ = $1;}					
+			| PRINT { $$ = $1;}	
+			| LLAMADA ';' {$$ =$1;}				
 			| error { 	
 						Utils.registrarErrorSintactico(@1.first_line-1,@1.first_column-1, $1, $1);
 						$$ = null;						
@@ -159,10 +161,11 @@ INSTRUCCION:  PRINTLN { $$ = $1;}
 ;
 
 
-FUNCION : tvoid id '(' LPARAMETROS ')' BLOQUE 
-			{ $$ = new Funcion(@1.first_line-1,@1.first_column-1, null/*Tipo*/, $2, $4,$6);}
-		| tvoid id '('  ')' BLOQUE 
-			{ $$ = new Funcion(@1.first_line-1,@1.first_column-1, null/*Tipo*/, $2, null, $5);}			
+FUNCION : 		
+		  TIPO id '(' LPARAMETROS ')' BLOQUE 
+			{ $$ = new Funcion(@1.first_line-1,@1.first_column-1, $1, $2, $4,$6);}
+		| TIPO id '('  ')' BLOQUE 
+			{ $$ = new Funcion(@1.first_line-1,@1.first_column-1, $1, $2, null,$5);}			
 ;
 
 LPARAMETROS: LPARAMETROS PARAMETRO 
@@ -172,10 +175,11 @@ LPARAMETROS: LPARAMETROS PARAMETRO
 PARAMETRO : TIPO id { $$ = new Parametro(@1.first_line-1,@1.first_column-1, $1, $2);}
 ;
 
-TIPO :  tint { $$ = new Tipo(TipoPrimitivo.INT);}
+TIPO :    tint { $$ = new Tipo(TipoPrimitivo.INT);}
 		| tdouble { $$ = new Tipo(TipoPrimitivo.DOUBLE);}
 		| tstring { $$ = new Tipo(TipoPrimitivo.STRING);}
 		| tchar { $$ = new Tipo(TipoPrimitivo.CHAR);}
+		| tvoid { $$ = new Tipo(TipoPrimitivo.VOID);}
 		;
 
 BLOQUE: '{' INSTRUCCIONES '}' 
@@ -336,5 +340,9 @@ E   : '(' E ')'
 	{
 		$$ = new TipoDe(@1.first_line,@1.first_column,$3);
 	}
+	| LLAMADA {$$= $1;}
 	;
+
+LLAMADA : id '(' ')' { $$ = new Llamada(@1.first_line,@1.first_column, $1, null);} 
+;
 

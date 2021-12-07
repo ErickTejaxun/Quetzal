@@ -58,6 +58,7 @@ class Utilidades
         this.consolaSalida = new Array;
         this.contadorTemporales = 0;
         this.contadorEtiquetas =0;
+        this.finalCadena = 7823797;
 
         this.registrarErrorLexico=function(linea, columna, id, descripcion, archivo)
         {
@@ -146,7 +147,74 @@ class Utilidades
             this.contadorEtiquetas += 1;
             return etiqueta;
         } 
+
+        this.obtenerFinCadena = function()
+        {
+            return this.finalCadena.toString();
+        }
+
+
+        /*Area de generación de código 3D */
+        this.generarNativas = function()
+        {
+            this.NativaImpresion();
+            this.NativaImpresionLn();
+        }
         
+        this.NativaImpresion = function()
+        {
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            var t2 = this.generarTemporal();
+
+            var L0 = this.genenerarEtiqueta();
+            var L1 = this.genenerarEtiqueta();
+            var L2 = this.genenerarEtiqueta();
+
+            this.imprimirConsola('\n\n');
+            this.imprimirConsola('void Nativa_Impresion(){\n');
+            this.imprimirConsola(t0+'=P+1;// Direccion parametro recibido\n');
+            this.imprimirConsola(t1+'=stack[(int)'+t0+'];// Direccion de la cadena\n');
+            this.imprimirConsola(L0+':\n');
+            this.imprimirConsola(t2+'=heap[(int)'+t1+']; // Caracter actual\n');
+            this.imprimirConsola('if ('+t2+'!='+this.obtenerFinCadena()+') goto '+L1+';\n')
+            this.imprimirConsola('goto '+L2+';// Fin impresion\n');
+            this.imprimirConsola(L1+':\n');
+            this.imprimirConsola('printf("%c", (int)'+t2+'); // Imprimir caracter\n');
+            this.imprimirConsola(t1+'='+t1+'+1; // siguiente caracter\n');
+            this.imprimirConsola('goto '+L0+';\n');
+            this.imprimirConsola(L2+':\n');
+            this.imprimirConsola('return;\n');
+            this.imprimirConsola('}\n');
+        }
+
+        this.NativaImpresionLn = function()
+        {
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            var t2 = this.generarTemporal();
+
+            var L0 = this.genenerarEtiqueta();
+            var L1 = this.genenerarEtiqueta();
+            var L2 = this.genenerarEtiqueta();
+
+            this.imprimirConsola('\n\n');
+            this.imprimirConsola('void Nativa_ImpresionLn(){\n');
+            this.imprimirConsola(t0+'=P+1;// Direccion parametro recibido\n');
+            this.imprimirConsola(t1+'=stack[(int)'+t0+'];// Direccion de la cadena\n');
+            this.imprimirConsola(L0+':\n');
+            this.imprimirConsola(t2+'=heap[(int)'+t1+']; // Caracter actual\n');
+            this.imprimirConsola('if ('+t2+'!='+this.obtenerFinCadena()+') goto '+L1+';\n')
+            this.imprimirConsola('goto '+L2+';// Fin impresion\n');
+            this.imprimirConsola(L1+':\n');
+            this.imprimirConsola('printf("%c", (int)'+t2+'); // Imprimir caracter\n');
+            this.imprimirConsola(t1+'='+t1+'+1; // siguiente caracter\n');
+            this.imprimirConsola('goto '+L0+';\n');
+            this.imprimirConsola(L2+':\n');
+            this.imprimirConsola('printf("%c", 10); // Imprimir salto de linea\n');
+            this.imprimirConsola('return;\n');
+            this.imprimirConsola('}\n');
+        }        
         
     }
 }
