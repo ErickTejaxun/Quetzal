@@ -72,12 +72,12 @@
   }
 */
 var gramatica = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,7],$V2=[1,8],$V3=[1,9],$V4=[1,10],$V5=[5,21,22,23,24,25],$V6=[1,22],$V7=[18,21,22,23,24,25],$V8=[1,30],$V9=[1,33],$Va=[1,31],$Vb=[1,32],$Vc=[2,15,27,28,30],$Vd=[1,39],$Ve=[1,44],$Vf=[1,41],$Vg=[1,42],$Vh=[1,43],$Vi=[1,45],$Vj=[1,46],$Vk=[1,47],$Vl=[1,48],$Vm=[1,49],$Vn=[1,50],$Vo=[1,55],$Vp=[18,31];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,7],$V2=[1,8],$V3=[1,9],$V4=[1,10],$V5=[5,21,22,23,24,25],$V6=[1,22],$V7=[18,21,22,23,24,25],$V8=[1,30],$V9=[1,33],$Va=[1,31],$Vb=[1,32],$Vc=[2,15,27,28,30],$Vd=[1,39],$Ve=[1,44],$Vf=[1,41],$Vg=[1,42],$Vh=[1,43],$Vi=[1,45],$Vj=[1,46],$Vk=[1,47],$Vl=[1,48],$Vm=[1,49],$Vn=[1,50],$Vo=[1,55],$Vp=[1,56],$Vq=[1,57],$Vr=[1,58],$Vs=[18,31,32,33,34],$Vt=[18,31,32];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"INICIO":3,"INSTRUCCIONESG":4,"EOF":5,"INSTRUCCIONG":6,"FUNCION":7,"INSTRUCCIONES":8,"INSTRUCCION":9,"PRINTLN":10,"PRINT":11,"LLAMADA":12,";":13,"TIPO":14,"id":15,"(":16,"LPARAMETROS":17,")":18,"BLOQUE":19,"PARAMETRO":20,"tint":21,"tdouble":22,"tstring":23,"tchar":24,"tvoid":25,"{":26,"}":27,"println":28,"E":29,"print":30,"+":31,"entero":32,"double":33,"texto":34,"caracter":35,"nulo":36,"verdadero":37,"falso":38,"tipode":39,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",13:";",15:"id",16:"(",18:")",21:"tint",22:"tdouble",23:"tstring",24:"tchar",25:"tvoid",26:"{",27:"}",28:"println",30:"print",31:"+",32:"entero",33:"double",34:"texto",35:"caracter",36:"nulo",37:"verdadero",38:"falso",39:"tipode"},
-productions_: [0,[3,2],[4,2],[4,1],[6,1],[8,2],[8,1],[9,1],[9,1],[9,2],[9,1],[7,6],[7,5],[17,2],[17,1],[20,2],[14,1],[14,1],[14,1],[14,1],[14,1],[19,3],[10,5],[11,5],[29,3],[29,3],[29,1],[29,1],[29,1],[29,1],[29,1],[29,1],[29,1],[29,1],[29,4],[29,1],[12,3]],
+symbols_: {"error":2,"INICIO":3,"INSTRUCCIONESG":4,"EOF":5,"INSTRUCCIONG":6,"FUNCION":7,"INSTRUCCIONES":8,"INSTRUCCION":9,"PRINTLN":10,"PRINT":11,"LLAMADA":12,";":13,"TIPO":14,"id":15,"(":16,"LPARAMETROS":17,")":18,"BLOQUE":19,"PARAMETRO":20,"tint":21,"tdouble":22,"tstring":23,"tchar":24,"tvoid":25,"{":26,"}":27,"println":28,"E":29,"print":30,"+":31,"-":32,"*":33,"/":34,"entero":35,"double":36,"texto":37,"caracter":38,"nulo":39,"verdadero":40,"falso":41,"tipode":42,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",13:";",15:"id",16:"(",18:")",21:"tint",22:"tdouble",23:"tstring",24:"tchar",25:"tvoid",26:"{",27:"}",28:"println",30:"print",31:"+",32:"-",33:"*",34:"/",35:"entero",36:"double",37:"texto",38:"caracter",39:"nulo",40:"verdadero",41:"falso",42:"tipode"},
+productions_: [0,[3,2],[4,2],[4,1],[6,1],[8,2],[8,1],[9,1],[9,1],[9,2],[9,1],[7,6],[7,5],[17,2],[17,1],[20,2],[14,1],[14,1],[14,1],[14,1],[14,1],[19,3],[10,5],[11,5],[29,3],[29,3],[29,3],[29,3],[29,3],[29,1],[29,1],[29,1],[29,1],[29,1],[29,1],[29,1],[29,1],[29,4],[29,1],[12,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -167,59 +167,74 @@ case 25:
 break;
 case 26:
 
-		this.$ = new Entero(_$[$0].first_line,_$[$0].first_column, parseInt($$[$0]));		
+		this.$ = new Resta(_$[$0-2].first_line-1,_$[$0-2].first_column-1,$$[$0-2],$$[$0]);
 	
 break;
 case 27:
 
-		this.$ = new Double(_$[$0].first_line,_$[$0].first_column, parseFloat($$[$0]));
+		this.$ = new Multiplicacion(_$[$0-2].first_line-1,_$[$0-2].first_column-1,$$[$0-2],$$[$0]);
 	
 break;
 case 28:
 
-		this.$ = new ExpVariable(_$[$0].first_line,_$[$0].first_column,$$[$0]);
+		this.$ = new Division(_$[$0-2].first_line-1,_$[$0-2].first_column-1,$$[$0-2],$$[$0]);
 	
 break;
 case 29:
 
-		this.$ = new ExpString(_$[$0].first_line,_$[$0].first_column,$$[$0]);
-		
+		this.$ = new Entero(_$[$0].first_line,_$[$0].first_column, parseInt($$[$0]));		
 	
 break;
 case 30:
 
-		this.$ = new ExpString(_$[$0].first_line,_$[$0].first_column,$$[$0]);
+		this.$ = new Double(_$[$0].first_line,_$[$0].first_column, parseFloat($$[$0]));
 	
 break;
 case 31:
 
-		this.$ = new Nulo(_$[$0].first_line,_$[$0].first_column);
+		this.$ = new ExpVariable(_$[$0].first_line,_$[$0].first_column,$$[$0]);
 	
 break;
 case 32:
 
-		this.$ = new ExpBooleana(_$[$0].first_line,_$[$0].first_column, true);
+		this.$ = new ExpString(_$[$0].first_line,_$[$0].first_column,$$[$0].substring(1,$$[$0].length-1));
+		
 	
 break;
 case 33:
 
-		this.$ = new ExpBooleana(_$[$0].first_line,_$[$0].first_column, false);
+		this.$ = new ExpString(_$[$0].first_line,_$[$0].first_column,$$[$0].substring(1,$$[$0].length-1));
 	
 break;
 case 34:
 
-		this.$ = new TipoDe(_$[$0-3].first_line,_$[$0-3].first_column,$$[$0-1]);
+		this.$ = new Nulo(_$[$0].first_line,_$[$0].first_column);
 	
 break;
 case 35:
-this.$= $$[$0];
+
+		this.$ = new ExpBooleana(_$[$0].first_line,_$[$0].first_column, true);
+	
 break;
 case 36:
+
+		this.$ = new ExpBooleana(_$[$0].first_line,_$[$0].first_column, false);
+	
+break;
+case 37:
+
+		this.$ = new TipoDe(_$[$0-3].first_line,_$[$0-3].first_column,$$[$0-1]);
+	
+break;
+case 38:
+this.$= $$[$0];
+break;
+case 39:
  this.$ = new Llamada(_$[$0-2].first_line,_$[$0-2].first_column, $$[$0-2], null);
 break;
 }
 },
-table: [{3:1,4:2,6:3,7:4,14:5,21:$V0,22:$V1,23:$V2,24:$V3,25:$V4},{1:[3]},{5:[1,11],6:12,7:4,14:5,21:$V0,22:$V1,23:$V2,24:$V3,25:$V4},o($V5,[2,3]),o($V5,[2,4]),{15:[1,13]},{15:[2,16]},{15:[2,17]},{15:[2,18]},{15:[2,19]},{15:[2,20]},{1:[2,1]},o($V5,[2,2]),{16:[1,14]},{14:18,17:15,18:[1,16],20:17,21:$V0,22:$V1,23:$V2,24:$V3,25:$V4},{14:18,18:[1,19],20:20,21:$V0,22:$V1,23:$V2,24:$V3,25:$V4},{19:21,26:$V6},o($V7,[2,14]),{15:[1,23]},{19:24,26:$V6},o($V7,[2,13]),o($V5,[2,12]),{2:$V8,8:25,9:26,10:27,11:28,12:29,15:$V9,28:$Va,30:$Vb},o($V7,[2,15]),o($V5,[2,11]),{2:$V8,9:35,10:27,11:28,12:29,15:$V9,27:[1,34],28:$Va,30:$Vb},o($Vc,[2,6]),o($Vc,[2,7]),o($Vc,[2,8]),{13:[1,36]},o($Vc,[2,10]),{16:[1,37]},{16:[1,38]},{16:$Vd},o($V5,[2,21]),o($Vc,[2,5]),o($Vc,[2,9]),{12:51,15:$Ve,16:$Vf,29:40,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn},{12:51,15:$Ve,16:$Vf,29:52,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn},{18:[1,53]},{18:[1,54],31:$Vo},{12:51,15:$Ve,16:$Vf,29:56,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn},o($Vp,[2,26]),o($Vp,[2,27]),o($Vp,[2,28],{16:$Vd}),o($Vp,[2,29]),o($Vp,[2,30]),o($Vp,[2,31]),o($Vp,[2,32]),o($Vp,[2,33]),{16:[1,57]},o($Vp,[2,35]),{18:[1,58],31:$Vo},o([13,18,31],[2,36]),{13:[1,59]},{12:51,15:$Ve,16:$Vf,29:60,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn},{18:[1,61],31:$Vo},{12:51,15:$Ve,16:$Vf,29:62,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn},{13:[1,63]},o($Vc,[2,22]),o($Vp,[2,25]),o($Vp,[2,24]),{18:[1,64],31:$Vo},o($Vc,[2,23]),o($Vp,[2,34])],
+table: [{3:1,4:2,6:3,7:4,14:5,21:$V0,22:$V1,23:$V2,24:$V3,25:$V4},{1:[3]},{5:[1,11],6:12,7:4,14:5,21:$V0,22:$V1,23:$V2,24:$V3,25:$V4},o($V5,[2,3]),o($V5,[2,4]),{15:[1,13]},{15:[2,16]},{15:[2,17]},{15:[2,18]},{15:[2,19]},{15:[2,20]},{1:[2,1]},o($V5,[2,2]),{16:[1,14]},{14:18,17:15,18:[1,16],20:17,21:$V0,22:$V1,23:$V2,24:$V3,25:$V4},{14:18,18:[1,19],20:20,21:$V0,22:$V1,23:$V2,24:$V3,25:$V4},{19:21,26:$V6},o($V7,[2,14]),{15:[1,23]},{19:24,26:$V6},o($V7,[2,13]),o($V5,[2,12]),{2:$V8,8:25,9:26,10:27,11:28,12:29,15:$V9,28:$Va,30:$Vb},o($V7,[2,15]),o($V5,[2,11]),{2:$V8,9:35,10:27,11:28,12:29,15:$V9,27:[1,34],28:$Va,30:$Vb},o($Vc,[2,6]),o($Vc,[2,7]),o($Vc,[2,8]),{13:[1,36]},o($Vc,[2,10]),{16:[1,37]},{16:[1,38]},{16:$Vd},o($V5,[2,21]),o($Vc,[2,5]),o($Vc,[2,9]),{12:51,15:$Ve,16:$Vf,29:40,35:$Vg,36:$Vh,37:$Vi,38:$Vj,39:$Vk,40:$Vl,41:$Vm,42:$Vn},{12:51,15:$Ve,16:$Vf,29:52,35:$Vg,36:$Vh,37:$Vi,38:$Vj,39:$Vk,40:$Vl,41:$Vm,42:$Vn},{18:[1,53]},{18:[1,54],31:$Vo,32:$Vp,33:$Vq,34:$Vr},{12:51,15:$Ve,16:$Vf,29:59,35:$Vg,36:$Vh,37:$Vi,38:$Vj,39:$Vk,40:$Vl,41:$Vm,42:$Vn},o($Vs,[2,29]),o($Vs,[2,30]),o($Vs,[2,31],{16:$Vd}),o($Vs,[2,32]),o($Vs,[2,33]),o($Vs,[2,34]),o($Vs,[2,35]),o($Vs,[2,36]),{16:[1,60]},o($Vs,[2,38]),{18:[1,61],31:$Vo,32:$Vp,33:$Vq,34:$Vr},o([13,18,31,32,33,34],[2,39]),{13:[1,62]},{12:51,15:$Ve,16:$Vf,29:63,35:$Vg,36:$Vh,37:$Vi,38:$Vj,39:$Vk,40:$Vl,41:$Vm,42:$Vn},{12:51,15:$Ve,16:$Vf,29:64,35:$Vg,36:$Vh,37:$Vi,38:$Vj,39:$Vk,40:$Vl,41:$Vm,42:$Vn},{12:51,15:$Ve,16:$Vf,29:65,35:$Vg,36:$Vh,37:$Vi,38:$Vj,39:$Vk,40:$Vl,41:$Vm,42:$Vn},{12:51,15:$Ve,16:$Vf,29:66,35:$Vg,36:$Vh,37:$Vi,38:$Vj,39:$Vk,40:$Vl,41:$Vm,42:$Vn},{18:[1,67],31:$Vo,32:$Vp,33:$Vq,34:$Vr},{12:51,15:$Ve,16:$Vf,29:68,35:$Vg,36:$Vh,37:$Vi,38:$Vj,39:$Vk,40:$Vl,41:$Vm,42:$Vn},{13:[1,69]},o($Vc,[2,22]),o($Vt,[2,25],{33:$Vq,34:$Vr}),o($Vt,[2,26],{33:$Vq,34:$Vr}),o($Vs,[2,27]),o($Vs,[2,28]),o($Vs,[2,24]),{18:[1,70],31:$Vo,32:$Vp,33:$Vq,34:$Vr},o($Vc,[2,23]),o($Vs,[2,37])],
 defaultActions: {6:[2,16],7:[2,17],8:[2,18],9:[2,19],10:[2,20],11:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -818,13 +833,13 @@ case 4:return;
 break;
 case 5:return;
 break;
-case 6:return 33
+case 6:return 36
 break;
-case 7:return 32
+case 7:return 35
 break;
-case 8:return 34
+case 8:return 37
 break;
-case 9:return 35
+case 9:return 38
 break;
 case 10: debugPrint('++');return '++'; 
 break;
@@ -854,13 +869,13 @@ case 22: debugPrint('&&');return '&&';
 break;
 case 23: debugPrint('!');return '!'; 
 break;
-case 24: debugPrint('*');return '*'; 
+case 24: debugPrint('*');return 33; 
 break;
 case 25: debugPrint('->');return 'flecha'; 
 break;
-case 26: debugPrint('/');return '/'; 
+case 26: debugPrint('/');return 34; 
 break;
-case 27: debugPrint('-');return '-'; 
+case 27: debugPrint('-');return 32; 
 break;
 case 28: debugPrint('+');return 31; 
 break;
@@ -892,17 +907,17 @@ case 41: debugPrint(':');return ':';
 break;
 case 42: debugPrint(';');return 13; 
 break;
-case 43: debugPrint(yy_.yytext);return 36; 
+case 43: debugPrint(yy_.yytext);return 39; 
 break;
-case 44: debugPrint(yy_.yytext);return 37; 
+case 44: debugPrint(yy_.yytext);return 40; 
 break;
-case 45: debugPrint(yy_.yytext);return 38; 
+case 45: debugPrint(yy_.yytext);return 41; 
 break;
 case 46: debugPrint(yy_.yytext);return 28; 
 break;
 case 47: debugPrint(yy_.yytext);return 30; 
 break;
-case 48: debugPrint(yy_.yytext);return 39; 
+case 48: debugPrint(yy_.yytext);return 42; 
 break;
 case 49: debugPrint(yy_.yytext);return 21; 
 break;

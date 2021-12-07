@@ -31,7 +31,21 @@ println("Hola" + " " + "mundo!");
 
 void main()
 {
-    println("Comenzando ejecución");
+    println("Comenzando esssssssssssjecución");
     println("hola");
+	println(3);	
+    println(4.4);
+	println(true);
+	println(false);
+	println('a');
+    println(5+2+3+3);
+	println(null);
+	//suma();
 }
+
+void suma()
+{
+	println("dentro suma");
+}
+
 */

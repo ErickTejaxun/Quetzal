@@ -206,21 +206,20 @@ E   : '(' E ')'
     | E '+' E
 	{
 		$$ = new Suma(@1.first_line-1,@1.first_column-1,$1,$3);	
-	}	
-	/*
+	}		
     | E '-' E
 	{
 		$$ = new Resta(@1.first_line-1,@1.first_column-1,$1,$3);
-	}
-	
+	}	
     | E '*' E
 	{
 		$$ = new Multiplicacion(@1.first_line-1,@1.first_column-1,$1,$3);
-	}
+	}	
     | E '/' E
 	{
 		$$ = new Division(@1.first_line-1,@1.first_column-1,$1,$3);
 	}
+	/*
     | E '^' E
 	{
 		$$ = new Potencia(@1.first_line-1,@1.first_column-1,$1,$3);
@@ -317,12 +316,12 @@ E   : '(' E ')'
 	}
 	| texto
 	{
-		$$ = new ExpString(@1.first_line,@1.first_column,$1);
+		$$ = new ExpString(@1.first_line,@1.first_column,$1.substring(1,$1.length-1));
 		
 	}
     | caracter
 	{
-		$$ = new ExpString(@1.first_line,@1.first_column,$1);
+		$$ = new ExpString(@1.first_line,@1.first_column,$1.substring(1,$1.length-1));
 	}
 	| nulo
 	{

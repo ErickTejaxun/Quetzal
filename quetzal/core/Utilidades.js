@@ -152,9 +152,32 @@ class Utilidades
         {
             return this.finalCadena.toString();
         }
-
-
+        
         /*Area de generación de código 3D */
+        this.generarCodigoParaImprimirLn = function(valor, entorno)
+        {
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            this.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';//Simulacion de cambio de entorno\n');
+            this.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+            this.imprimirConsola('stack[(int)'+t1+']='+valor+';//Paso parametro\n');
+            this.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+            this.imprimirConsola('Nativa_ImpresionLn();\n');
+            Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Retomar entorno\n');
+        }
+
+        this.generarCodigoParaImprimir = function(valor, entorno)
+        {
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            this.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';//Simulacion de cambio de entorno\n');
+            this.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+            this.imprimirConsola('stack[(int)'+t1+']='+valor+';//Paso parametro\n');
+            this.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+            this.imprimirConsola('Nativa_Impresion();\n');
+            Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Retomar entorno\n');
+        }        
+
         this.generarNativas = function()
         {
             this.NativaImpresion();
