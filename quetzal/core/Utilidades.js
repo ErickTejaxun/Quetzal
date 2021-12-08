@@ -101,6 +101,7 @@ class Utilidades
             var cadenaSalida = '';
 
             cadenaSalida += '#include <stdio.h> //Importar para el uso de Printf\n';
+            cadenaSalida += '#include <math.h> // Libreria matematica\n';
             cadenaSalida += 'float heap[100000];\n';
             cadenaSalida += 'float stack[100000];\n';
             cadenaSalida += 'float H = 0.00;\n';
@@ -237,8 +238,7 @@ class Utilidades
             this.imprimirConsola('printf("%c", 10); // Imprimir salto de linea\n');
             this.imprimirConsola('return;\n');
             this.imprimirConsola('}\n');
-        }        
-        
+        }                
     }
 }
 

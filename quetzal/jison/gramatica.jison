@@ -28,14 +28,7 @@
 \"(\\.|[^"])*\" 	  return 'texto'
 \'(\\.|[^'])\' 	      return 'caracter'
 
-//AUMENTO DECREMENTO
-"++"                  %{ debugPrint('++');return '++'; %}
-"--"                  %{ debugPrint('--');return '--'; %}
-//asignacion y Eeracion
-"+="                  %{ debugPrint('+=');return '+='; %}
-"*="                  %{ debugPrint('*-');return '*-'; %}
-"-="                  %{ debugPrint('-=');return '-='; %}
-"/="                  %{ debugPrint('/=k');return '/='; %}
+
 //Eeradores relacionales
 ">="                  %{ debugPrint('>=');return '>='; %}
 "<="                  %{ debugPrint('<=');return '<='; %}
@@ -53,6 +46,7 @@
 "/"                   %{ debugPrint('/');return '/'; %}
 "-"                   %{ debugPrint('-');return '-'; %}
 "+"                   %{ debugPrint('+');return '+'; %}
+"%"                   %{ debugPrint('%');return '%'; %}
 "^"                   %{ debugPrint('^');return '^'; %}
 "="                   %{ debugPrint('=');return '='; %}
 //signos de agrupacion
@@ -87,6 +81,12 @@
 "char"			 %{ debugPrint(yytext);return 'tchar'; %}
 "boolean"   		 %{ debugPrint(yytext);return 'boolean'; %}
 "void"   			 %{ debugPrint(yytext);return 'tvoid'; %}
+/*Funciones nativas*/
+"pow"   			 %{ debugPrint(yytext);return 'pow'; %}
+"sqrt"   			 %{ debugPrint(yytext);return 'sqrt'; %}
+"sin"   			 %{ debugPrint(yytext);return 'sin'; %}
+"cos"   			 %{ debugPrint(yytext);return 'cos'; %}
+"tan"   			 %{ debugPrint(yytext);return 'tan'; %}
 ([a-zA-Z]|"_"|"$")([a-zA-Z]|[0-9]|"_"|"$")* %{ debugPrint(yytext); return 'id'; %}
 
 <<EOF>>               return 'EOF'
@@ -97,7 +97,7 @@
 
 
 %left '+' '-'
-%left '*' '/'
+%left '*' '/' '%'
 %left '^'
 %left '(' ')'
 %left '->'
@@ -219,6 +219,30 @@ E   : '(' E ')'
 	{
 		$$ = new Division(@1.first_line-1,@1.first_column-1,$1,$3);
 	}
+ 	|E '%' E
+	{
+		$$ = new Modulo(@1.first_line-1,@1.first_column-1,$1,$3);
+	}
+	| pow '(' E ',' E ')'
+	{
+		$$ = new Potencia(@1.first_line-1,@1.first_column-1,$3, $5);
+	}
+	| sqrt '(' E ')'
+	{
+		$$ = new RaizCuadrada(@1.first_line-1,@1.first_column-1,$3);
+	}	
+	| sin '(' E ')'
+	{
+		$$ = new Seno(@1.first_line-1,@1.first_column-1,$3);
+	}	
+	| cos '(' E ')'
+	{
+		$$ = new Coseno(@1.first_line-1,@1.first_column-1,$3);
+	}	
+	| tan '(' E ')'
+	{
+		$$ = new Tangente(@1.first_line-1,@1.first_column-1,$3);
+	}			
 	/*
     | E '^' E
 	{

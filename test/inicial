@@ -30,17 +30,21 @@ println("Hola" + " " + "mundo!");
 
 
 void main()
-{
-    println("Comenzando esssssssssssjecución");
-    println("hola");
-	println(3);	
-    println(4.4);
-	println(true);
-	println(false);
-	println('a');
-    println(5+2+3+3);
-	println(null);
-	println('a'+10+'a');
+{    
+	println(10/2);
+	println(3.0/2);
+	println(11%3);
+	println(5%1);
+	println(5%0.5);
+	println(pow(2,3.3));
+	println(sqrt(4)+3);
+	println(sqrt(4.00)*2/3);
+	println(sin(2));
+	println(sin(2.0));
+	println(cos(2));
+	println(cos(2.0));
+	println(tan(2));
+	println(tan(2.0));
 	//suma();
 }
 
