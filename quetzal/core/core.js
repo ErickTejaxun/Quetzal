@@ -12,8 +12,6 @@ var TipoPrimitivo;
     TipoPrimitivo[TipoPrimitivo["VOID"] = 11] = "VOID";  
 })(TipoPrimitivo || (TipoPrimitivo = {}));
 
-
-
 class Tipo
 {
     constructor(tipo, nombre ="")
@@ -59,7 +57,6 @@ class Tipo
         }
     }
 }
-
 
 
 /* Entorno */
@@ -108,7 +105,6 @@ class Variable
     }    
 }
 
-
 class SimboloFuncion
 {
     constructor(linea, columna, id, tipo, listaParametrosFormales, bloqueInstrucciones)
@@ -128,10 +124,6 @@ class SimboloFuncion
 
     }    
 }
-
-
-
-
 
 class Entorno
 {
@@ -173,7 +165,6 @@ class Entorno
         }        
     }
 }
-
 
 class Raiz 
 {
@@ -290,7 +281,6 @@ class Double
     }
 }
 
-
 class ExpString
 {
     constructor(linea,columna,valor){                
@@ -345,7 +335,6 @@ class ExpString
     }
 }
 
-
 class Caracter
 {
     constructor(linea,columna,valor){                
@@ -370,7 +359,6 @@ class Caracter
         }
     }
 }
-
 
 class Nulo
 {
@@ -398,7 +386,6 @@ class Nulo
         }        
     }
 }
-
 
 class ExpBooleana
 {
@@ -448,7 +435,6 @@ class ExpVariable
         }        
     }
 }
-
 
 class TipoDe
 {
@@ -554,7 +540,6 @@ class Suma
     }
 }
 
-
 class Resta
 {
     constructor(linea, columna, expresionI, expresionD)
@@ -627,8 +612,6 @@ class Resta
     }
 }
 
-
-
 class Multiplicacion
 {
     constructor(linea, columna, expresionI, expresionD)
@@ -700,7 +683,6 @@ class Multiplicacion
         }        
     }
 }
-
 
 class Division
 {
@@ -784,7 +766,6 @@ class Division
     }
 }
 
-
 class Llamada
 { 
     constructor(linea, columna, id, parametros)
@@ -814,11 +795,487 @@ class Llamada
     }
 }
 
+
+/*Expresiones Relacionales------------------------------------------------> */
+
+class Igualdad
+{
+    constructor(linea, columna, expresionI, expresionD)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresionI = expresionI;
+        this.expresionD = expresionD;
+
+        this.getTipo = function(entorno)
+        {
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO: verificar igual de arreglos
+            if(tipoI.esNulo() || tipoI.esArreglo() || tipoI.esStruct() || tipoI.esError() || tipoI.esStructNombre())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+            if(tipoD.esNulo() || tipoD.esArreglo() || tipoD.esStruct() || tipoD.esError() || tipoD.esStructNombre())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+
+            return new Tipo(TipoPrimitivo.BOOL);
+        }
+
+        this.getValor= function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '==','Error de tipos en operación igualdad. '+this.expresionI.getTipo(entorno).getNombreTipo()+' + '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO:validar las cadenas o caracteres
+            var valorI = this.expresionI.getValor(entorno);
+            var valorD = this.expresionD.getValor(entorno);
+
+            return parseFloat(valorI) === parseFloat(valorD);
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+class Diferenciacion
+{
+    constructor(linea, columna, expresionI, expresionD)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresionI = expresionI;
+        this.expresionD = expresionD;
+
+        this.getTipo = function(entorno)
+        {
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO: verificar igual de arreglos
+            if(tipoI.esNulo() || tipoI.esArreglo() || tipoI.esStruct() || tipoI.esError() || tipoI.esStructNombre())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+            if(tipoD.esNulo() || tipoD.esArreglo() || tipoD.esStruct() || tipoD.esError() || tipoD.esStructNombre())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+
+            return new Tipo(TipoPrimitivo.BOOL);
+        }
+
+        this.getValor= function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '!=','Error de tipos en operación diferencia. '+this.expresionI.getTipo(entorno).getNombreTipo()+' + '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO:validar las cadenas o caracteres
+            var valorI = this.expresionI.getValor(entorno);
+            var valorD = this.expresionD.getValor(entorno);
+
+            return parseFloat(valorI) != parseFloat(valorD);
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+class MayorQue
+{
+    constructor(linea, columna, expresionI, expresionD)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresionI = expresionI;
+        this.expresionD = expresionD;
+
+        this.getTipo = function(entorno)
+        {
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO: verificar igual de arreglos
+            if(tipoI.esNulo() || tipoI.esArreglo() || tipoI.esStruct() || tipoI.esError() || tipoI.esStructNombre())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+            if(tipoD.esNulo() || tipoD.esArreglo() || tipoD.esStruct() || tipoD.esError() || tipoD.esStructNombre())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+
+            return new Tipo(TipoPrimitivo.BOOL);
+        }
+
+        this.getValor= function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '>','Error de tipos en operación mayor que. '+this.expresionI.getTipo(entorno).getNombreTipo()+' + '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO:validar las cadenas o caracteres
+            var valorI = this.expresionI.getValor(entorno);
+            var valorD = this.expresionD.getValor(entorno);
+
+            return parseFloat(valorI) > parseFloat(valorD);
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+class MenorQue
+{
+    constructor(linea, columna, expresionI, expresionD)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresionI = expresionI;
+        this.expresionD = expresionD;
+
+        this.getTipo = function(entorno)
+        {
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO: verificar igual de arreglos
+            if(tipoI.esNulo() || tipoI.esArreglo() || tipoI.esStruct() || tipoI.esError() || tipoI.esStructNombre())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+            if(tipoD.esNulo() || tipoD.esArreglo() || tipoD.esStruct() || tipoD.esError() || tipoD.esStructNombre())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+
+            return new Tipo(TipoPrimitivo.BOOL);
+        }
+
+        this.getValor= function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '<','Error de tipos en operación menor que. '+this.expresionI.getTipo(entorno).getNombreTipo()+' + '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO:validar las cadenas o caracteres
+            var valorI = this.expresionI.getValor(entorno);
+            var valorD = this.expresionD.getValor(entorno);
+
+            return parseFloat(valorI) < parseFloat(valorD);
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+class MayorIgual
+{
+    constructor(linea, columna, expresionI, expresionD)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresionI = expresionI;
+        this.expresionD = expresionD;
+
+        this.getTipo = function(entorno)
+        {
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO: verificar igual de arreglos
+            if(tipoI.esNulo() || tipoI.esArreglo() || tipoI.esStruct() || tipoI.esError() || tipoI.esStructNombre())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+            if(tipoD.esNulo() || tipoD.esArreglo() || tipoD.esStruct() || tipoD.esError() || tipoD.esStructNombre())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+
+            return new Tipo(TipoPrimitivo.BOOL);
+        }
+
+        this.getValor= function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '>=','Error de tipos en operación mayor igual que. '+this.expresionI.getTipo(entorno).getNombreTipo()+' + '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO:validar las cadenas o caracteres
+            var valorI = this.expresionI.getValor(entorno);
+            var valorD = this.expresionD.getValor(entorno);
+
+            return parseFloat(valorI) >= parseFloat(valorD);
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+class MenorIgual
+{
+    constructor(linea, columna, expresionI, expresionD)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresionI = expresionI;
+        this.expresionD = expresionD;
+
+        this.getTipo = function(entorno)
+        {
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO: verificar igual de arreglos
+            if(tipoI.esNulo() || tipoI.esArreglo() || tipoI.esStruct() || tipoI.esError() || tipoI.esStructNombre())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+            if(tipoD.esNulo() || tipoD.esArreglo() || tipoD.esStruct() || tipoD.esError() || tipoD.esStructNombre())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+
+            return new Tipo(TipoPrimitivo.BOOL);
+        }
+
+        this.getValor= function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '<=','Error de tipos en operación menor igual que. '+this.expresionI.getTipo(entorno).getNombreTipo()+' + '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO:validar las cadenas o caracteres
+            var valorI = this.expresionI.getValor(entorno);
+            var valorD = this.expresionD.getValor(entorno);
+
+            return parseFloat(valorI) <= parseFloat(valorD);
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+
+
+/*Expresiones Logicas------------------------------------------------> */
+
+class AndLog
+{
+    constructor(linea, columna, expresionI, expresionD)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresionI = expresionI;
+        this.expresionD = expresionD;
+
+        this.getTipo = function(entorno)
+        {
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO: verificar validaciones
+            if(!tipoI.esBoolean() || !tipoD.esBoolean())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+
+            return new Tipo(TipoPrimitivo.BOOL);
+        }
+
+        this.getValor= function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '&&','Error de tipos en operación and. '+this.expresionI.getTipo(entorno).getNombreTipo()+' + '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+
+            //var tipoI = expresionI.getTipo(entorno);
+            //var tipoD = expresionD.getTipo(entorno);
+
+            //TODO:validar las cadenas o caracteres
+            var valorI = this.expresionI.getValor(entorno);
+            var valorD = this.expresionD.getValor(entorno);
+
+            return Boolean(valorI) && Boolean(valorD);
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+class OrLog
+{
+    constructor(linea, columna, expresionI, expresionD)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresionI = expresionI;
+        this.expresionD = expresionD;
+
+        this.getTipo = function(entorno)
+        {
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+
+            //TODO: verificar validaciones
+            if(!tipoI.esBoolean() || !tipoD.esBoolean())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+
+            return new Tipo(TipoPrimitivo.BOOL);
+        }
+
+        this.getValor= function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '||','Error de tipos en operación or. '+this.expresionI.getTipo(entorno).getNombreTipo()+' + '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+
+            //var tipoI = expresionI.getTipo(entorno);
+            //var tipoD = expresionD.getTipo(entorno);
+
+            //TODO:validar las cadenas o caracteres
+            var valorI = this.expresionI.getValor(entorno);
+            var valorD = this.expresionD.getValor(entorno);
+
+            return Boolean(valorI) || Boolean(valorD);
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+class NotLog
+{
+    constructor(linea, columna, expresionI)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresionI = expresionI;
+
+        this.getTipo = function(entorno)
+        {
+            var tipoI = expresionI.getTipo(entorno);
+
+            //TODO: verificar validaciones
+            if(!tipoI.esBoolean())
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+
+            return new Tipo(TipoPrimitivo.BOOL);
+        }
+
+
+        this.getValor= function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '!','Error de tipos en operación de negacion. '+this.expresionI.getTipo(entorno).getNombreTipo()+' + '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+
+            //var tipoI = expresionI.getTipo(entorno);
+
+            //TODO:validar las cadenas o caracteres
+            var valorI = this.expresionI.getValor(entorno);
+
+            return !Boolean(valorI);
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+
+
 /*Instrucciones---------------------------------------->*/
-
-
-
-
 
 class Funcion 
 {
@@ -915,7 +1372,6 @@ class Bloque
         }
     }
 }
-
 
 class Print
 {

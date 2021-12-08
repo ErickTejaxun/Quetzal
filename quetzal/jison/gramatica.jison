@@ -1,6 +1,4 @@
-
-%{	
-
+%{
 	var debugMode = false;
 	function debugPrint(valor)
 	{
@@ -18,6 +16,7 @@
 \s+                   /* skip whitespace */
 \n+                   /* skip whitespace */
 \t+                   /* skip whitespace */
+
 //comentarios
 "/*"[^'*']*"*/"         return;
 "//"[^\r\n]*[^\r\n]     return;
@@ -28,15 +27,9 @@
 \"(\\.|[^"])*\" 	  return 'texto'
 \'(\\.|[^'])\' 	      return 'caracter'
 
-//AUMENTO DECREMENTO
-"++"                  %{ debugPrint('++');return '++'; %}
-"--"                  %{ debugPrint('--');return '--'; %}
-//asignacion y Eeracion
-"+="                  %{ debugPrint('+=');return '+='; %}
-"*="                  %{ debugPrint('*-');return '*-'; %}
-"-="                  %{ debugPrint('-=');return '-='; %}
-"/="                  %{ debugPrint('/=k');return '/='; %}
 //Eeradores relacionales
+">"                   %{ debugPrint('>');return '>'; %}
+"<"                   %{ debugPrint('<');return '<'; %}
 ">="                  %{ debugPrint('>=');return '>='; %}
 "<="                  %{ debugPrint('<=');return '<='; %}
 "=="                  %{ debugPrint('==');return '=='; %}
@@ -47,14 +40,14 @@
 "??"                  %{ debugPrint('??');return '??'; %}
 "&&"                  %{ debugPrint('&&');return '&&'; %}
 "!"                   %{ debugPrint('!');return '!'; %}
+
 //Eeradores aritmeticos
 "*"                   %{ debugPrint('*');return '*'; %}
-"->"                 %{ debugPrint('->');return 'flecha'; %} 
 "/"                   %{ debugPrint('/');return '/'; %}
 "-"                   %{ debugPrint('-');return '-'; %}
 "+"                   %{ debugPrint('+');return '+'; %}
-"^"                   %{ debugPrint('^');return '^'; %}
 "="                   %{ debugPrint('=');return '='; %}
+
 //signos de agrupacion
 "("                   %{ debugPrint('(');return '('; %}
 ")"                   %{ debugPrint(')');return ')'; %}
@@ -62,52 +55,44 @@
 "}"                   %{ debugPrint('}');return '}'; %}
 "["                   %{ debugPrint('[');return '['; %}
 "]"                   %{ debugPrint(']');return ']'; %}
-//otros signitos culeros
 
-">"                   %{ debugPrint('>');return '>'; %}
-"<"                   %{ debugPrint('<');return '<'; %}
+//otros signitos culeros
 ","                   %{ debugPrint(',');return ','; %}
 "."                   %{ debugPrint('.');return '.'; %}
-					  
 ":"                   %{ debugPrint(':');return ':'; %}
 ";"                   %{ debugPrint(';');return ';'; %}
 
-
-"null"		      %{ debugPrint(yytext);return 'nulo'; %}
-"true"		      %{ debugPrint(yytext);return 'verdadero'; %}
-"false"		      %{ debugPrint(yytext);return 'falso'; %}
+//palabras reservadas
+"null"		          %{ debugPrint(yytext);return 'nulo'; %}
+"true"		          %{ debugPrint(yytext);return 'verdadero'; %}
+"false"		          %{ debugPrint(yytext);return 'falso'; %}
 "println"		      %{ debugPrint(yytext);return 'println'; %}
 "print"		      	  %{ debugPrint(yytext);return 'print'; %}
-"typeof"		      	  %{ debugPrint(yytext);return 'tipode'; %}
+"typeof"		      %{ debugPrint(yytext);return 'tipode'; %}
 
-/*Tipos */
+//Tipos
+"null"               %{ debugPrint(yytext);return 'tnull'; %}
 "int"   			 %{ debugPrint(yytext);return 'tint'; %}
 "double"   			 %{ debugPrint(yytext);return 'tdouble'; %}
-"string"   			 %{ debugPrint(yytext);return 'tstring'; %}
-"char"			 %{ debugPrint(yytext);return 'tchar'; %}
 "boolean"   		 %{ debugPrint(yytext);return 'boolean'; %}
+"char"			     %{ debugPrint(yytext);return 'tchar'; %}
+"string"   			 %{ debugPrint(yytext);return 'tstring'; %}
 "void"   			 %{ debugPrint(yytext);return 'tvoid'; %}
 ([a-zA-Z]|"_"|"$")([a-zA-Z]|[0-9]|"_"|"$")* %{ debugPrint(yytext); return 'id'; %}
 
 <<EOF>>               return 'EOF'
-.                  %{  Utils.registrarErrorLexico(yylloc.first_line, yylloc.first_column, yytext, 'Caracter no válido.'); return 'INVALIDO' %}
+.                    %{  Utils.registrarErrorLexico(yylloc.first_line, yylloc.first_column, yytext, 'Caracter no válido.'); return 'INVALIDO' %}
 /lex
 
 /* Eerator associations and precedence */
-
-
 %left '+' '-'
 %left '*' '/'
-%left '^'
 %left '(' ')'
-%left '->'
 %left UMINUS
-%left '||' '??'
+%left '||'
 %left '=' 
 %left '==' '!=' '>' '>=' '<' '<='
-%left '+=' '-=' '*=' '/=' 
 %left '&&'
-%left '++' '--'
 %right '!'
 
 
@@ -116,7 +101,6 @@
 %start INICIO
 
 %% /* language grammar */
-
 
 INICIO	:  INSTRUCCIONESG EOF{		
 	return new Raiz($1.linea, $1.columna, $1); 
@@ -219,129 +203,88 @@ E   : '(' E ')'
 	{
 		$$ = new Division(@1.first_line-1,@1.first_column-1,$1,$3);
 	}
-	/*
-    | E '^' E
+    | E '>=' E
 	{
-		$$ = new Potencia(@1.first_line-1,@1.first_column-1,$1,$3);
+		$$ = new MayorIgual(@1.first_line-1,@1.first_column-1,$1,$3);
 	}
+    | E '<=' E
+	{
+		$$ = new MenorIgual(@1.first_line-1,@1.first_column-1,$1,$3);
+	}
+    | E '!=' E
+	{
+		$$ = new Diferenciacion(@1.first_line-1,@1.first_column-1,$1,$3);
+	}
+    | E '==' E
+	{
+		$$ = new Igualdad(@1.first_line-1,@1.first_column-1,$1,$3);
+	}
+    | E '>' E
+	{
+		$$ = new MayorQue(@1.first_line-1,@1.first_column-1,$1,$3);
+	}
+    | E '<' E
+	{
+		$$ = new MenorQue(@1.first_line-1,@1.first_column-1,$1,$3);
+	}
+	/*
     | '-' E %prec UMINUS
 	{
 		$$ = new Menos(@1.first_line-1,@1.first_column-1,$2);
 	}
-    | E '>=' E
-	{
-		$$ = crearNodo(">=",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
-	}
-    | E '<=' E
-	{
-		$$ = crearNodo("<=",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
-	}
-    | E '==' E
-	{
-		$$ = crearNodo("==",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
-	}
-    | E '!=' E
-	{
-		$$ = crearNodo("!=",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
-	}
-    | E '>' E
-	{
-		$$ = crearNodo(">",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
-	}
-    | E '<' E
-	{
-		$$ = crearNodo("<",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
-	}
+	*/
     | E '||' E
 	{
-		$$ = crearNodo("||",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
+		$$ = new OrLog(@1.first_line-1,@1.first_column-1,$1,$3);
 	}
     | E '&&' E
 	{
-		$$ = crearNodo("&&",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
+		$$ = new AndLog(@1.first_line-1,@1.first_column-1,$1,$3);
 	}
-    | E '??' E
+	| '!' E
 	{
-		$$ = crearNodo("??",@1.first_line-1,@1.first_column-1);
-		$$.add($1);
-		$$.add($3);
+		$$ = new NotLog(@2.first_line,@2.first_column,$2);
 	}
-	| verdadero
-	{
-		$$ = crearNodo("Verdadero",@1.first_line,@1.first_column);
-	}
-	| falso
-	{
-		$$ = crearNodo("falso",@1.first_line,@1.first_column);
-	}
-	| E '++'
-	{
-		$$ = crearNodo("Expresion",@1.first_line,@1.first_column);
-		$$.add($1);
-		$$.add($2);
-	}
-	| E '--'
-	{
-		$$ = crearNodo("Expresion",@1.first_line,@1.first_column);
-		$$.add($1);
-		$$.add($2);
-	}*/
     | entero
 	{
-		$$ = new Entero(@1.first_line,@1.first_column, parseInt($1));		
+		$$ = new Entero(@1.first_line-1,@1.first_column-1, parseInt($1));
 	}	
 	| double
 	{
-		$$ = new Double(@1.first_line,@1.first_column, parseFloat($1));
+		$$ = new Double(@1.first_line-1,@1.first_column-1, parseFloat($1));
 	}
     | id 
     {
-		$$ = new ExpVariable(@1.first_line,@1.first_column,$1);
+		$$ = new ExpVariable(@1.first_line-1,@1.first_column-1,$1);
 	}
 	| texto
 	{
-		$$ = new ExpString(@1.first_line,@1.first_column,$1.substring(1,$1.length-1));
+		$$ = new ExpString(@1.first_line-1,@1.first_column-1,$1.substring(1,$1.length-1));
 		
 	}
     | caracter
 	{
-		$$ = new ExpString(@1.first_line,@1.first_column,$1.substring(1,$1.length-1));
+		$$ = new ExpString(@1.first_line-1,@1.first_column-1,$1.substring(1,$1.length-1));
 	}
 	| nulo
 	{
-		$$ = new Nulo(@1.first_line,@1.first_column);
+		$$ = new Nulo(@1.first_line-1,@1.first_column-1);
 	}
 	| verdadero
 	{
-		$$ = new ExpBooleana(@1.first_line,@1.first_column, true);
+		$$ = new ExpBooleana(@1.first_line-1,@1.first_column-1, true);
 	}
 	| falso
 	{
-		$$ = new ExpBooleana(@1.first_line,@1.first_column, false);
+		$$ = new ExpBooleana(@1.first_line-1,@1.first_column-1, false);
 	}	
 	| tipode '(' E ')'
 	{
-		$$ = new TipoDe(@1.first_line,@1.first_column,$3);
+		$$ = new TipoDe(@1.first_line-1,@1.first_column-1,$3);
 	}
 	| LLAMADA {$$= $1;}
 	;
 
-LLAMADA : id '(' ')' { $$ = new Llamada(@1.first_line,@1.first_column, $1, null);} 
+LLAMADA : id '(' ')' { $$ = new Llamada(@1.first_line-1,@1.first_column-1, $1, null);}
 ;
 

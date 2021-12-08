@@ -27,8 +27,6 @@ println("Hola" + " " + "mundo!");
 
 /*
 
-
-
 void main()
 {
     println("Comenzando esssssssssssjecución");
