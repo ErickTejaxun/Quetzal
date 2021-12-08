@@ -786,7 +786,7 @@ class Division
 
 
 class Llamada
-{
+{ 
     constructor(linea, columna, id, parametros)
     {
         this.linea = linea;
