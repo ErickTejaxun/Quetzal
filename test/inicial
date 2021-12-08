@@ -40,6 +40,7 @@ void main()
 	println('a');
     println(5+2+3+3);
 	println(null);
+	println('a'+10+'a');
 	//suma();
 }
 
