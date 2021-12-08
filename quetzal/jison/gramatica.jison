@@ -321,7 +321,7 @@ E   : '(' E ')'
 	}
     | caracter
 	{
-		$$ = new ExpString(@1.first_line,@1.first_column,$1.substring(1,$1.length-1));
+		$$ = new Caracter(@1.first_line,@1.first_column,$1.substring(1,$1.length-1));
 	}
 	| nulo
 	{

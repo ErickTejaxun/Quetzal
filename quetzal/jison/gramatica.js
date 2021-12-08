@@ -203,7 +203,7 @@ case 32:
 break;
 case 33:
 
-		this.$ = new ExpString(_$[$0].first_line,_$[$0].first_column,$$[$0].substring(1,$$[$0].length-1));
+		this.$ = new Caracter(_$[$0].first_line,_$[$0].first_column,$$[$0].substring(1,$$[$0].length-1));
 	
 break;
 case 34:

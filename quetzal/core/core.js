@@ -285,7 +285,7 @@ class Double
         }
         this.generar3D=function(entorno)
         {
-            return this.valor.toString();
+            return this.valor%1 > 0 ? this.valor.toString(): this.valor.toString() + '.00';
         }        
     }
 }
@@ -529,14 +529,14 @@ class Suma
             if(tipo.esEntero())
             {
                 return parseInt(valorI) +parseInt(valorD);
-            }            
+            }          
         }
 
         this.generar3D = function(entorno)
         {
             var tipo = this.getTipo(entorno);
-            var valorI = this.expresionI.getValor(entorno);
-            var valorD = this.expresionD.getValor(entorno);
+            var valorI = this.expresionI.generar3D(entorno);
+            var valorD = this.expresionD.generar3D(entorno);
             
             var t0 = Utils.generarTemporal();
 
@@ -549,7 +549,8 @@ class Suma
             {
                 Utils.imprimirConsola(t0+'='+valorI+'+'+valorD+';\n');
                 return t0;
-            }                            
+            } 
+
         }
     }
 }
@@ -623,6 +624,26 @@ class Resta
                 Utils.imprimirConsola(t0+'='+valorI+'-'+valorD+';\n');
                 return t0;
             }                            
+        } 
+        
+        this.generar3D = function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            var valorI = this.expresionI.generar3D(entorno);
+            var valorD = this.expresionD.generar3D(entorno);
+            
+            var t0 = Utils.generarTemporal();
+
+            if(tipo.esDouble())
+            {
+                Utils.imprimirConsola(t0+'='+valorI+'-'+valorD+';\n');
+                return t0;
+            }
+            if(tipo.esEntero())
+            {
+                Utils.imprimirConsola(t0+'='+valorI+'-'+valorD+';\n');
+                return t0;
+            } 
         }        
     }
 }
@@ -682,8 +703,8 @@ class Multiplicacion
         this.generar3D = function(entorno)
         {
             var tipo = this.getTipo(entorno);
-            var valorI = this.expresionI.getValor(entorno);
-            var valorD = this.expresionD.getValor(entorno);
+            var valorI = this.expresionI.generar3D(entorno);
+            var valorD = this.expresionD.generar3D(entorno);
             
             var t0 = Utils.generarTemporal();
 
@@ -696,8 +717,8 @@ class Multiplicacion
             {
                 Utils.imprimirConsola(t0+'='+valorI+'*'+valorD+';\n');
                 return t0;
-            }                            
-        }        
+            } 
+        }          
     }
 }
 
@@ -757,8 +778,8 @@ class Division
         this.generar3D = function(entorno)
         {
             var tipo = this.getTipo(entorno);
-            var valorI = this.expresionI.getValor(entorno);
-            var valorD = this.expresionD.getValor(entorno);
+            var valorI = this.expresionI.generar3D(entorno);
+            var valorD = this.expresionD.generar3D(entorno);
             
             var t0 = Utils.generarTemporal();
 
