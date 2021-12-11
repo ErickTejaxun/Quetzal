@@ -311,23 +311,19 @@ class ExpString
             heap[t1] = 33; // Caracter b
              */
 
-            var t0 = Utils.generarTemporal();
-            var t1 = Utils.generarTemporal();
+            var t0 = Utils.generarTemporal();            
 
-            Utils.imprimirConsola(t0+'=H;// Inicio de la nueva cadena\n');
-            Utils.imprimirConsola(t1+'=H;// puntero\n');
+            Utils.imprimirConsola(t0+'=H;// Inicio de la nueva cadena\n');            
 
             var array = Array.from(this.valor);
             array.forEach(caracter =>
             {
-                Utils.imprimirConsola('heap[(int)'+t1+']='+ caracter.charCodeAt() +'; // ' + caracter+'\n'); // Caracter a
-                Utils.imprimirConsola('H=H+1; // Reservando espacio \n');
-                Utils.imprimirConsola(t1+'='+t1+'+1; // Actualizando puntero \n');
+                Utils.imprimirConsola('heap[(int)H]='+ caracter.charCodeAt() +'; // ' + caracter+'\n'); // Caracter a
+                Utils.imprimirConsola('H=H+1; // Reservando espacio \n');                
                 
-            });              
-            
+            });                          
             //Agregar caracter de final de cadena
-            Utils.imprimirConsola('heap[(int)'+t1+']='+ Utils.obtenerFinCadena() +'; // Fin de cadena. \n'); // Caracter a
+            Utils.imprimirConsola('heap[(int)H]='+ Utils.obtenerFinCadena() +'; // Fin de cadena. \n'); // Caracter a
             Utils.imprimirConsola('H=H+1; // Reservando espacio \n');           
 
             return t0;
@@ -459,6 +455,88 @@ class TipoDe
 }
 
 /*Expresiones Aritmeticas------------------------------------------------> */
+
+class Concatenar
+{
+    constructor(linea, columna, expresionI, expresionD)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresionI = expresionI;
+        this.expresionD = expresionD;
+
+        this.getTipo = function(entorno)
+        {
+            var tipoI = expresionI.getTipo(entorno);
+            var tipoD = expresionD.getTipo(entorno);
+           
+            /**
+             * Aquí falta verificar. El auxiliar mencionó en una clase que esta operación
+             * Convertía ambos operandos a cadena. Hay que confirmar eso.
+             */
+            return new Tipo(TipoPrimitivo.STRING);        
+        }        
+
+        this.getValor= function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '&','Error de tipos en operación concatenación. '+this.expresionI.getTipo(entorno).getNombreTipo()+' & '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+
+            var valorI = this.expresionI.getValor(entorno);
+            var valorD = this.expresionD.getValor(entorno);
+            return valorI.toString() + valorD.toString();        
+        }
+
+        this.generar3D = function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            var tipoI = this.getTipo(entorno);
+            var tipoD = this.getTipo(entorno);
+            
+            if(tipo.esError())
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, '&','Error de tipos en operación concatenación. '+this.expresionI.getTipo(entorno).getNombreTipo()+' & '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;                
+            }
+
+            var valorI = this.expresionI.generar3D(entorno);
+            var valorD = this.expresionD.generar3D(entorno);
+
+            if(tipoI.esCadena())
+            {
+                if(tipoD.esCadena())
+                {             
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();
+                    var t3 =Utils.generarTemporal();
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1; // Dirección del primer parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+';\n');
+                    Utils.imprimirConsola(t2+'='+t0+'+2;// Dirección del segundo parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t2+']='+valorD+';\n');
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola('Nativa_Concatenar_Cadenas();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola(t3+'=stack[(int)'+t0+']; // Valor de retorno.\n');                    
+                    return t3;
+                }
+                if(tipoD.esEntero())
+                {
+                    
+                }
+            }
+
+        }
+    }
+}
+
+
 
 class Suma
 {
@@ -612,7 +690,7 @@ class Resta
             }                            
         } 
         
-        this.generar3D = function(entorno)
+/*        this.generar3D = function(entorno)
         {
             var tipo = this.getTipo(entorno);
             var valorI = this.expresionI.generar3D(entorno);
@@ -631,6 +709,73 @@ class Resta
                 return t0;
             } 
         }        
+*/
+    }
+}
+
+
+class Menos
+{
+    constructor(linea, columna, expresionI)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresionI = expresionI;        
+        this.getTipo = function(entorno)
+        {
+            var tipoI = expresionI.getTipo(entorno);            
+           
+            if(tipoI.esDouble())
+            {
+                return new Tipo(TipoPrimitivo.DOUBLE);
+            }
+
+            if(tipoI.esEntero() || tipoI.esChar())
+            {
+                return new Tipo(TipoPrimitivo.INT);
+            }
+            return new Tipo(TipoPrimitivo.ERROR);        
+        }
+
+        this.getValor= function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '-','Error de tipos en operación menos.  - '+ this.expresionI.getTipo(entorno).getNombreTipo());
+                return;
+            }
+
+            var valorI = this.expresionI.getValor(entorno);            
+            if(tipo.esDouble())
+            {
+                return parseFloat(valorI) *-1;
+            }
+            if(tipo.esEntero())
+            {
+                return parseInt(valorI) *-1;
+            }                        
+        }
+
+        this.generar3D = function(entorno)
+        {
+            var tipo = this.getTipo(entorno);
+            var valorI = this.expresionI.getValor(entorno);                                
+            if(tipo.esDouble())
+            {
+                var t0 = Utils.generarTemporal();
+                Utils.imprimirConsola(t0+'='+valorI+'* -1;\n');
+                return t0;
+            }
+            if(tipo.esEntero())
+            {
+                var t0 = Utils.generarTemporal();
+                Utils.imprimirConsola(t0+'='+valorI+'* -1;\n');
+                return t0;
+            }                            
+        } 
+               
     }
 }
 
@@ -768,9 +913,9 @@ class Division
 
             if(tipo.esDouble() || tipo.esEntero())
             {
-                var L1 = Utils.genenerarEtiqueta();
-                var L2 = Utils.genenerarEtiqueta();
-                var L3 = Utils.genenerarEtiqueta();
+                var L1 = Utils.generarEtiqueta();
+                var L2 = Utils.generarEtiqueta();
+                var L3 = Utils.generarEtiqueta();
                 Utils.imprimirConsola('if('+valorD+'==0) goto '+L1+'; // Error dividendo\n');
                 Utils.imprimirConsola('goto '+L2+';//correcto\n');
                 Utils.imprimirConsola(L1+':\n');
@@ -1259,7 +1404,67 @@ class Igualdad
 
         this.generar3D = function(entorno)
         {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '==','Error de tipos en operación igualdad. '+this.expresionI.getTipo(entorno).getNombreTipo()+' == '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+            var tipoI = this.expresionI.getTipo(entorno);
+            var tipoD = this.expresionI.getTipo(entorno);
 
+            if(tipoI.esNumerico() && tipoD.esNumerico())
+            {
+                this.LV = Utils.generarEtiqueta();
+                this.LF = Utils.generarEtiqueta();
+                var valorI = this.expresionI.generar3D(entorno);
+                var valorD = this.expresionD.generar3D(entorno);
+                
+                Utils.imprimirConsola('if('+valorI+'=='+valorD+') goto '+this.LV+'; \n');
+                Utils.imprimirConsola('goto '+this.LF+'; \n');
+                return this;
+            }
+            else if(tipoI.esBoolean() && tipoD.esBoolean())
+            {
+                this.LV = Utils.generarEtiqueta();
+                this.LF = Utils.generarEtiqueta();
+                var valorI = this.expresionI.generar3D(entorno);
+                var valorD = this.expresionD.generar3D(entorno);
+                
+                Utils.imprimirConsola('if('+valorI+'=='+valorD+') goto '+this.LV+'; \n');
+                Utils.imprimirConsola('goto '+this.LF+'; \n');
+                return this;
+            }
+            else if(tipoI.esCadena() && tipoD.esCadena())
+            {
+                this.LV = Utils.generarEtiqueta();
+                this.LF = Utils.generarEtiqueta();
+                var valorI = this.expresionI.generar3D(entorno);
+                var valorD = this.expresionD.generar3D(entorno);
+                
+
+                //Temporales
+                var t0 = Utils.generarTemporal();
+                var t1 = Utils.generarTemporal();
+                var t2 = Utils.generarTemporal();
+                var t3 = Utils.generarTemporal();
+                var t4 = Utils.generarTemporal();
+
+                Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulacion de cambio de entorno\n');
+                Utils.imprimirConsola(t1+'='+t0+'+1; //Direccion Cadena 1\n');
+                Utils.imprimirConsola('stack[(int)'+t1+'] = '+valorI+'; // Pasando primer cadena\n');
+                Utils.imprimirConsola(t2+'='+t0+'+2; //Direccion Cadena 2\n');
+                Utils.imprimirConsola('stack[(int)'+t2+'] = '+valorD+'; // Pasando segunda cadena\n');
+                Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                Utils.imprimirConsola('Nativa_Comparar_Cadenas();\n');
+                Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Retomar de entorno\n');
+                Utils.imprimirConsola(t3+'='+t0+'+0; //Direccion retorno\n');
+                Utils.imprimirConsola(t4+'=stack[(int)'+t3+']; //Valor de retorno\n');
+                Utils.imprimirConsola('if('+t4+'==1) goto '+this.LV+'; \n');
+                Utils.imprimirConsola('goto '+this.LF+'; \n');
+                return this;
+            }
         }
     }
 }
@@ -1313,7 +1518,67 @@ class Diferenciacion
 
         this.generar3D = function(entorno)
         {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '!=','Error de tipos en operación desigualdad. '+this.expresionI.getTipo(entorno).getNombreTipo()+' != '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+            var tipoI = this.expresionI.getTipo(entorno);
+            var tipoD = this.expresionI.getTipo(entorno);
 
+            if(tipoI.esNumerico() && tipoD.esNumerico())
+            {
+                this.LV = Utils.generarEtiqueta();
+                this.LF = Utils.generarEtiqueta();
+                var valorI = this.expresionI.generar3D(entorno);
+                var valorD = this.expresionD.generar3D(entorno);
+                
+                Utils.imprimirConsola('if('+valorI+'!='+valorD+') goto '+this.LV+'; \n');
+                Utils.imprimirConsola('goto '+this.LF+'; \n');
+                return this;
+            }
+            else if(tipoI.esBoolean() && tipoD.esBoolean())
+            {
+                this.LV = Utils.generarEtiqueta();
+                this.LF = Utils.generarEtiqueta();
+                var valorI = this.expresionI.generar3D(entorno);
+                var valorD = this.expresionD.generar3D(entorno);
+                
+                Utils.imprimirConsola('if('+valorI+'!='+valorD+') goto '+this.LV+'; \n');
+                Utils.imprimirConsola('goto '+this.LF+'; \n');
+                return this;
+            }
+            else if(tipoI.esCadena() && tipoD.esCadena())
+            {
+                this.LV = Utils.generarEtiqueta();
+                this.LF = Utils.generarEtiqueta();
+                var valorI = this.expresionI.generar3D(entorno);
+                var valorD = this.expresionD.generar3D(entorno);
+                
+
+                //Temporales
+                var t0 = Utils.generarTemporal();
+                var t1 = Utils.generarTemporal();
+                var t2 = Utils.generarTemporal();
+                var t3 = Utils.generarTemporal();
+                var t4 = Utils.generarTemporal();
+
+                Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulacion de cambio de entorno\n');
+                Utils.imprimirConsola(t1+'='+t0+'+1; //Direccion Cadena 1\n');
+                Utils.imprimirConsola('stack[(int)'+t1+'] = '+valorI+'; // Pasando primer cadena\n');
+                Utils.imprimirConsola(t2+'='+t0+'+2; //Direccion Cadena 2\n');
+                Utils.imprimirConsola('stack[(int)'+t2+'] = '+valorD+'; // Pasando segunda cadena\n');
+                Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                Utils.imprimirConsola('Nativa_Comparar_Cadenas();\n');
+                Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Retomar de entorno\n');
+                Utils.imprimirConsola(t3+'='+t0+'+0; //Direccion retorno\n');
+                Utils.imprimirConsola(t4+'=stack[(int)'+t3+']; //Valor de retorno\n');
+                Utils.imprimirConsola('if('+t4+'==0) goto '+this.LV+'; \n');
+                Utils.imprimirConsola('goto '+this.LF+'; \n');
+                return this;
+            }
         }
     }
 }
@@ -1367,7 +1632,27 @@ class MayorQue
 
         this.generar3D = function(entorno)
         {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '>','Error de tipos en operación mayor que. '+this.expresionI.getTipo(entorno).getNombreTipo()+' > '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+            var tipoI = this.expresionI.getTipo(entorno);
+            var tipoD = this.expresionI.getTipo(entorno);
 
+            if(tipoI.esNumerico() && tipoD.esNumerico())
+            {
+                this.LV = Utils.generarEtiqueta();
+                this.LF = Utils.generarEtiqueta();
+                var valorI = this.expresionI.generar3D(entorno);
+                var valorD = this.expresionD.generar3D(entorno);
+                
+                Utils.imprimirConsola('if('+valorI+'>'+valorD+') goto '+this.LV+'; \n');
+                Utils.imprimirConsola('goto '+this.LF+'; \n');
+                return this;
+            }
         }
     }
 }
@@ -1421,7 +1706,27 @@ class MenorQue
 
         this.generar3D = function(entorno)
         {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '<','Error de tipos en operación menor que. '+this.expresionI.getTipo(entorno).getNombreTipo()+' < '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+            var tipoI = this.expresionI.getTipo(entorno);
+            var tipoD = this.expresionI.getTipo(entorno);
 
+            if(tipoI.esNumerico() && tipoD.esNumerico())
+            {
+                this.LV = Utils.generarEtiqueta();
+                this.LF = Utils.generarEtiqueta();
+                var valorI = this.expresionI.generar3D(entorno);
+                var valorD = this.expresionD.generar3D(entorno);
+                
+                Utils.imprimirConsola('if('+valorI+'<'+valorD+') goto '+this.LV+'; \n');
+                Utils.imprimirConsola('goto '+this.LF+'; \n');
+                return this;
+            }
         }
     }
 }
@@ -1475,7 +1780,27 @@ class MayorIgual
 
         this.generar3D = function(entorno)
         {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '>=','Error de tipos en operación mayor o igual que. '+this.expresionI.getTipo(entorno).getNombreTipo()+' >= '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+            var tipoI = this.expresionI.getTipo(entorno);
+            var tipoD = this.expresionI.getTipo(entorno);
 
+            if(tipoI.esNumerico() && tipoD.esNumerico())
+            {
+                this.LV = Utils.generarEtiqueta();
+                this.LF = Utils.generarEtiqueta();
+                var valorI = this.expresionI.generar3D(entorno);
+                var valorD = this.expresionD.generar3D(entorno);
+                
+                Utils.imprimirConsola('if('+valorI+'>='+valorD+') goto '+this.LV+'; \n');
+                Utils.imprimirConsola('goto '+this.LF+'; \n');
+                return this;
+            }
         }
     }
 }
@@ -1529,7 +1854,27 @@ class MenorIgual
 
         this.generar3D = function(entorno)
         {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '<=','Error de tipos en operación menor o igual que. '+this.expresionI.getTipo(entorno).getNombreTipo()+' <= '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }
+            var tipoI = this.expresionI.getTipo(entorno);
+            var tipoD = this.expresionI.getTipo(entorno);
 
+            if(tipoI.esNumerico() && tipoD.esNumerico())
+            {
+                this.LV = Utils.generarEtiqueta();
+                this.LF = Utils.generarEtiqueta();
+                var valorI = this.expresionI.generar3D(entorno);
+                var valorD = this.expresionD.generar3D(entorno);
+                
+                Utils.imprimirConsola('if('+valorI+'<='+valorD+') goto '+this.LV+'; \n');
+                Utils.imprimirConsola('goto '+this.LF+'; \n');
+                return this;
+            }
         }
     }
 }
@@ -1583,7 +1928,58 @@ class AndLog
 
         this.generar3D = function(entorno)
         {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '&&','Error de tipos en operación lógica and. '+this.expresionI.getTipo(entorno).getNombreTipo()+' && '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }            
+            
+            var valorI = this.expresionI.generar3D(entorno);                    
+            if(Utils.tenemosEtiquetas(valorI))
+            {
+                Utils.imprimirConsola(valorI.LV+':\n');
+                var valorD = this.expresionD.generar3D(entorno);
+                if(Utils.tenemosEtiquetas(valorD))
+                {
+                    this.LV = valorD.LV;
+                    this.LF = valorD.LF + ':\n'+ valorI.LF;
+                }
+                else
+                {
+                    this.LV = Utils.generarEtiqueta();
+                    var LF = Utils.generarEtiqueta();
+                    Utils.imprimirConsola('if('+valorD+'==1) goto '+this.LV+';//Verdadero\n');
+                    Utils.imprimirConsola('goto '+LF+';//Falso\n');
+                    this.LF = valorI.LF + ':\n'+ LF;
+                }
+            }
+            else
+            {
 
+                var LV = Utils.generarEtiqueta();
+                var LF = Utils.generarEtiqueta();
+                Utils.imprimirConsola('if('+valorI+'==1) goto '+LV+';//Verdadero\n');
+                Utils.imprimirConsola('goto '+LF+';//Falso\n');
+                Utils.imprimirConsola(LV+':\n');
+                var valorD = this.expresionD.generar3D(entorno);
+
+                if(Utils.tenemosEtiquetas(valorD))
+                {
+                    this.LV = valorD.LV;
+                    this.LF = LF + ':\n'+ valorD.LF;
+                }
+                else
+                {
+                    this.LV = Utils.generarEtiqueta();                    
+                    Utils.imprimirConsola('if('+valorD+'==1) goto '+this.LV+';//Verdadero\n');
+                    Utils.imprimirConsola('goto '+LF+';//Falso\n');
+                    this.LF = LF;
+                }                
+                
+            }
+            return this;            
         }
     }
 }
@@ -1633,7 +2029,58 @@ class OrLog
 
         this.generar3D = function(entorno)
         {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                //Registramos el error
+                Utils.registrarErrorSemantico(this.linea, this.columna, '||','Error de tipos en operación lógica OR. '+this.expresionI.getTipo(entorno).getNombreTipo()+' || '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                return;
+            }            
+            var valorI = this.expresionI.generar3D(entorno);                        
+            if(Utils.tenemosEtiquetas(valorI))
+            {
+                Utils.imprimirConsola(valorI.LF+':\n');
+                var valorD = this.expresionD.generar3D(entorno);
+                if(Utils.tenemosEtiquetas(valorD))
+                {
+                    this.LV = valorD.LV + ':\n'+ valorI.LV;
+                    this.LF = valorD.LF;
+                }
+                else
+                {
+                    var LV = Utils.generarEtiqueta();
+                    this.LF = Utils.generarEtiqueta();
+                    Utils.imprimirConsola('if('+valorD+'==1) goto '+LV+';//Verdadero\n');
+                    Utils.imprimirConsola('goto '+this.LF+';//Falso\n');                    
+                    this.LV = valorI.LV + ':\n' + LV;
+                }
+            }
+            else
+            {
 
+                var LV = Utils.generarEtiqueta();
+                var LF = Utils.generarEtiqueta();
+                Utils.imprimirConsola('if('+valorI+'==1) goto '+LV+';//Verdadero\n');
+                Utils.imprimirConsola('goto '+LF+';//Falso\n');
+                Utils.imprimirConsola(LV+':\n');
+                var valorD = this.expresionD.generar3D(entorno);
+
+                if(Utils.tenemosEtiquetas(valorD))
+                {
+                    this.LV = LV +':\n'+valorD.LV;
+                    this.LF = valorD.LF;
+                }
+                else
+                {
+                    this.LV = Utils.generarEtiqueta();                    
+                    Utils.imprimirConsola('if('+valorD+'==1) goto '+this.LV+';//Verdadero\n');
+                    Utils.imprimirConsola('goto '+LF+';//Falso\n');
+                    this.LF = LF;
+                    this.LV = LV +':\n' + this.LV;
+                }                
+                
+            }
+            return this;            
         }
     }
 }
@@ -1666,7 +2113,7 @@ class NotLog
             if(tipo.esError())
             {
                 //Registramos el error
-                Utils.registrarErrorSemantico(this.linea, this.columna, '!','Error de tipos en operación de negacion. '+this.expresionI.getTipo(entorno).getNombreTipo()+' + '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                Utils.registrarErrorSemantico(this.linea, this.columna, '!','Error de tipos en operación de negacion. '+this.expresionI.getTipo(entorno).getNombreTipo());
                 return;
             }
 
@@ -1680,6 +2127,28 @@ class NotLog
 
         this.generar3D = function(entorno)
         {
+            var tipo = this.getTipo(entorno);
+            if(tipo.esError())
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, '!','Error de tipos en operación de negacion. '+this.expresionI.getTipo(entorno).getNombreTipo());
+                return;
+            }   
+            
+            var valorI = this.expresionI.generar3D(entorno);
+            if(Utils.tenemosEtiquetas(valorI))
+            {
+                this.LF = valorI.LV;
+                this.LV = valorI.LF;
+                return this;
+            }
+            else
+            {
+                this.LF = Utils.generarEtiqueta();
+                this.LV = Utils.generarEtiqueta();
+                Utils.imprimirConsola('if('+valorI+'==1) goto '+this.LF+';//Falso\n');
+                Utils.imprimirConsola('goto '+this.LV+';//Verdadero\n');
+                return this;
+            }
 
         }
     }
@@ -1712,6 +2181,7 @@ class Funcion
             // Codigo para codigo del método. 
             Utils.imprimirConsola('\n\nvoid '+this.id+'() {\n');
             this.bloqueInstrucciones.generar3D(entorno);
+            Utils.imprimirConsola('return;\n');
             Utils.imprimirConsola('}//Fin main\n');                       
         }
     }
@@ -1835,9 +2305,9 @@ class Print
             {
                 var valorExpresion = this.expresion.generar3D(entorno);
                 var t3 = Utils.generarTemporal();
-                var L1 = Utils.genenerarEtiqueta();
-                var L2 = Utils.genenerarEtiqueta();
-                var L3 = Utils.genenerarEtiqueta();  
+                var L1 = Utils.generarEtiqueta();
+                var L2 = Utils.generarEtiqueta();
+                var L3 = Utils.generarEtiqueta();  
                 var t0 = Utils.generarTemporal();                              
                 Utils.imprimirConsola('if ('+valorExpresion+'==1) goto '+L1+'; // Valor Verdadero\n');
                 Utils.imprimirConsola('goto '+L2+'; // Valor falso\n');
@@ -1943,32 +2413,49 @@ class Println
             if(tipoExpresion.esBoolean())
             {
                 var valorExpresion = this.expresion.generar3D(entorno);
-                var t3 = Utils.generarTemporal();                
-                var L1 = Utils.genenerarEtiqueta();
-                var L2 = Utils.genenerarEtiqueta();
-                var L3 = Utils.genenerarEtiqueta();
-                var t0 = Utils.generarTemporal();
-                Utils.imprimirConsola('if ('+valorExpresion+'==1) goto '+L1+'; // Valor Verdadero\n');
-                Utils.imprimirConsola('goto '+L2+'; // Valor falso\n');
-                Utils.imprimirConsola(L1+':\n');
-                var nodoStringVerdadero = new ExpString(this.linea, this.columna,"true");   
-                var cadenaStringVerdadero = nodoStringVerdadero.generar3D(entorno);           
-                Utils.imprimirConsola(t3+'='+cadenaStringVerdadero+'; // Inicio cadena\n');
-                Utils.imprimirConsola('goto '+L3+'; // Salida\n');
-                Utils.imprimirConsola(L2+':\n');
-                var nodoStringFalso = new ExpString(this.linea, this.columna,"false");
-                var cadenaStringFalso = nodoStringFalso.generar3D(entorno); 
-                Utils.imprimirConsola(t0+'='+cadenaStringFalso+'; // Inicio cadena\n');
-                Utils.imprimirConsola(L3+':\n');
-                var inicioCadena = nodoStringVerdadero.generar3D(entorno);
-                t0 = Utils.generarTemporal();
-                var t1 = Utils.generarTemporal();
-                Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';//Simulacion de cambio de entorno\n');
-                Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
-                Utils.imprimirConsola('stack[(int)'+t1+']='+t3+';//Paso parametro\n');
-                Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
-                Utils.imprimirConsola('Nativa_ImpresionLn();\n');
-                Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Retomar entorno\n');
+                if(Utils.tenemosEtiquetas(valorExpresion))
+                {         
+                    var LSalida = Utils.generarEtiqueta();          
+                    Utils.imprimirConsola(valorExpresion.LV+':\n');
+                    var cadenaVerdadero = new ExpString(this.linea, this.columna, "true\n");
+                    var inicioCadena = cadenaVerdadero.generar3D(entorno);
+                    Utils.generarCodigoParaImprimir(inicioCadena, entorno);                    
+                    Utils.imprimirConsola('goto '+LSalida+'; // Salida\n ');
+                    Utils.imprimirConsola(valorExpresion.LF+':\n');
+                    var cadenaFalso = new ExpString(this.linea, this.columna, "false\n");
+                    inicioCadena = cadenaFalso.generar3D(entorno);
+                    Utils.generarCodigoParaImprimir(inicioCadena, entorno);
+                    Utils.imprimirConsola(LSalida+':\n');
+                }                
+                else
+                {
+                    var t3 = Utils.generarTemporal();                
+                    var L1 = Utils.generarEtiqueta();
+                    var L2 = Utils.generarEtiqueta();
+                    var L3 = Utils.generarEtiqueta();
+                    var t0 = Utils.generarTemporal();
+                    Utils.imprimirConsola('if ('+valorExpresion+'==1) goto '+L1+'; // Valor Verdadero\n');
+                    Utils.imprimirConsola('goto '+L2+'; // Valor falso\n');
+                    Utils.imprimirConsola(L1+':\n');
+                    var nodoStringVerdadero = new ExpString(this.linea, this.columna,"true");   
+                    var cadenaStringVerdadero = nodoStringVerdadero.generar3D(entorno);           
+                    Utils.imprimirConsola(t3+'='+cadenaStringVerdadero+'; // Inicio cadena\n');
+                    Utils.imprimirConsola('goto '+L3+'; // Salida\n');
+                    Utils.imprimirConsola(L2+':\n');
+                    var nodoStringFalso = new ExpString(this.linea, this.columna,"false");
+                    var cadenaStringFalso = nodoStringFalso.generar3D(entorno); 
+                    Utils.imprimirConsola(t3+'='+cadenaStringFalso+'; // Inicio cadena\n');
+                    Utils.imprimirConsola(L3+':\n');
+                    var inicioCadena = nodoStringVerdadero.generar3D(entorno);
+                    t0 = Utils.generarTemporal();
+                    var t1 = Utils.generarTemporal();
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';//Simulacion de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+t3+';//Paso parametro\n');
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola('Nativa_ImpresionLn();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Retomar entorno\n');
+                }
             }            
             else
             if(tipoExpresion.esChar())

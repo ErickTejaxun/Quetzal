@@ -9,7 +9,7 @@
 	}
 %}
 %lex
-%options case-insensitive
+%options case-sensitve
 
 %%
 
@@ -40,6 +40,7 @@
 "||"                  %{ debugPrint('||');return '||'; %}
 "??"                  %{ debugPrint('??');return '??'; %}
 "&&"                  %{ debugPrint('&&');return '&&'; %}
+"&"                   %{ debugPrint('&');return '&'; %}
 "!"                   %{ debugPrint('!');return '!'; %}
 
 //Eeradores aritmeticos
@@ -94,15 +95,14 @@
 /lex
 
 /* Eerator associations and precedence */
-%left '+' '-'
+%left '&&' '||'
+%left '==' '!=' '>' '>=' '<' '<='
+%left '+' '-' '&'
 %left '*' '/' '%'
 %left '^'
 %left '(' ')'
 %left UMINUS
-%left '||'
 %left '=' 
-%left '==' '!=' '>' '>=' '<' '<='
-%left '&&'
 %right '!'
 
 
@@ -195,7 +195,7 @@ PRINT : print '(' E ')' ';'
 
 E   : '(' E ')'
 	{
-		$$ = $1;		
+		$$ = $2;		
 	}	
     | E '+' E
 	{
@@ -236,12 +236,7 @@ E   : '(' E ')'
 	| tan '(' E ')'
 	{
 		$$ = new Tangente(@1.first_line-1,@1.first_column-1,$3);
-	}			
-	/*
-    | E '^' E
-	{
-		$$ = new Potencia(@1.first_line-1,@1.first_column-1,$1,$3);
-	}
+	}				
     | '-' E %prec UMINUS
 	{
 		$$ = new Menos(@1.first_line-1,@1.first_column-1,$2);
@@ -253,11 +248,12 @@ E   : '(' E ')'
     | E '<=' E
 	{
 		$$ = new MenorIgual(@1.first_line-1,@1.first_column-1,$1,$3);
-	}
+	}	
     | E '!=' E
 	{
 		$$ = new Diferenciacion(@1.first_line-1,@1.first_column-1,$1,$3);
 	}
+	
     | E '==' E
 	{
 		$$ = new Igualdad(@1.first_line-1,@1.first_column-1,$1,$3);
@@ -270,12 +266,6 @@ E   : '(' E ')'
 	{
 		$$ = new MenorQue(@1.first_line-1,@1.first_column-1,$1,$3);
 	}
-	/*
-    | '-' E %prec UMINUS
-	{
-		$$ = new Menos(@1.first_line-1,@1.first_column-1,$2);
-	}
-	*/
     | E '||' E
 	{
 		$$ = new OrLog(@1.first_line-1,@1.first_column-1,$1,$3);
@@ -288,6 +278,10 @@ E   : '(' E ')'
 	{
 		$$ = new NotLog(@2.first_line,@2.first_column,$2);
 	}
+    | E '&' E
+	{
+		$$ = new Concatenar(@1.first_line-1,@1.first_column-1,$1,$3);
+	}	
     | entero
 	{
 		$$ = new Entero(@1.first_line-1,@1.first_column-1, parseInt($1));

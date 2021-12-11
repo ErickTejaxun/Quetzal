@@ -142,7 +142,7 @@ class Utilidades
             return temporal;
         }
 
-        this.genenerarEtiqueta = function()
+        this.generarEtiqueta = function()
         {
             var etiqueta = 'L'+this.contadorEtiquetas;
             this.contadorEtiquetas += 1;
@@ -183,6 +183,8 @@ class Utilidades
         {
             this.NativaImpresion();
             this.NativaImpresionLn();
+            this.NativaCompararCadenas();
+            this.NativaConcatenarCadenas();
         }
         
         this.NativaImpresion = function()
@@ -191,9 +193,9 @@ class Utilidades
             var t1 = this.generarTemporal();
             var t2 = this.generarTemporal();
 
-            var L0 = this.genenerarEtiqueta();
-            var L1 = this.genenerarEtiqueta();
-            var L2 = this.genenerarEtiqueta();
+            var L0 = this.generarEtiqueta();
+            var L1 = this.generarEtiqueta();
+            var L2 = this.generarEtiqueta();
 
             this.imprimirConsola('\n\n');
             this.imprimirConsola('void Nativa_Impresion(){\n');
@@ -218,9 +220,9 @@ class Utilidades
             var t1 = this.generarTemporal();
             var t2 = this.generarTemporal();
 
-            var L0 = this.genenerarEtiqueta();
-            var L1 = this.genenerarEtiqueta();
-            var L2 = this.genenerarEtiqueta();
+            var L0 = this.generarEtiqueta();
+            var L1 = this.generarEtiqueta();
+            var L2 = this.generarEtiqueta();
 
             this.imprimirConsola('\n\n');
             this.imprimirConsola('void Nativa_ImpresionLn(){\n');
@@ -238,7 +240,131 @@ class Utilidades
             this.imprimirConsola('printf("%c", 10); // Imprimir salto de linea\n');
             this.imprimirConsola('return;\n');
             this.imprimirConsola('}\n');
-        }                
+        }        
+        //Nativa_Comparar_Cadenas     
+        this.NativaCompararCadenas = function()
+        {
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            var t2 = this.generarTemporal();
+            var t3 = this.generarTemporal();
+            var t4 = this.generarTemporal();
+            var t5 = this.generarTemporal();
+            var t6 = this.generarTemporal();
+
+            var L0 = this.generarEtiqueta();
+            var L1 = this.generarEtiqueta();
+            var L2 = this.generarEtiqueta();
+            var L3 = this.generarEtiqueta();
+            //var L4 = this.generarEtiqueta();
+            var L5 = this.generarEtiqueta();
+            var L6 = this.generarEtiqueta();            
+            var L7 = this.generarEtiqueta();
+
+            this.imprimirConsola('\n\n');
+            this.imprimirConsola('void Nativa_Comparar_Cadenas(){\n');
+            this.imprimirConsola(t0+'=P+1;// Direccion cadena \n');
+            this.imprimirConsola(t1+'=stack[(int)'+t0+'];// Direccion de la cadena 1\n');
+            this.imprimirConsola(t2+'=P+2;// Direccion cadena 2\n');
+            this.imprimirConsola(t3+'=stack[(int)'+t2+'];// Direccion de la cadena 2\n');
+            this.imprimirConsola(L0+':\n');
+            this.imprimirConsola(t4+'=heap[(int)'+t1+'];// caracter i-esimo cadena 1\n');
+            this.imprimirConsola('if('+t4+'=='+this.obtenerFinCadena()+') goto '+L1+'; //Fin de cadena 1;\n');
+            this.imprimirConsola('goto '+L2+';\n');
+            this.imprimirConsola(L2+':\n');
+            this.imprimirConsola(t5+'=heap[(int)'+t3+'];// caracter i-esimo cadena 2\n');
+            this.imprimirConsola('if('+t4+'=='+t5+') goto '+L3+'; //Verdadero, actualizar caracter;\n');
+            this.imprimirConsola('goto '+L6+';// Caracteres diferentes. Falso\n');
+            this.imprimirConsola(L3+':\n');
+            this.imprimirConsola(t1+'='+t1+'+1;// caracter cadena 1\n');
+            this.imprimirConsola(t3+'='+t3+'+1;// caracter cadena 2\n');
+            this.imprimirConsola('goto '+L0+'; // Compracion\n');
+            this.imprimirConsola(L1+':\n');
+            this.imprimirConsola(t5+'=heap[(int)'+t3+'];// caracter i-esimo cadena 2\n');
+            this.imprimirConsola('if('+t4+'=='+t5+') goto '+L5+'; //Verdadero, \n');
+            this.imprimirConsola('goto '+L6+';\n');
+            this.imprimirConsola(L6+':\n');
+            this.imprimirConsola(t6+'=P+0;//Direccion retorno\n');
+            this.imprimirConsola('stack[(int)'+t6+']=0; // Valor falso de retorno\n');
+            this.imprimirConsola('goto '+L7+';\n');
+            this.imprimirConsola(L5+':\n');
+            this.imprimirConsola(t6+'=P+0;//Direccion retorno\n');
+            this.imprimirConsola('stack[(int)'+t6+']=1; // Valor verdadero de retorno\n');
+            this.imprimirConsola(L7+':\n');
+            this.imprimirConsola('return;\n');
+            this.imprimirConsola('}\n');
+        }  
+
+
+        this.NativaConcatenarCadenas = function()
+        {
+
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            var t2 = this.generarTemporal();
+            var t3 = this.generarTemporal();
+            var t4 = this.generarTemporal();
+            var t5 = this.generarTemporal();
+            var t6 = this.generarTemporal();
+            var t7 = this.generarTemporal();
+            var t8 = this.generarTemporal();
+            var t9 = this.generarTemporal();
+            var t10 =this.generarTemporal();
+            var t11 =this.generarTemporal();
+            var t12 =this.generarTemporal();       
+            var L1 = this.generarEtiqueta();
+            var L2 = this.generarEtiqueta();    
+            var L3 = this.generarEtiqueta();
+            var L4 = this.generarEtiqueta();   
+            var L5 = this.generarEtiqueta();
+
+            this.imprimirConsola('\n\n');
+            this.imprimirConsola('void Nativa_Concatenar_Cadenas(){\n');
+            this.imprimirConsola(t0+'=P+1;// Direccion primer cadena\n')
+            this.imprimirConsola(t1+'=stack[(int)'+t0+'];// Referencia primer cadena\n')
+            this.imprimirConsola(t2+'=P+2;// Direccion segunda cadena\n')
+            this.imprimirConsola(t3+'=stack[(int)'+t2+'];// Referencia segunda cadena\n')
+            this.imprimirConsola(t4+'=H;\n')
+            this.imprimirConsola(t5+'='+t1+';\n')
+            this.imprimirConsola(t6+'='+t3+';\n')
+            this.imprimirConsola(L1+':\n') 
+            this.imprimirConsola(t7+'=heap[(int)'+t5+'];\n')
+            this.imprimirConsola('if ('+t7+'!='+this.obtenerFinCadena()+') goto '+L2+'; \n')
+            this.imprimirConsola('goto '+L3+';\n')
+            this.imprimirConsola(L2+':\n')
+            this.imprimirConsola(t8+'=H;\n')
+            this.imprimirConsola('H=H+1;\n')
+            this.imprimirConsola('heap[(int)'+t8+']='+t7+';\n')
+            this.imprimirConsola(t5+'='+t5+'+1;\n')
+            this.imprimirConsola('goto '+L1+';\n')
+            this.imprimirConsola(L3+':\n')
+            this.imprimirConsola(t9+'=heap[(int)'+t6+'];\n')
+            this.imprimirConsola('if ('+t9+'!='+this.obtenerFinCadena()+'){ goto '+L4+'; }\n')
+            this.imprimirConsola('goto '+L5+';\n')
+            this.imprimirConsola(L4+':\n')
+            this.imprimirConsola(t10+'=H;\n')
+            this.imprimirConsola('H=H+1;\n')
+            this.imprimirConsola('heap[(int)'+t10+']='+t9+';\n')
+            this.imprimirConsola(t6+'='+t6+'+1;\n')
+            this.imprimirConsola('goto '+L3+';\n')
+            this.imprimirConsola(L5+':\n')
+            this.imprimirConsola(t11+'=H;\n')
+            this.imprimirConsola('H=H+1;\n')
+            this.imprimirConsola('heap[(int)'+t11+']='+this.obtenerFinCadena()+';\n')
+            this.imprimirConsola(t12+'=P+0;\n')
+            this.imprimirConsola('stack[(int)'+t12+']='+t4+';\n')
+            this.imprimirConsola('\n');
+            this.imprimirConsola('return;\n');
+            this.imprimirConsola('}\n');                        
+        }
+
+
+        
+        this.tenemosEtiquetas = function(objecto)
+        {
+            return (objecto instanceof Igualdad) || (objecto instanceof Diferenciacion) || (objecto instanceof MayorQue) || (objecto instanceof MenorQue) || (objecto instanceof MenorIgual)
+                    || (objecto instanceof MayorIgual) || (objecto instanceof AndLog) || (objecto instanceof OrLog)|| (objecto instanceof NotLog);
+        }
     }
 }
 
