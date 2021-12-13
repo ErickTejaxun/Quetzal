@@ -38,7 +38,7 @@
 
 //Eeradores Logicos
 "||"                  %{ debugPrint('||');return '||'; %}
-"??"                  %{ debugPrint('??');return '??'; %}
+"?"                  %{ debugPrint('?');return '?'; %}
 "&&"                  %{ debugPrint('&&');return '&&'; %}
 "&"                   %{ debugPrint('&');return '&'; %}
 "!"                   %{ debugPrint('!');return '!'; %}
@@ -95,6 +95,7 @@
 /lex
 
 /* Eerator associations and precedence */
+%left '?'
 %left '&&' '||'
 %left '==' '!=' '>' '>=' '<' '<='
 %left '+' '-' '&'
@@ -102,7 +103,7 @@
 %left '^'
 %left '(' ')'
 %left UMINUS
-%left '=' 
+%left '='
 %right '!'
 
 
@@ -281,7 +282,15 @@ E   : '(' E ')'
     | E '&' E
 	{
 		$$ = new Concatenar(@1.first_line-1,@1.first_column-1,$1,$3);
-	}	
+	}
+    | E '^' E
+	{
+		$$ = new PotenciaString(@1.first_line-1,@1.first_column-1,$1,$3);
+	}
+    | E '?' E ':' E
+	{
+		$$ = new Ternario(@1.first_line-1,@1.first_column-1,$1,$3, $5);
+	}			
     | entero
 	{
 		$$ = new Entero(@1.first_line-1,@1.first_column-1, parseInt($1));
