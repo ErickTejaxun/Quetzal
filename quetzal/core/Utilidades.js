@@ -185,6 +185,10 @@ class Utilidades
             this.NativaImpresionLn();
             this.NativaCompararCadenas();
             this.NativaConcatenarCadenas();
+            this.NativaIntToString();
+            this.DoubleToString();
+            this.CharToString();
+            this.BooleanToString();
         }
         
         this.NativaImpresion = function()
@@ -320,46 +324,322 @@ class Utilidades
 
             this.imprimirConsola('\n\n');
             this.imprimirConsola('void Nativa_Concatenar_Cadenas(){\n');
-            this.imprimirConsola(t0+'=P+1;// Direccion primer cadena\n')
-            this.imprimirConsola(t1+'=stack[(int)'+t0+'];// Referencia primer cadena\n')
-            this.imprimirConsola(t2+'=P+2;// Direccion segunda cadena\n')
-            this.imprimirConsola(t3+'=stack[(int)'+t2+'];// Referencia segunda cadena\n')
-            this.imprimirConsola(t4+'=H;\n')
-            this.imprimirConsola(t5+'='+t1+';\n')
-            this.imprimirConsola(t6+'='+t3+';\n')
-            this.imprimirConsola(L1+':\n') 
-            this.imprimirConsola(t7+'=heap[(int)'+t5+'];\n')
-            this.imprimirConsola('if ('+t7+'!='+this.obtenerFinCadena()+') goto '+L2+'; \n')
-            this.imprimirConsola('goto '+L3+';\n')
-            this.imprimirConsola(L2+':\n')
-            this.imprimirConsola(t8+'=H;\n')
-            this.imprimirConsola('H=H+1;\n')
-            this.imprimirConsola('heap[(int)'+t8+']='+t7+';\n')
-            this.imprimirConsola(t5+'='+t5+'+1;\n')
-            this.imprimirConsola('goto '+L1+';\n')
-            this.imprimirConsola(L3+':\n')
-            this.imprimirConsola(t9+'=heap[(int)'+t6+'];\n')
-            this.imprimirConsola('if ('+t9+'!='+this.obtenerFinCadena()+'){ goto '+L4+'; }\n')
-            this.imprimirConsola('goto '+L5+';\n')
-            this.imprimirConsola(L4+':\n')
-            this.imprimirConsola(t10+'=H;\n')
-            this.imprimirConsola('H=H+1;\n')
-            this.imprimirConsola('heap[(int)'+t10+']='+t9+';\n')
-            this.imprimirConsola(t6+'='+t6+'+1;\n')
-            this.imprimirConsola('goto '+L3+';\n')
-            this.imprimirConsola(L5+':\n')
-            this.imprimirConsola(t11+'=H;\n')
-            this.imprimirConsola('H=H+1;\n')
-            this.imprimirConsola('heap[(int)'+t11+']='+this.obtenerFinCadena()+';\n')
-            this.imprimirConsola(t12+'=P+0;\n')
-            this.imprimirConsola('stack[(int)'+t12+']='+t4+';\n')
+            this.imprimirConsola(t0+'=P+1;// Direccion primer cadena\n');
+            this.imprimirConsola(t1+'=stack[(int)'+t0+'];// Referencia primer cadena\n');
+            this.imprimirConsola(t2+'=P+2;// Direccion segunda cadena\n');
+            this.imprimirConsola(t3+'=stack[(int)'+t2+'];// Referencia segunda cadena\n');
+            this.imprimirConsola(t4+'=H;\n');
+            this.imprimirConsola(t5+'='+t1+';\n');
+            this.imprimirConsola(t6+'='+t3+';\n');
+            this.imprimirConsola(L1+':\n');
+            this.imprimirConsola(t7+'=heap[(int)'+t5+'];\n');
+            this.imprimirConsola('if ('+t7+'!='+this.obtenerFinCadena()+') goto '+L2+'; \n');
+            this.imprimirConsola('goto '+L3+';\n');
+            this.imprimirConsola(L2+':\n');
+            this.imprimirConsola(t8+'=H;\n');
+            this.imprimirConsola('H=H+1;\n');
+            this.imprimirConsola('heap[(int)'+t8+']='+t7+';\n');
+            this.imprimirConsola(t5+'='+t5+'+1;\n');
+            this.imprimirConsola('goto '+L1+';\n');
+            this.imprimirConsola(L3+':\n');
+            this.imprimirConsola(t9+'=heap[(int)'+t6+'];\n');
+            this.imprimirConsola('if ('+t9+'!='+this.obtenerFinCadena()+'){ goto '+L4+'; }\n');
+            this.imprimirConsola('goto '+L5+';\n');
+            this.imprimirConsola(L4+':\n');
+            this.imprimirConsola(t10+'=H;\n');
+            this.imprimirConsola('H=H+1;\n');
+            this.imprimirConsola('heap[(int)'+t10+']='+t9+';\n');
+            this.imprimirConsola(t6+'='+t6+'+1;\n');
+            this.imprimirConsola('goto '+L3+';\n');
+            this.imprimirConsola(L5+':\n');
+            this.imprimirConsola(t11+'=H;\n');
+            this.imprimirConsola('H=H+1;\n');
+            this.imprimirConsola('heap[(int)'+t11+']='+this.obtenerFinCadena()+';\n');
+            this.imprimirConsola(t12+'=P+0;\n');
+            this.imprimirConsola('stack[(int)'+t12+']='+t4+';\n');
             this.imprimirConsola('\n');
             this.imprimirConsola('return;\n');
             this.imprimirConsola('}\n');                        
         }
 
-
+        this.NativaIntToString = function()
+        {
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            var t2 = this.generarTemporal();
+            var t3 = this.generarTemporal();
+            var t4 = this.generarTemporal();
+            var t5 = this.generarTemporal();
+            var t6 = this.generarTemporal();
+            var t7 = this.generarTemporal();
+            var t8 = this.generarTemporal();
+            var t9 = this.generarTemporal();
+            var t10 = this.generarTemporal();
+            var t11 = this.generarTemporal();
+            var t12 = this.generarTemporal();
+            var t13 = this.generarTemporal();
+            var t14 = this.generarTemporal();
+            var t15 = this.generarTemporal(); 
+            var t30 = this.generarTemporal(); 
         
+            var L0 = this.generarEtiqueta();
+            var L1 = this.generarEtiqueta();
+            var L2 = this.generarEtiqueta();
+            var L3 = this.generarEtiqueta();
+            var L4 = this.generarEtiqueta();
+            var L5 = this.generarEtiqueta();
+            var L11 = this.generarEtiqueta();
+            var L12 = this.generarEtiqueta();
+            var L13 = this.generarEtiqueta();
+            var L15 = this.generarEtiqueta();
+            
+            this.imprimirConsola('void IntToString_Nativa(){\n');
+            this.imprimirConsola(t0+'=P+1;  // Direccion valor int\n');
+            this.imprimirConsola(t1+'=stack[(int)'+t0+'];  // Valor int\n');
+            this.imprimirConsola(t2+'=0;// Contador de caracteres\n');
+            // Para manejo de negativos
+            this.imprimirConsola(t30+'=0;//Por defecto es positivo\n');
+            this.imprimirConsola('if('+t1+'<0) goto '+L11+';\n');
+            this.imprimirConsola('goto '+L0+';\n');
+            this.imprimirConsola(L11+':\n');
+            this.imprimirConsola(t1+'='+t1+'*-1;\n');
+            this.imprimirConsola(t30+'=1;//Significa negativo\n');
+            // Para manejo de negativos
+            this.imprimirConsola(L0+':\n');
+            this.imprimirConsola('if('+t1+'>=10) goto '+L1+';\n');
+            this.imprimirConsola('goto '+L2+';\n');
+            this.imprimirConsola(L1+':\n');
+            this.imprimirConsola(t3+'=(int)'+t1+'/10;\n');
+            this.imprimirConsola(t4+'='+t3+'*10;\n');
+            this.imprimirConsola(t5+'='+t1+'-'+t4+'; // Digito\n');
+            this.imprimirConsola(t6+'='+t5+'+48;// Caracter digito\n');
+            this.imprimirConsola(t1+'='+t4+'/10;\n');
+            this.imprimirConsola(t7+'=H;\n');
+            this.imprimirConsola('H=H+1;\n');
+            this.imprimirConsola('heap[(int)'+t7+']='+t6+';\n');
+            this.imprimirConsola(t2+'='+t2+'+1;// Aumento contador\n');
+            this.imprimirConsola('goto '+L0+';\n');
+            this.imprimirConsola(L2+':\n');
+            this.imprimirConsola(t8+'='+t1+'+48; // Caracter digito\n');
+            this.imprimirConsola(t9+'=H;\n');
+            this.imprimirConsola('H=H+1;\n');
+            this.imprimirConsola('heap[(int)'+t9+']='+t8+';\n');
+            this.imprimirConsola(t2+'='+t2+'+1;// Aumento contador\n');
+            this.imprimirConsola(t11+'=H; // Inicio de cadena ordenada\n');
+            this.imprimirConsola(t10+'=H;\n');
+            // Verificamos para agregar el simbolo de menos    
+            this.imprimirConsola('if('+t30+'==1) goto '+L12+';//Agregamos el símbolo -\n');
+            this.imprimirConsola('goto '+L13+';\n');
+            this.imprimirConsola(L12+':\n');
+            this.imprimirConsola(t15+'=H;//Direccion nuevo caracter\n');
+            this.imprimirConsola('H=H+1;//Reservando espacio en memoria\n');
+            this.imprimirConsola('heap[(int)'+t15+']=45;// -\n');
+            this.imprimirConsola(t10+'=H;\n');
+            this.imprimirConsola(L13+':\n');
+            //Verificamos para agregar el simbolo de menos    
+            this.imprimirConsola(L3+':\n');
+            this.imprimirConsola('if('+t2+'>=0) goto '+ L4+';\n');
+            this.imprimirConsola('goto '+L5+';\n');
+            this.imprimirConsola(L4+':\n');
+            this.imprimirConsola(t12+'=heap[(int)'+t11+']; // Caracter\n');
+            this.imprimirConsola(t13+'=H;\n');
+            this.imprimirConsola('H=H+1; // Reservando espacio\n');
+            this.imprimirConsola('heap[(int)'+t13+']='+t12+';\n');
+            this.imprimirConsola(t2+'='+t2+'-1;\n');
+            this.imprimirConsola(t11+'='+t11+'-1;\n');
+            this.imprimirConsola('goto '+L3+';\n');
+            this.imprimirConsola(L5+':\n');
+            this.imprimirConsola(t14+'=H;\n');
+            this.imprimirConsola('H=H+1;\n');
+            this.imprimirConsola('heap[(int)'+t14+']='+this.obtenerFinCadena()+';// Fin cadena\n');
+            this.imprimirConsola(t15+'=P+0;\n');
+            this.imprimirConsola('stack[(int)'+t15+']='+t10+';// H ---> inicio nueva cadena\n');
+            this.imprimirConsola('return;\n');
+            this.imprimirConsola('}\n');                         
+        }  
+        
+        this.DoubleToString = function()
+        {
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            var t2 = this.generarTemporal();
+            var t3 = this.generarTemporal();
+            var t4 = this.generarTemporal();
+            var t5 = this.generarTemporal();
+            var t6 = this.generarTemporal();
+            var t7 = this.generarTemporal();
+            var t8 = this.generarTemporal();
+            var t9 = this.generarTemporal();
+            var t10 = this.generarTemporal();
+            var t11 = this.generarTemporal();
+            var t12 = this.generarTemporal();
+            var t13 = this.generarTemporal();
+            var t14 = this.generarTemporal();
+            var t15 = this.generarTemporal();   
+            var t16 = this.generarTemporal();
+            var t17 = this.generarTemporal();
+            var t18 = this.generarTemporal();   
+            var t19 = this.generarTemporal();
+            var t20 = this.generarTemporal();
+            var t21 = this.generarTemporal();
+            var t22 = this.generarTemporal();
+            var t23 = this.generarTemporal();
+            var t24 = this.generarTemporal();
+            var t25 = this.generarTemporal();
+            var t26 = this.generarTemporal();
+            var t27 = this.generarTemporal();
+            var t28 = this.generarTemporal();
+            var t29 = this.generarTemporal();   
+            var t30 = this.generarTemporal();
+        
+            var L0 = this.generarEtiqueta();
+            var L1 = this.generarEtiqueta();
+            var L2 = this.generarEtiqueta();
+            var L3 = this.generarEtiqueta();
+            var L4 = this.generarEtiqueta();
+            var L5 = this.generarEtiqueta();
+            var L6 = this.generarEtiqueta();
+            var L7 = this.generarEtiqueta();
+            var L8 = this.generarEtiqueta();
+            var L9 = this.generarEtiqueta();
+            var L10 = this.generarEtiqueta();
+            var L11 = this.generarEtiqueta();
+            var L12 = this.generarEtiqueta();
+            var L13 = this.generarEtiqueta();
+
+            
+            this.imprimirConsola('void DoubleToString_Nativa(){\n');
+            this.imprimirConsola(t0+'=P+1;\n');
+            this.imprimirConsola(t1+'=stack[(int)'+t0+'];\n');
+            this.imprimirConsola(t2+'=0;\n');
+            // Para manejo de negativos
+            this.imprimirConsola(t30+'=0;//Por defecto es positivo\n');    
+            this.imprimirConsola('if('+t1+'<0) goto '+L11+';\n');
+            this.imprimirConsola('goto '+L0+';\n');
+            this.imprimirConsola(L11+':\n');
+            this.imprimirConsola(t1+'='+t1+'*-1;\n');
+            this.imprimirConsola(t30+'=1;//Significa negativo\n');
+            // Para manejo de negativos
+            this.imprimirConsola(L0+':\n');
+            this.imprimirConsola(t3+'=(int)'+t1+';\n');
+            this.imprimirConsola(t4+'='+t1+'-'+t3+'; // residuo decimal\n');
+            this.imprimirConsola('if('+t4+' >0) goto '+L1+';\n');
+            this.imprimirConsola('goto '+L2+';\n');
+            this.imprimirConsola(L1+':\n');
+            this.imprimirConsola(t1+'='+t1+'*10;\n');
+            this.imprimirConsola(t2+'='+t2+'+1;\n');
+            this.imprimirConsola('goto '+L0+';\n');
+            this.imprimirConsola(L2+': // Se comienza a crear la cadena\n');
+            this.imprimirConsola(t3+'=0;// Contador dígitos\n');
+            this.imprimirConsola(L3+':\n');
+            this.imprimirConsola('if('+t1+'>=10) goto '+L4+';\n');
+            this.imprimirConsola('goto '+L5+';// Ya sólo queda un dígito\n');
+            this.imprimirConsola(L4+':\n');
+            this.imprimirConsola('if('+t3+'=='+t2+') goto '+L6+';\n');
+            this.imprimirConsola('goto '+L7+';\n');
+            this.imprimirConsola(L6+': // Ponemos el punto\n');
+            this.imprimirConsola(t4+'=H;\n');
+            this.imprimirConsola('H=H+1;\n');
+            this.imprimirConsola('heap[(int)'+t4+']=46; // . \n');
+            this.imprimirConsola(t3+'='+t3+'+1;\n');
+            this.imprimirConsola('goto '+L3+';\n');
+            this.imprimirConsola(L7+': // Normal\n');
+            this.imprimirConsola(t5+'=(int)'+t1+'/10;\n');
+            this.imprimirConsola(t6+'='+t5+'*10;\n');
+            this.imprimirConsola(t7+'='+t1+'-'+t6+';// Digito\n');
+            this.imprimirConsola(t8+'='+t7+'+48;// Caracter digito\n');
+            this.imprimirConsola(t1+'='+t6+'/10;\n');
+            this.imprimirConsola(t9+'=H;// Direccion nuevo caracter\n');
+            this.imprimirConsola('H=H+1;// Reservando espacio\n');
+            this.imprimirConsola('heap[(int)'+t9+']='+t8+';// Guardando caracter\n');
+            this.imprimirConsola(t3+'='+t3+'+1;\n');
+            this.imprimirConsola('goto '+L3+';\n');
+            this.imprimirConsola(L5+': // Ultimo dígito\n');
+            this.imprimirConsola(t10+'=H;// Direccion nuevo caracter\n');
+            this.imprimirConsola('H=H+1;// Reservando espacio\n');
+            this.imprimirConsola(t11+'='+t1+'+48;// Caracter digito\n');
+            this.imprimirConsola('heap[(int)'+t10+']='+t11+';\n');
+            this.imprimirConsola(t3+'='+t3+'+1;\n');
+            // Verificamos para agregar el simbolo de menos    
+            this.imprimirConsola('if('+t30+'==1) goto '+L12+';//Agregamos el símbolo -\n');
+            this.imprimirConsola('goto '+L13+';\n');
+            this.imprimirConsola(L12+':\n');
+            this.imprimirConsola(t15+'=H;//Direccion nuevo caracter\n');
+            this.imprimirConsola('H=H+1;//Reservando espacio en memoria\n');
+            this.imprimirConsola('heap[(int)'+t15+']=45;// -\n');
+            this.imprimirConsola(L13+':\n');   
+            // Verificamos para agregar el simbolo de menos
+            this.imprimirConsola(t10+'=H;// Inicio de cadena ordena\n');
+            this.imprimirConsola(t15+'=H;// Inicio cadena\n');
+            this.imprimirConsola(L8+':\n');
+            this.imprimirConsola('if('+t3+'>=0) goto '+L9+';\n');
+            this.imprimirConsola('goto '+L10+';\n');
+            this.imprimirConsola(L9+':\n');
+            this.imprimirConsola(t11+'=heap[(int)'+t10+'];\n');
+            this.imprimirConsola(t12+'=H;\n');
+            this.imprimirConsola('H=H+1;\n');
+            this.imprimirConsola('heap[(int)'+t12+']='+t11+';\n');
+            this.imprimirConsola(t3+'='+t3+'-1;\n');
+            this.imprimirConsola(t10+'='+t10+'-1;\n');
+            this.imprimirConsola('goto '+L8+';\n');
+            this.imprimirConsola(L10+':\n');
+            this.imprimirConsola(t13+'=H;\n');
+            this.imprimirConsola('H=H+1;\n');
+            this.imprimirConsola('heap[(int)'+t13+']='+this.obtenerFinCadena()+';\n');
+            this.imprimirConsola(t14+'=P+0;//Direccion retorno\n');
+            this.imprimirConsola('stack[(int)'+t14+']='+t15+';\n');       
+            this.imprimirConsola('return;\n');
+            this.imprimirConsola('}\n');
+            this.imprimirConsola('\n');
+        }
+
+        this.CharToString = function()
+        {
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            var t2 = this.generarTemporal();
+            this.imprimirConsola('void CharToString_Nativa(){\n');
+            this.imprimirConsola(t0+'=P+1;//Direccion parametro\n');
+            this.imprimirConsola(t1+'=stack[(int)'+t0+'];//valor caracter\n');
+            this.imprimirConsola(t2+'=H;//Inicio cadena\n');
+            this.imprimirConsola('heap[(int)H] = '+t1+';//Nueva cadena\n');
+            this.imprimirConsola('H=H+1;//Reservar espacio\n');
+            this.imprimirConsola('heap[(int)H] = '+this.obtenerFinCadena()+';//Fin de cadena\n');
+            this.imprimirConsola('H=H+1;//Reservar espacio\n');            
+            this.imprimirConsola('stack[(int)P]='+t2+';//Set valor return\n');
+            this.imprimirConsola('return;\n');
+            this.imprimirConsola('}\n');
+            this.imprimirConsola('\n');            
+        }
+
+        this.BooleanToString = function()
+        {
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            var t2 = this.generarTemporal();
+            var L1 = this.generarEtiqueta();
+            var L2 = this.generarEtiqueta();
+
+            this.imprimirConsola('void BooleanToString_Nativa(){\n');
+            this.imprimirConsola(t0+'=P+1;//Direccion parametro\n');
+            this.imprimirConsola(t1+'=stack[(int)'+t0+'];//valor caracter\n');
+            this.imprimirConsola('if('+t1+'==1) goto '+L1+';\n');
+            var NodoStringFalso = new ExpString(0,0,"false");
+            var inicioCadenaFalso = NodoStringFalso.generar3D(null);
+            this.imprimirConsola('stack[(int)P]='+inicioCadenaFalso+';//Set valor return\n');
+            this.imprimirConsola('goto '+L2+';// Salida\n')
+            this.imprimirConsola(L1+':\n');
+            var NodoStringVerdadero = new ExpString(0,0,"true");
+            var inicioCadenaVerdadero = NodoStringVerdadero.generar3D(null);
+            this.imprimirConsola('stack[(int)P]='+inicioCadenaVerdadero+';//Set valor return\n');
+            this.imprimirConsola(L2+':\n');
+            this.imprimirConsola('return;\n');
+            this.imprimirConsola('}\n');
+            this.imprimirConsola('\n');               
+        }
+
+
+
         this.tenemosEtiquetas = function(objecto)
         {
             return (objecto instanceof Igualdad) || (objecto instanceof Diferenciacion) || (objecto instanceof MayorQue) || (objecto instanceof MenorQue) || (objecto instanceof MenorIgual)

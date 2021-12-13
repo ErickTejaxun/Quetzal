@@ -495,8 +495,8 @@ class Concatenar
         this.generar3D = function(entorno)
         {
             var tipo = this.getTipo(entorno);
-            var tipoI = this.getTipo(entorno);
-            var tipoD = this.getTipo(entorno);
+            var tipoI = this.expresionI.getTipo(entorno);
+            var tipoD = this.expresionD.getTipo(entorno);
             
             if(tipo.esError())
             {
@@ -504,11 +504,12 @@ class Concatenar
                 return;                
             }
 
-            var valorI = this.expresionI.generar3D(entorno);
-            var valorD = this.expresionD.generar3D(entorno);
+
 
             if(tipoI.esCadena())
             {
+                var valorI = this.expresionI.generar3D(entorno);
+                var valorD = this.expresionD.generar3D(entorno);
                 if(tipoD.esCadena())
                 {             
                     var t0 =Utils.generarTemporal();       
@@ -525,11 +526,316 @@ class Concatenar
                     Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
                     Utils.imprimirConsola(t3+'=stack[(int)'+t0+']; // Valor de retorno.\n');                    
                     return t3;
-                }
+                }else
                 if(tipoD.esEntero())
                 {
+
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();
+                    var t3 =Utils.generarTemporal();
+                    var t4 =Utils.generarTemporal();       
+                    var t5 =Utils.generarTemporal();
+                    var t6 =Utils.generarTemporal();                    
                     
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorD+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('IntToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                    Utils.imprimirConsola(t3+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t4+'='+t3+'+1; // Dirección del primer parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t4+']='+valorI+'; // Paso cadena 1\n');
+                    Utils.imprimirConsola(t5+'='+t3+'+2;// Dirección del segundo parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t5+']='+t2+'; // Paso cadena 2\n');
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola('Nativa_Concatenar_Cadenas();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola(t6+'=stack[(int)'+t3+']; // Valor de retorno.\n');  
+                    return t6;
                 }
+                else if (tipoD.esDouble())
+                {
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();
+                    var t3 =Utils.generarTemporal();
+                    var t4 =Utils.generarTemporal();       
+                    var t5 =Utils.generarTemporal();
+                    var t6 =Utils.generarTemporal();                    
+                    
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorD+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('DoubleToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                    Utils.imprimirConsola(t3+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t4+'='+t3+'+1; // Dirección del primer parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t4+']='+valorI+'; // Paso cadena 1\n');
+                    Utils.imprimirConsola(t5+'='+t3+'+2;// Dirección del segundo parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t5+']='+t2+'; // Paso cadena 2\n');
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola('Nativa_Concatenar_Cadenas();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola(t6+'=stack[(int)'+t3+']; // Valor de retorno.\n');  
+                    return t6;                    
+                }
+                else if (tipoD.esChar())
+                {
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();
+                    var t3 =Utils.generarTemporal();
+                    var t4 =Utils.generarTemporal();       
+                    var t5 =Utils.generarTemporal();
+                    var t6 =Utils.generarTemporal();                    
+                    
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorD+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('CharToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                    Utils.imprimirConsola(t3+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t4+'='+t3+'+1; // Dirección del primer parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t4+']='+valorI+'; // Paso cadena 1\n');
+                    Utils.imprimirConsola(t5+'='+t3+'+2;// Dirección del segundo parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t5+']='+t2+'; // Paso cadena 2\n');
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola('Nativa_Concatenar_Cadenas();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola(t6+'=stack[(int)'+t3+']; // Valor de retorno.\n');  
+                    return t6;                     
+                }
+                else if (tipoD.esBoolean())
+                {
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();
+                    var t3 =Utils.generarTemporal();
+                    var t4 =Utils.generarTemporal();       
+                    var t5 =Utils.generarTemporal();
+                    var t6 =Utils.generarTemporal();                    
+                    
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorD+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('BooleanToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                    Utils.imprimirConsola(t3+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t4+'='+t3+'+1; // Dirección del primer parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t4+']='+valorI+'; // Paso cadena 1\n');
+                    Utils.imprimirConsola(t5+'='+t3+'+2;// Dirección del segundo parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t5+']='+t2+'; // Paso cadena 2\n');
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola('Nativa_Concatenar_Cadenas();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola(t6+'=stack[(int)'+t3+']; // Valor de retorno.\n');  
+                    return t6;
+                }                
+            }// Completo
+            else
+            { // Tenemos que convertir el valorI a string.------------------------------------------>
+
+                var valorI = this.expresionI.generar3D(entorno);                
+                if(tipoI.esEntero())
+                {
+
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();                    
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('IntToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                    valorI = t2;
+                }
+                else if (tipoI.esDouble())
+                {
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();                                  
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('DoubleToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');
+                    valorI = t2;
+                }
+                else if (tipoI.esChar())
+                {
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();                                    
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('CharToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                    valorI = t2;                    
+                }
+                else if (tipoI.esBoolean())
+                {
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();                   
+                    
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('BooleanToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                    valorI = t2;
+                }
+
+                // valor derecho
+                var valorD = this.expresionD.generar3D(entorno);
+                if(tipoD.esCadena())
+                {             
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();
+                    var t3 =Utils.generarTemporal();
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1; // Dirección del primer parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+';\n');
+                    Utils.imprimirConsola(t2+'='+t0+'+2;// Dirección del segundo parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t2+']='+valorD+';\n');
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola('Nativa_Concatenar_Cadenas();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola(t3+'=stack[(int)'+t0+']; // Valor de retorno.\n');                    
+                    return t3;
+                }else
+                if(tipoD.esEntero())
+                {
+
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();
+                    var t3 =Utils.generarTemporal();
+                    var t4 =Utils.generarTemporal();       
+                    var t5 =Utils.generarTemporal();
+                    var t6 =Utils.generarTemporal();                    
+                    
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorD+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('IntToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                    Utils.imprimirConsola(t3+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t4+'='+t3+'+1; // Dirección del primer parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t4+']='+valorI+'; // Paso cadena 1\n');
+                    Utils.imprimirConsola(t5+'='+t3+'+2;// Dirección del segundo parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t5+']='+t2+'; // Paso cadena 2\n');
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola('Nativa_Concatenar_Cadenas();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola(t6+'=stack[(int)'+t3+']; // Valor de retorno.\n');  
+                    return t6;
+                }
+                else if (tipoD.esDouble())
+                {
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();
+                    var t3 =Utils.generarTemporal();
+                    var t4 =Utils.generarTemporal();       
+                    var t5 =Utils.generarTemporal();
+                    var t6 =Utils.generarTemporal();                    
+                    
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorD+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('DoubleToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                    Utils.imprimirConsola(t3+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t4+'='+t3+'+1; // Dirección del primer parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t4+']='+valorI+'; // Paso cadena 1\n');
+                    Utils.imprimirConsola(t5+'='+t3+'+2;// Dirección del segundo parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t5+']='+t2+'; // Paso cadena 2\n');
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola('Nativa_Concatenar_Cadenas();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola(t6+'=stack[(int)'+t3+']; // Valor de retorno.\n');  
+                    return t6;                    
+                }
+                else if (tipoD.esChar())
+                {
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();
+                    var t3 =Utils.generarTemporal();
+                    var t4 =Utils.generarTemporal();       
+                    var t5 =Utils.generarTemporal();
+                    var t6 =Utils.generarTemporal();                    
+                    
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorD+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('CharToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                    Utils.imprimirConsola(t3+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t4+'='+t3+'+1; // Dirección del primer parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t4+']='+valorI+'; // Paso cadena 1\n');
+                    Utils.imprimirConsola(t5+'='+t3+'+2;// Dirección del segundo parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t5+']='+t2+'; // Paso cadena 2\n');
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola('Nativa_Concatenar_Cadenas();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola(t6+'=stack[(int)'+t3+']; // Valor de retorno.\n');  
+                    return t6;                     
+                }
+                else if (tipoD.esBoolean())
+                {
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();
+                    var t3 =Utils.generarTemporal();
+                    var t4 =Utils.generarTemporal();       
+                    var t5 =Utils.generarTemporal();
+                    var t6 =Utils.generarTemporal();                    
+                    
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorD+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('BooleanToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                    Utils.imprimirConsola(t3+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t4+'='+t3+'+1; // Dirección del primer parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t4+']='+valorI+'; // Paso cadena 1\n');
+                    Utils.imprimirConsola(t5+'='+t3+'+2;// Dirección del segundo parámetro\n');
+                    Utils.imprimirConsola('stack[(int)'+t5+']='+t2+'; // Paso cadena 2\n');
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola('Nativa_Concatenar_Cadenas();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola(t6+'=stack[(int)'+t3+']; // Valor de retorno.\n');  
+                    return t6;
+                }               
             }
 
         }

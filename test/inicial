@@ -78,4 +78,14 @@ void main()
 
 
 
+
+void main(){
+//println("mijos" & 1234 & " terminamos");
+println("mijos" & 100.00 & " terminamos");
+println("hola" & '5'  & 100.00 & " terminamos");
+println("hola" & false & true & "hola");
+
+println(1234 & "mihos");
+}
+
 */
