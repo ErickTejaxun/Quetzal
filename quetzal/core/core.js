@@ -31,6 +31,8 @@ class Tipo
         this.esError = function(){ return this.tipo == TipoPrimitivo.ERROR;} 
         this.esStructNombre = function(id){ return this.tipo ==  TipoPrimitivo.STRUCT && this.nombre==id; }
 
+        this.esIgual =function(tipo){ return this.tipo==tipo.tipo || (this.esNumerico() && tipo.esNumerico());}
+        
         this.getNombreTipo = function()
         {
             switch(this.tipo)
@@ -93,6 +95,7 @@ class Variable
         this.tipo = tipo;
         this.valor = valor;
         this.rol = 'VARIABLE';
+        this.posicion =0;
 
         this.getTipo = function()
         {
@@ -132,6 +135,7 @@ class Entorno
     {
         this.padre = padre;
         this.tabla = new Map();
+        this.contador = 0;
 
         this.getSimbolo= function(id)
         {
@@ -140,6 +144,7 @@ class Entorno
             if (simbolo ==null  || simbolo == undefined)
             {
                 console.log('Error, simbolo '+ id+' no encontrado en entorno actual.');
+                return null;
             }
             return simbolo;
         }
@@ -152,6 +157,8 @@ class Entorno
                 console.log('Error. Ya existe un simbolo con el nombre '+ id+' en el entorno actual.');
                 return;
             }     
+            simbolo.posicion = this.contador;
+            this.contador++;
             this.tabla.set(simbolo.id,simbolo);
         }
 
@@ -419,17 +426,47 @@ class ExpVariable
         this.columna = columna;
         this.id = id;
         
-        this.getTipo= function()
+        this.getTipo= function(entorno)
         {
             // Implementar busqueda de tipo del símbolo si existe
-            return this.tipo;
+            var varBuscada = entorno.getSimbolo(this.id);
+            if(varBuscada!= null && varBuscada!= undefined)
+            {
+                return varBuscada.tipo;
+            } 
+            return new Tipo(TipoPrimitivo.ERROR);
         }
 
-        this.getValor= function()
+        this.getValor= function(entorno)
         {
             // Implementar busqueda de tipo del símbolo si existe
-            return this.valor;
-        }        
+            if(!this.getTipo(entorno).esError())
+            {
+                var varBuscada = entorno.getSimbolo(this.id);
+                if(varBuscada!= null && varBuscada!= undefined)
+                {
+                    return varBuscada.valor;
+                } 
+            }            
+        } 
+        
+        this.generar3D = function(entorno)
+        {
+            if(!this.getTipo(entorno).esError())
+            {
+                var varBuscada = entorno.getSimbolo(this.id);
+                if(varBuscada!= null && varBuscada!= undefined)
+                {
+                    //return varBuscada.valor;
+                    var t0 = Utils.generarTemporal();
+                    var t1 = Utils.generarTemporal();
+
+                    Utils.imprimirConsola(t0+'=P+'+varBuscada.posicion.toString()+';//Direccion variable '+this.id+'\n');
+                    Utils.imprimirConsola(t1+'=stack[(int)'+t0+'];\n');                          
+                    return t1;
+                } 
+            }            
+        }
     }
 }
 
@@ -450,6 +487,13 @@ class TipoDe
         {
             var tipoExpresion = this.expresion.getTipo(entorno);
             return tipoExpresion.getNombreTipo();
+        }
+        this.generar3D = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);            
+            var NodoStringTipo = new ExpString(this.linea, this.columna, tipoExpresion.getNombreTipo());
+            var inicioCadena = NodoStringTipo.generar3D(entorno);
+            return inicioCadena;
         }
     }
 }
@@ -1011,7 +1055,12 @@ class Ternario
         this.getTipo = function(entorno)
         {
             // Verificar este manejo de tipo
-            return this.expresionI.getTipo(entorno);
+            if(this.expresionI.getTipo(entorno).esIgual(this.expresionD.getTipo(entorno)))
+            {
+                return this.expresionI.getTipo(entorno);
+            }
+            Utils.registrarErrorSemantico(this.linea, this.columna, '?','Error expresión ternaria. Tipos diferentes' + tipoCondicion.getNombreTipo());
+            return this.expresionI.getTipo(entorno);            
         }
 
         this.getValor = function(entorno)
@@ -1046,12 +1095,9 @@ class Ternario
             var valorCondicion = this.condicion.generar3D(entorno);
             //Agregar verificación
             if(Utils.tenemosEtiquetas(valorCondicion))
-            {
-                
-                
+            {                                
                 var t0 = Utils.generarTemporal();
                 var LSalida = Utils.generarTemporal();
-
                 // Hay que ver qué hacemos cuando el retorno es un boolean
                 Utils.imprimirConsola(valorCondicion.LV+':\n');
                 var valorI = this.expresionI.generar3D(entorno);
@@ -1064,8 +1110,26 @@ class Ternario
                 return t0;
             }
             else
-            {
+            {                
+                var L1 = Utils.generarEtiqueta();
+                var L2 = Utils.generarEtiqueta();
                 //Generar etiquetas
+                Utils.imprimirConsola('if('+valorCondicion+'==1) goto '+L1+';\n');
+                Utils.imprimirConsola('goto '+L2+';\n');
+
+                var t0 = Utils.generarTemporal();                
+                var LSalida = Utils.generarTemporal();
+                // Hay que ver qué hacemos cuando el retorno es un boolean
+                Utils.imprimirConsola(L1+':\n');
+                var valorI = this.expresionI.generar3D(entorno);
+                Utils.imprimirConsola(t0+'='+valorI+';\n');
+                Utils.imprimirConsola('goto '+LSalida+';\n');                
+                Utils.imprimirConsola(L2+':\n');
+                var valorD = this.expresionD.generar3D(entorno);
+                Utils.imprimirConsola(t0+'='+valorD+';\n');
+                Utils.imprimirConsola(LSalida+':\n');
+                return t0;                
+
             }
            
         }
@@ -3018,3 +3082,224 @@ class Println
     }
 }
 
+
+class Declaracion
+{
+    constructor(linea, columna, tipo, listaId, expresion)
+    {
+        this.linea = linea; 
+        this.columna = columna;
+        this.tipo = tipo;
+        this.listaId = listaId;
+        this.expresion = expresion;
+
+        this.ejecutar = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);            
+            if(this.expresion != null)
+            {
+                var valorExpresion = this.expresion.getValor(entorno);            
+                if(tipoExpresion.esIgual(tipo))
+                {
+                    this.listaId.forEach( id =>
+                        {
+                            var simboloTmp = entorno.getSimbolo(id);
+                            if(simboloTmp == null || simboloTmp == undefined)
+                            {
+                                var nuevoVariable = new Simbolo(this.linea, this.columna, id, this.tipo, valorExpresion);
+                                entorno.registrarSimbolo(nuevoVariable);
+                            }
+                            else
+                            {
+                                Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','Ya se ha declarado una variable llamada '+id +'.');
+                            }
+                        });
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','Se esperaba una valor de tipo '+tipoExpresion.getNombreTipo());
+                }
+            }
+            else
+            {
+                this.listaId.forEach( id =>
+                    {
+                        var simboloTmp = entorno.getSimbolo(id);
+                        if(simboloTmp == null || simboloTmp == undefined)
+                        {
+                            var valorInicial = '';
+                            if(tipo.esCadena())
+                            {
+                                valorInicial = null;
+                            }
+                            else if (tipo.esNumerico())
+                            {
+                                valorInicial = 0;
+                            }
+                            else if (tipo.esBoolean())
+                            {
+                                valorInicial = 0; // Falso por defecto
+                            }
+                            var nuevoVariable = new Simbolo(this.linea, this.columna, id, this.tipo, valorInicial);
+                            entorno.registrarSimbolo(nuevoVariable);                        
+                        }
+                        else
+                        {
+                            Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','Ya se ha declarado una variable llamada '+id +'.');
+                        }
+                    });                
+            }            
+        }
+
+        this.generar3D = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);            
+            if(this.expresion != null)
+            {
+                var valorExpresion = this.expresion.generar3D(entorno);            
+                if(tipoExpresion.esIgual(tipo))
+                {
+                    this.listaId.forEach( id =>
+                        {
+                            var simboloTmp = entorno.getSimbolo(id);
+                            if(simboloTmp == null || simboloTmp == undefined)
+                            {
+                                var nuevoVariable = new Simbolo(this.linea, this.columna, id, this.tipo, null);
+                                entorno.registrarSimbolo(nuevoVariable);
+
+                                var t0 = Utils.generarTemporal();
+                                Utils.imprimirConsola(t0+'=P+'+nuevoVariable.posicion.toString()+';\n');
+                                Utils.imprimirConsola('stack[(int)'+t0+']='+valorExpresion+';\n');                                
+                            }
+                            else
+                            {
+                                Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','Ya se ha declarado una variable llamada '+id +'.');
+                            }
+                        });
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','Se esperaba una valor de tipo '+tipoExpresion.getNombreTipo());
+                }
+            }
+            else
+            {
+                this.listaId.forEach( id =>
+                    {
+                        var simboloTmp = entorno.getSimbolo(id);
+                        if(simboloTmp == null || simboloTmp == undefined)
+                        {
+                            var valorInicial = '';
+                            if(tipo.esCadena())
+                            {
+                                valorInicial = Utils.obtenerFinCadena();
+                            }
+                            else if (tipo.esNumerico())
+                            {
+                                valorInicial = 0;
+                            }
+                            else if (tipo.esBoolean())
+                            {
+                                valorInicial = 0; // Falso por defecto
+                            }
+                            var nuevoVariable = new Simbolo(this.linea, this.columna, id, this.tipo, null);
+                            entorno.registrarSimbolo(nuevoVariable);
+
+                            var t0 = Utils.generarTemporal();
+                            Utils.imprimirConsola(t0+'=P+'+nuevoVariable.posicion.toString()+';\n');
+                            Utils.imprimirConsola('stack[(int)'+t0+']='+valorInicial+';\n');
+                        }
+                        else
+                        {
+                            Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','Ya se ha declarado una variable llamada '+id +'.');
+                        }
+                    });                
+            }
+        }
+
+    }
+}
+
+
+class Asignacion 
+{
+    constructor(linea, columna, id, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.id = id;
+        this.expresion = expresion;
+
+        this.ejecutar = function(entorno)
+        {
+            // Primero buscamos la variable 
+            var VarBuscada = entorno.getSimbolo(this.id);
+            if(VarBuscada== null || VarBuscada== undefined)
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'Asignación','La variable '+id +' no ha sido declarada anteriormente.');
+                return;
+            }
+            else
+            {   
+                var tipoExpresion = this.expresion.getTipo(entorno);
+                if(tipoExpresion.esIgual(VarBuscada.tipo))
+                {
+                    // Si son iguales no hay problema
+                    var valorExpresion = this.expresion.getValor(entorno);
+                    VarBuscada.valor = valorExpresion;                 
+
+                }
+                else if (VarBuscada.tipo.esNumerico() && tipoExpresion.esNumerico())
+                {
+                    // Verificar si los tipos son compatibles
+                    var valorExpresion = this.expresion.getValor(entorno);
+                    VarBuscada.valor = valorExpresion;
+                }
+                else
+                {
+                    // Error tipos no coinciden
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Asignación','Variable '+id +'. Se esperaba un valor de tipo '+VarBuscada.tipo.getNombreTipo());
+                    return;                    
+                }
+            }
+        }
+
+        this.generar3D = function(entorno)
+        {
+            // Primero buscamos la variable 
+            var VarBuscada = entorno.getSimbolo(this.id);
+            if(VarBuscada== null || VarBuscada== undefined)
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'Asignación','La variable '+id +' no ha sido declarada anteriormente.');
+                return;
+            }
+            else
+            {   
+                var tipoExpresion = this.expresion.getTipo(entorno);
+                if(tipoExpresion.esIgual(VarBuscada.tipo))
+                {
+                    // Si son iguales no hay problema
+                    var valorExpresion = this.expresion.generar3D(entorno);
+                    var t0 = Utils.generarTemporal();
+                    Utils.imprimirConsola(t0+'=P+'+VarBuscada.posicion.toString()+';\n');
+                    Utils.imprimirConsola('stack[(int)'+t0+']='+valorExpresion+';\n');                    
+
+                }
+                else if (VarBuscada.tipo.esNumerico() && tipoExpresion.esNumerico())
+                {
+                    // Verificar si los tipos son compatibles
+                    var valorExpresion = this.expresion.generar3D(entorno);
+                    var t0 = Utils.generarTemporal();
+                    Utils.imprimirConsola(t0+'=P+'+VarBuscada.posicion.toString()+';\n');
+                    Utils.imprimirConsola('stack[(int)'+t0+']='+valorExpresion+';\n'); 
+                }
+                else
+                {
+                    // Error tipos no coinciden
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Asignación','Variable '+id +'. Se esperaba un valor de tipo '+VarBuscada.tipo.getNombreTipo());
+                    return;                    
+                }
+            }
+        }
+    }
+}

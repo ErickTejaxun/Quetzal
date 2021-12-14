@@ -148,13 +148,28 @@ INSTRUCCIONES :
 
 INSTRUCCION:  PRINTLN { $$ = $1;}
 			| PRINT { $$ = $1;}	
-			| LLAMADA ';' {$$ =$1;}				
+			| LLAMADA ';' {$$ =$1;}	
+			| ASIGNACION {$$ = $1;}
+			| DECLARACION {$$ = $1;}						
 			| error { 	
 						Utils.registrarErrorSintactico(@1.first_line-1,@1.first_column-1, $1, $1);
 						$$ = null;						
 					}				
 ;
 
+
+ASIGNACION : id '=' E ';' { $$ = new Asignacion(@1.first_line-1,@1.first_column-1,$1,$3); }
+;
+
+
+DECLARACION : TIPOVAR LID ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,null);}
+			| TIPOVAR LID '=' E ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,$4);}
+;
+
+
+LID : LID ',' id {$$  =$1; $$.push($3);}
+	| id { $$ = new Array; $$.push($1); }
+;
 
 FUNCION : 		
 		  TIPO id '(' LPARAMETROS ')' BLOQUE 
@@ -167,13 +182,21 @@ LPARAMETROS: LPARAMETROS PARAMETRO
 			| PARAMETRO 
 ;
 
-PARAMETRO : TIPO id { $$ = new Parametro(@1.first_line-1,@1.first_column-1, $1, $2);}
+PARAMETRO : TIPOVAR id { $$ = new Parametro(@1.first_line-1,@1.first_column-1, $1, $2);}
+;
+
+TIPOVAR :  tint { $$ = new Tipo(TipoPrimitivo.INT);}
+		| tdouble { $$ = new Tipo(TipoPrimitivo.DOUBLE);}
+		| tstring { $$ = new Tipo(TipoPrimitivo.STRING);}
+		| tchar { $$ = new Tipo(TipoPrimitivo.CHAR);}
+		| id {$$ = new Tipo(TipoPrimitivo.STRUCT, $1);}
 ;
 
 TIPO :    tint { $$ = new Tipo(TipoPrimitivo.INT);}
 		| tdouble { $$ = new Tipo(TipoPrimitivo.DOUBLE);}
 		| tstring { $$ = new Tipo(TipoPrimitivo.STRING);}
 		| tchar { $$ = new Tipo(TipoPrimitivo.CHAR);}
+		| id {$$ = new Tipo(TipoPrimitivo.STRUCT, $1);}
 		| tvoid { $$ = new Tipo(TipoPrimitivo.VOID);}
 		;
 
