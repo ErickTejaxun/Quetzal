@@ -934,7 +934,6 @@ class Concatenar
     }
 }
 
-
 class PotenciaString
 {
     constructor(linea, columna, expresionI, expresionD)
@@ -1688,7 +1687,7 @@ class RaizCuadrada
         {
             var tipo = expresion.getTipo(entorno);            
            
-            if(tipo.esNumerico())
+            if(tipo.esEntero() || tipo.esDouble())
             {
                 return new Tipo(TipoPrimitivo.DOUBLE);
             }
@@ -1701,22 +1700,18 @@ class RaizCuadrada
             if(tipo.esError())
             {
                 //Registramos el error
-                Utils.registrarErrorSemantico(this.linea, this.columna, '%','Error de tipos en operación módulo. '+this.expresionI.getTipo(entorno).getNombreTipo()+' / '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'sqrt','Error de tipos en raiz cuadrada. '+ this.expresion.getTipo(entorno).getNombreTipo());
                 return;
             }
 
-            var valorI = this.expresionI.getValor(entorno);
-            var valorD = this.expresionD.getValor(entorno);
-            if(tipo.esDouble())
-            {
-                return parseFloat(valorI) /parseFloat(valorD);
-                // Hay que verificar si el dividendo es diferente a 0
+            var valor = this.expresion.getValor(entorno);
+
+            if (valor != null || valor != undefined || !isNaN(valor)){
+                return Math.sqrt(valor);
+            }else{
+                return 0;
             }
-            if(tipo.esEntero())
-            {
-                return parseInt(valorI) /parseInt(valorD);
-                // Hay que verificar si el dividendo es diferente a 0
-            }                        
+
         }
 
         this.generar3D = function(entorno)
@@ -1742,16 +1737,17 @@ class Seno
     {
         this.linea = linea;
         this.columna = columna;
-        this.expresion = expresion;        
+        this.expresion = expresion;
+
         this.getTipo = function(entorno)
         {
-            var tipo = expresion.getTipo(entorno);            
-           
-            if(tipo.esNumerico())
+            var tipo = expresion.getTipo(entorno);
+
+            if(tipo.esEntero() || tipo.esDouble())
             {
                 return new Tipo(TipoPrimitivo.DOUBLE);
             }
-            return new Tipo(TipoPrimitivo.ERROR);        
+            return new Tipo(TipoPrimitivo.ERROR);
         }
 
         this.getValor= function(entorno)
@@ -1760,22 +1756,18 @@ class Seno
             if(tipo.esError())
             {
                 //Registramos el error
-                Utils.registrarErrorSemantico(this.linea, this.columna, '%','Error de tipos en operación módulo. '+this.expresionI.getTipo(entorno).getNombreTipo()+' / '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'seno','Error de tipos en seno. '+ this.expresion.getTipo(entorno).getNombreTipo());
                 return;
             }
 
-            var valorI = this.expresionI.getValor(entorno);
-            var valorD = this.expresionD.getValor(entorno);
-            if(tipo.esDouble())
-            {
-                return parseFloat(valorI) /parseFloat(valorD);
-                // Hay que verificar si el dividendo es diferente a 0
+            var valor = this.expresion.getValor(entorno);
+
+            if (valor != null || valor != undefined || !isNaN(valor)){
+                return Math.sin(valor);
+            }else{
+                return 0;
             }
-            if(tipo.esEntero())
-            {
-                return parseInt(valorI) /parseInt(valorD);
-                // Hay que verificar si el dividendo es diferente a 0
-            }                        
+
         }
 
         this.generar3D = function(entorno)
@@ -1801,16 +1793,17 @@ class Coseno
     {
         this.linea = linea;
         this.columna = columna;
-        this.expresion = expresion;        
+        this.expresion = expresion;
+
         this.getTipo = function(entorno)
         {
-            var tipo = expresion.getTipo(entorno);            
-           
-            if(tipo.esNumerico())
+            var tipo = expresion.getTipo(entorno);
+
+            if(tipo.esEntero() || tipo.esDouble())
             {
                 return new Tipo(TipoPrimitivo.DOUBLE);
             }
-            return new Tipo(TipoPrimitivo.ERROR);        
+            return new Tipo(TipoPrimitivo.ERROR);
         }
 
         this.getValor= function(entorno)
@@ -1819,22 +1812,18 @@ class Coseno
             if(tipo.esError())
             {
                 //Registramos el error
-                Utils.registrarErrorSemantico(this.linea, this.columna, '%','Error de tipos en operación módulo. '+this.expresionI.getTipo(entorno).getNombreTipo()+' / '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'cos','Error de tipos en coseno. '+ this.expresion.getTipo(entorno).getNombreTipo());
                 return;
             }
 
-            var valorI = this.expresionI.getValor(entorno);
-            var valorD = this.expresionD.getValor(entorno);
-            if(tipo.esDouble())
-            {
-                return parseFloat(valorI) /parseFloat(valorD);
-                // Hay que verificar si el dividendo es diferente a 0
+            var valor = this.expresion.getValor(entorno);
+
+            if (valor != null || valor != undefined || !isNaN(valor)){
+                return Math.cos(valor);
+            }else{
+                return 0;
             }
-            if(tipo.esEntero())
-            {
-                return parseInt(valorI) /parseInt(valorD);
-                // Hay que verificar si el dividendo es diferente a 0
-            }                        
+
         }
 
         this.generar3D = function(entorno)
@@ -1860,16 +1849,17 @@ class Tangente
     {
         this.linea = linea;
         this.columna = columna;
-        this.expresion = expresion;        
+        this.expresion = expresion;
+
         this.getTipo = function(entorno)
         {
-            var tipo = expresion.getTipo(entorno);            
-           
-            if(tipo.esNumerico())
+            var tipo = expresion.getTipo(entorno);
+
+            if(tipo.esEntero() || tipo.esDouble())
             {
                 return new Tipo(TipoPrimitivo.DOUBLE);
             }
-            return new Tipo(TipoPrimitivo.ERROR);        
+            return new Tipo(TipoPrimitivo.ERROR);
         }
 
         this.getValor= function(entorno)
@@ -1878,22 +1868,18 @@ class Tangente
             if(tipo.esError())
             {
                 //Registramos el error
-                Utils.registrarErrorSemantico(this.linea, this.columna, '%','Error de tipos en operación módulo. '+this.expresionI.getTipo(entorno).getNombreTipo()+' / '+ this.expresionD.getTipo(entorno).getNombreTipo());
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'tang','Error de tipos en tangente. '+ this.expresion.getTipo(entorno).getNombreTipo());
                 return;
             }
 
-            var valorI = this.expresionI.getValor(entorno);
-            var valorD = this.expresionD.getValor(entorno);
-            if(tipo.esDouble())
-            {
-                return parseFloat(valorI) /parseFloat(valorD);
-                // Hay que verificar si el dividendo es diferente a 0
+            var valor = this.expresion.getValor(entorno);
+
+            if (valor != null || valor != undefined || !isNaN(valor)){
+                return Math.tan(valor);
+            }else{
+                return 0;
             }
-            if(tipo.esEntero())
-            {
-                return parseInt(valorI) /parseInt(valorD);
-                // Hay que verificar si el dividendo es diferente a 0
-            }                        
+
         }
 
         this.generar3D = function(entorno)
