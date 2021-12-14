@@ -6,7 +6,7 @@ var TipoPrimitivo;
     TipoPrimitivo[TipoPrimitivo["BOOL"] = 3] = "BOOL";
     TipoPrimitivo[TipoPrimitivo["CHAR"] = 4] = "CHAR";
     TipoPrimitivo[TipoPrimitivo["STRING"] = 5] = "STRING";    
-    TipoPrimitivo[TipoPrimitivo["STRUCT"] = 6] = "ARREGLO";
+    TipoPrimitivo[TipoPrimitivo["ARREGLO"] = 6] = "ARREGLO";
     TipoPrimitivo[TipoPrimitivo["STRUCT"] = 7] = "STRUCT";
     TipoPrimitivo[TipoPrimitivo["ERROR"] = 10] = "ERROR";    
     TipoPrimitivo[TipoPrimitivo["VOID"] = 11] = "VOID";  
@@ -24,7 +24,6 @@ class Tipo
         this.esDouble = function(){ return this.tipo == TipoPrimitivo.DOUBLE;}
         this.esBoolean = function(){ return this.tipo == TipoPrimitivo.BOOL;}
         this.esChar = function(){ return this.tipo == TipoPrimitivo.CHAR;}
-        this.esNumerico = function(){return this.esEntero() || this.esChar() || this.esDouble();}
         this.esCadena = function(){ return this.tipo == TipoPrimitivo.STRING;}                
         this.esArreglo = function(){ return this.tipo == TipoPrimitivo.ARREGLO;}  
         this.esStruct = function(){ return this.tipo == TipoPrimitivo.STRUCT;} 
@@ -788,7 +787,6 @@ class Division
     }
 }
 
-
 class Modulo
 {
     constructor(linea, columna, expresionI, expresionD)
@@ -865,7 +863,6 @@ class Modulo
     }
 }
 
-
 class Potencia
 {
     constructor(linea, columna, expresionI, expresionD)
@@ -936,7 +933,6 @@ class Potencia
     }
 }
 
-
 class RaizCuadrada
 {
     constructor(linea, columna, expresion)
@@ -995,7 +991,6 @@ class RaizCuadrada
         }        
     }
 }
-
 
 class Seno
 {
@@ -1056,8 +1051,6 @@ class Seno
     }
 }
 
-
-
 class Coseno
 {
     constructor(linea, columna, expresion)
@@ -1116,7 +1109,6 @@ class Coseno
         }        
     }
 }
-
 
 class Tangente
 {
@@ -1177,7 +1169,6 @@ class Tangente
     }
 }
 
-
 class Llamada
 { 
     constructor(linea, columna, id, parametros)
@@ -1206,6 +1197,7 @@ class Llamada
         }
     }
 }
+
 
 
 /*Expresiones Relacionales------------------------------------------------> */
