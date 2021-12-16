@@ -382,7 +382,7 @@ class Caracter
 
         this.getValor=function(entorno)
         {
-            return this.valor;
+            return this.valor.charCodeAt();
         }
 
         this.generar3D = function(entorno)
@@ -559,8 +559,14 @@ class Concatenar
                 return;
             }
 
+            var tipoI = this.expresionI.getTipo(entorno);
+            var tipoD = this.expresionD.getTipo(entorno);
+
             var valorI = this.expresionI.getValor(entorno);
             var valorD = this.expresionD.getValor(entorno);
+            
+            if(tipoI.esChar()){ valorI = String.fromCharCode(valorI); }
+            if(tipoD.esChar()){ valorD = String.fromCharCode(valorD); }
             return valorI  + valorD + "";
         }
 
