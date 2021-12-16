@@ -1,5 +1,5 @@
 println(10);
-println(3.33);;
+println(3.33);
 println("hola");
 println(true);
 println(false);
