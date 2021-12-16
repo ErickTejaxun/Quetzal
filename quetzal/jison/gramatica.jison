@@ -89,6 +89,7 @@
 "sin"   			 %{ debugPrint(yytext);return 'sin'; %}
 "cos"   			 %{ debugPrint(yytext);return 'cos'; %}
 "tan"   			 %{ debugPrint(yytext);return 'tan'; %}
+"caracterOfPosition" %{ debugPrint(yytext);return 'caracterposicion'; %}
 ([a-zA-Z]|"_"|"$")([a-zA-Z]|[0-9]|"_"|"$")* %{ debugPrint(yytext); return 'id'; %}
 
 <<EOF>>               return 'EOF'
@@ -96,6 +97,7 @@
 /lex
 
 /* Eerator associations and precedence */
+
 %left '?'
 %left '&&' '||'
 %left '==' '!=' '>' '>=' '<' '<='
@@ -106,6 +108,7 @@
 %left UMINUS
 %left '='
 %right '!'
+%left '.'
 
 
 %error-verbose
@@ -362,6 +365,7 @@ E   : '(' E ')'
 		$$ = new TipoDe(@1.first_line-1,@1.first_column-1,$3);
 	}
 	| LLAMADA {$$= $1;}
+	| POSICIONCADENA {$$= $1;}
 	;
 
 LLAMADA : id '(' ')' { $$ = new Llamada(@1.first_line-1,@1.first_column-1, $1, new Array);}
@@ -373,12 +377,20 @@ LExpr : LExpr ',' E {$$ = $1; $$.push($3);}
 ;
 
 
+/*
 SI:   si '(' E ')' BLOQUE 
 	| si '(' E ')' INSTRUCCION 
 	| si '(' E ')' BLOQUE ELSEIF %prec SI_SIMPLE
 	| si '(' E ')' INSTRUCCION ELSEIF %prec SI_SIMPLE
 ;
+*/
 
-ELSEIF : sino 
+
+POSICIONCADENA : E '.' caracterposicion '(' E ')' { $$ = new PosicionCadena(@1.first_line-1,@1.first_column-1,$1,$5);}
+;
+
+
+
+
 
 

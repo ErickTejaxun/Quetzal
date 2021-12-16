@@ -1601,12 +1601,12 @@ class Modulo
             var valorD = this.expresionD.getValor(entorno);
             if(tipo.esDouble())
             {
-                return parseFloat(valorI) /parseFloat(valorD);
+                return parseFloat(valorI) % parseFloat(valorD);
                 // Hay que verificar si el dividendo es diferente a 0
             }
             if(tipo.esEntero())
             {
-                return parseInt(valorI) /parseInt(valorD);
+                return parseInt(valorI) % parseInt(valorD);
                 // Hay que verificar si el dividendo es diferente a 0
             }                        
         }
@@ -1677,12 +1677,12 @@ class Potencia
             var valorD = this.expresionD.getValor(entorno);
             if(tipo.esDouble())
             {
-                return parseFloat(valorI) /parseFloat(valorD);
+                return Math.pow(parseFloat(valorI), parseFloat(valorD));
                 // Hay que verificar si el dividendo es diferente a 0
             }
             if(tipo.esEntero())
             {
-                return parseInt(valorI) /parseInt(valorD);
+                return Math.pow(parseInt(valorI), parseInt(valorD));
                 // Hay que verificar si el dividendo es diferente a 0
             }                        
         }
@@ -2062,6 +2062,52 @@ class Llamada
     }
 }
 
+
+class PosicionCadena
+{
+    constructor(linea, columna, expresion, expresionPosicion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+        this.expresionPosicion = expresionPosicion;
+
+        this.getTipo = function(entorno)
+        {
+            return new Tipo(TipoPrimitivo.CHAR);
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esCadena())
+            {
+                var cadena = this.expresion.getValor(entorno);
+                var tipoExpresionPosicion = this.expresionPosicion.getTipo(entorno);
+                if(tipoExpresionPosicion.esNumerico())
+                {
+                    var posicion = parseInt(this.expresionPosicion.getValor(entorno));
+                    return cadena.charAt(posicion);
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'caracterOfPosition ', 'Se esperaba un valor de tipo númerico para la posición y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                    return;                    
+                }
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'caracterOfPosition ', 'Se esperaba un valor de tipo String y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                return;
+            }
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
 
 
 /*Expresiones Relacionales------------------------------------------------> */
