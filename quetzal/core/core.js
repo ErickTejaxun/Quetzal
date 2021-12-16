@@ -17,7 +17,7 @@ class Tipo
     constructor(tipo, nombre ="")
     {
         this.tipo = tipo; // Tiene que ser un tipo primitivo
-        this.nombre = ""
+        this.nombre = nombre;
         
         this.esNulo =   function(){ return this.tipo == TipoPrimitivo.NULO;}
         this.esEntero = function(){ return this.tipo == TipoPrimitivo.INT;}
@@ -28,9 +28,14 @@ class Tipo
         this.esArreglo = function(){ return this.tipo == TipoPrimitivo.ARREGLO;}  
         this.esStruct = function(){ return this.tipo == TipoPrimitivo.STRUCT;} 
         this.esError = function(){ return this.tipo == TipoPrimitivo.ERROR;} 
+        this.esNumerico = function() { return this.esEntero() || this.esDouble() || this.esChar(); }
         this.esStructNombre = function(id){ return this.tipo ==  TipoPrimitivo.STRUCT && this.nombre==id; }
 
-        this.esIgual =function(tipo){ return this.tipo==tipo.tipo || (this.esNumerico() && tipo.esNumerico());}
+        this.esIgual =function(tipo)
+        { 
+            return this.tipo==tipo.tipo || 
+            (this.esNumerico() && tipo.esNumerico());
+        }
         
         this.getNombreTipo = function()
         {
@@ -139,13 +144,37 @@ class Entorno
         this.getSimbolo= function(id)
         {
             var simbolo = this.tabla.get(id);
-            // Falta implementar busqueda en profundidad.
-            if (simbolo ==null  || simbolo == undefined)
+            if(simbolo != null)
             {
-                console.log('Error, simbolo '+ id+' no encontrado en entorno actual.');
-                return null;
+                return simbolo;
             }
-            return simbolo;
+
+            var entornoActual = this;
+            while(entornoActual != null)
+            {
+                simbolo = entornoActual.tabla.get(id);
+                // Falta implementar busqueda en profundidad.
+                if (simbolo ==null  || simbolo == undefined)
+                {
+                    //console.log('Error, simbolo '+ id+' no encontrado en entorno actual.');
+                    // Si no existe pasamos al entorno superior
+                    entornoActual = entornoActual.padre;
+                    continue;                    
+                }
+                return simbolo;
+            }
+            return null;            
+
+        }
+
+        this.getEntornoGlobal = function()
+        {            
+            var entornoActual = this;
+            while(entornoActual.padre != null)
+            {
+                entornoActual = entornoActual.padre;
+            }     
+            return entornoActual;                   
         }
 
         this.registrarSimbolo = function(simbolo)
@@ -186,12 +215,12 @@ class Raiz
             // Primero hacemos lo de afuera y luego ejecutamos el main            
             this.bloqueInstrucciones.instrucciones.forEach(function (instruccion) 
             {
-                instruccion.ejecutar(entorno);               
+                instruccion.ejecutar(entorno);
             });
 
 
             // De último ejecutamos la función main
-            var LLamadaMain = new Llamada(this.linea, this.columna, "main",null);
+            var LLamadaMain = new Llamada(this.linea, this.columna, "main",new Array /**Lista de parametros */);
             LLamadaMain.getValor(entorno);
 
         }
@@ -204,33 +233,33 @@ class Raiz
 
             Utils.generarNativas();
 
+            Utils.imprimirConsola('void INIT_global_variables(){\n');
+            this.bloqueInstrucciones.instrucciones.forEach(function (instruccion) 
+            {
+                if (!(instruccion instanceof Funcion))
+                {
+                    instruccion.generar3D(entorno);                    
+                }              
+            }); 
+            Utils.imprimirConsola('return;\n');
+            Utils.imprimirConsola('}\n');
+            Utils.imprimirConsola('\n\n\n');
+            
+
+
             this.bloqueInstrucciones.instrucciones.forEach(function (instruccion) 
             {
                 if (instruccion instanceof Funcion)
                 {
-                    if(instruccion.id!='main')
-                    {
-                        instruccion.generar3D(entorno);
-                    }
+                    instruccion.generar3D(entorno);                    
                 }
-                else
+                /*else
                 {
                     instruccion.generar3D(entorno);
-                }                
-            });
-
-
-            // De último ejecutamos la función main
-            this.bloqueInstrucciones.instrucciones.forEach(function (instruccion) 
-            {
-                if (instruccion instanceof Funcion)
-                {
-                    if(instruccion.id=='main')
-                    {                        
-                        instruccion.generar3D(entorno);                        
-                    }
-                }             
-            });            
+                }*/               
+            });  
+                        
+            
         }
     }
 }
@@ -532,7 +561,7 @@ class Concatenar
 
             var valorI = this.expresionI.getValor(entorno);
             var valorD = this.expresionD.getValor(entorno);
-            return valorI.toString() + valorD.toString();        
+            return valorI  + valorD + "";
         }
 
         this.generar3D = function(entorno)
@@ -1922,23 +1951,128 @@ class Llamada
         this.id = id;
         this.parametros = parametros;
 
-        this.getValor = function(entorno)
+        this.getTipo = function(entorno)
         {
-            var idBuscado = id ; 
+            var idBuscado = this.id ; 
             //
+            this.parametros.forEach(parametro => {
+                var tipoParametro = parametro.getTipo(entorno);
+                idBuscado += '_' + tipoParametro.getNombreTipo();
+            });
 
-            var funcionBuscada = entorno.getSimbolo(this.id);
+            var funcionBuscada = entorno.getSimbolo(idBuscado);
             if(funcionBuscada != null || funcionBuscada!= undefined)
             {
-                var nuevoEntorno = new Entorno(null);// Cambiar null por global.
-                funcionBuscada.bloqueInstrucciones.ejecutar(entorno);
+                return funcionBuscada.tipo;
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'Función ' + this.id,'No se ha encontrado la definición de la función '+ idBuscado);
+                return;                
             }
         }
 
-        this.getTipo = function(entorno)
+        this.getValor = function(entorno)
         {
+            var idBuscado = this.id ; 
+            //
+            this.parametros.forEach(parametro => {
+                var tipoParametro = parametro.getTipo(entorno);
+                idBuscado += '_' + tipoParametro.getNombreTipo();
+            });
 
-        }
+            var funcionBuscada = entorno.getSimbolo(idBuscado);
+            if(funcionBuscada != null || funcionBuscada!= undefined)
+            {
+                var nuevoEntorno = entorno;
+                if(funcionBuscada!='main')
+                {
+                    nuevoEntorno = new Entorno(entorno.getEntornoGlobal());
+                }                
+                
+                /* Ahora tenemos que crear los parametros en este nuevo entorno */
+                /* Aquí los parametros actuales son una lista de Expresiones */
+                var indiceArreglo = 0;
+                for( indiceArreglo =0 ; indiceArreglo < this.parametros.length ; indiceArreglo++)
+                {
+                    var parametro = funcionBuscada.listaParametrosFormales[indiceArreglo];
+                    var expresionActual = this.parametros[indiceArreglo];
+                    //parametro.ejecutar(nuevoEntorno);
+                    
+                    var simboloTmp = nuevoEntorno.getSimbolo(parametro.id);
+                    if(simboloTmp == null || simboloTmp == undefined)
+                    {
+                        var valorInicial = expresionActual.getValor(entorno);
+                        var nuevoVariable = new Simbolo(parametro.linea, parametro.columna,parametro.id, parametro.tipo, valorInicial);
+                        nuevoEntorno.registrarSimbolo(nuevoVariable);                        
+                    }
+                    else
+                    {
+                        Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','Ya se ha declarado una variable llamada '+id +'.');
+                    }                                        
+                }              
+                var posibleRetorno = funcionBuscada.bloqueInstrucciones.ejecutar(nuevoEntorno);
+                if(posibleRetorno!= null)
+                {
+                    if(posibleRetorno instanceof Retorno)
+                    {
+                        var valorRetorno = posibleRetorno.expresion.getValor(nuevoEntorno);
+                        return valorRetorno;
+                    }
+                }
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'Función ' + this.id,'No se ha encontrado la definición de la función '+ idBuscado);
+                return;                
+            }
+        }   
+        
+        this.generar3D = function(entorno)
+        {
+            var idBuscado = this.id ;             
+            this.parametros.forEach(parametro => {
+                var tipoParametro = parametro.getTipo(entorno);
+                idBuscado += '_' + tipoParametro.getNombreTipo();
+            });
+
+            var funcionBuscada = entorno.getSimbolo(idBuscado);
+            if(funcionBuscada != null || funcionBuscada!= undefined)
+            {
+                var nuevoEntorno = entorno;
+                if(funcionBuscada!='main')
+                {
+                    nuevoEntorno = new Entorno(entorno.getEntornoGlobal());
+                }                                
+                /* Ahora tenemos que crear los parametros en este nuevo entorno */
+                /* Aquí los parametros actuales son una lista de Expresiones */
+                var indiceArreglo = 0;
+                for( indiceArreglo =0 ; indiceArreglo < this.parametros.length ; indiceArreglo++)
+                {
+                    var parametro = funcionBuscada.listaParametrosFormales[indiceArreglo];
+                    var expresionActual = this.parametros[indiceArreglo];
+                    //parametro.ejecutar(nuevoEntorno);
+                    
+                    var simboloTmp = nuevoEntorno.getSimbolo(parametro.id);
+                    if(simboloTmp == null || simboloTmp == undefined)
+                    {
+                        var valorInicial = expresionActual.getValor(entorno);
+                        var nuevoVariable = new Simbolo(parametro.linea, parametro.columna,parametro.id, parametro.tipo, valorInicial);
+                        nuevoEntorno.registrarSimbolo(nuevoVariable);                        
+                    }
+                    else
+                    {
+                        Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','Ya se ha declarado una variable llamada '+id +'.');
+                    }                                        
+                }              
+                funcionBuscada.bloqueInstrucciones.ejecutar(nuevoEntorno);
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'Función ' + this.id,'No se ha encontrado la definición de la función '+ idBuscado);
+                return;                
+            }
+        }         
     }
 }
 
@@ -2763,14 +2897,23 @@ class Funcion
         this.ejecutar= function(entorno)
         {
             // Codigo para guardar esta funcion en el entorno actual. 
-            var nuevaFuncion = new SimboloFuncion(this.id, this.columna, this.id, this.tipo, this.parametrosFormales, this.bloqueInstrucciones);            
+            var idFuncion = this.id;
+            this.parametrosFormales.forEach(parametro => {
+                idFuncion += '_'+ parametro.tipo.getNombreTipo();
+            });
+            var nuevaFuncion = new SimboloFuncion(this.linea, this.columna, idFuncion, this.tipo, this.parametrosFormales, this.bloqueInstrucciones);            
             entorno.registrarSimbolo(nuevaFuncion);        
         }
+        
 
         this.generar3D = function(entorno)
         {
             // Codigo para codigo del método. 
             Utils.imprimirConsola('\n\nvoid '+this.id+'() {\n');
+            if(this.id=='main')
+            {
+                Utils.imprimirConsola('INIT_global_variables();\n');
+            }
             this.bloqueInstrucciones.generar3D(entorno);
             Utils.imprimirConsola('return;\n');
             Utils.imprimirConsola('}//Fin main\n');                       
@@ -2794,7 +2937,10 @@ class Parametro
         this.ejecutar = function(entorno)
         {
             /* Codigo para crear variable*/
-
+            var arrayId = new Array;
+            arrayId.push(this.id);
+            var nodoDeclaracionParametro = new Declaracion(this.linea, this.columna, this.tipo,arrayId, this.valor );
+            nodoDeclaracionParametro.ejecutar(entorno);
         }
 
         this.generar3D = function(entorno)
@@ -2814,18 +2960,26 @@ class Bloque
 
         this.ejecutar=function(entorno)
         {
-            this.instrucciones.forEach(function (instruccion) 
+            var index = 0;
+            for(index = 0 ; index < this.instrucciones.length; index++)
             {
+                var instruccion = this.instrucciones[index];
                 if (instruccion instanceof Llamada)
                 {
                     instruccion.getValor(entorno);
                 }
                 else
-                {
-                    instruccion.ejecutar(entorno);
-                }
-                
-            });
+                {                    
+                    if(instruccion instanceof Retorno)
+                    {
+                        return instruccion;
+                    } 
+                    else
+                    {
+                        instruccion.ejecutar(entorno);                    
+                    }
+                }                
+            }
         }
 
         this.registrarInstruccion = function(instruccion)
@@ -3091,7 +3245,7 @@ class Declaracion
             if(this.expresion != null)
             {
                 var valorExpresion = this.expresion.getValor(entorno);            
-                if(tipoExpresion.esIgual(tipo))
+                if(tipoExpresion.esIgual(this.tipo))
                 {
                     this.listaId.forEach( id =>
                         {
@@ -3109,7 +3263,7 @@ class Declaracion
                 }
                 else
                 {
-                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','Se esperaba una valor de tipo '+tipoExpresion.getNombreTipo());
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','Se esperaba una valor de tipo '+this.tipo.getNombreTipo());
                 }
             }
             else
@@ -3149,7 +3303,7 @@ class Declaracion
             if(this.expresion != null)
             {
                 var valorExpresion = this.expresion.generar3D(entorno);            
-                if(tipoExpresion.esIgual(tipo))
+                if(tipoExpresion.esIgual(this.tipo))
                 {
                     this.listaId.forEach( id =>
                         {
@@ -3291,6 +3445,64 @@ class Asignacion
                     Utils.registrarErrorSemantico(this.linea, this.columna, 'Asignación','Variable '+id +'. Se esperaba un valor de tipo '+VarBuscada.tipo.getNombreTipo());
                     return;                    
                 }
+            }
+        }
+    }
+}
+
+class Retorno
+{
+    constructor(linea, columna, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+
+        this.ejecutar = function(entorno)
+        {
+            return this;
+        }
+
+        this.generar3D = function(entorno)
+        {
+            var valor = this.expresion.generar3D(entorno);
+            Utils.imprimirConsola('stack[(int)P] = '+valor+';\n');
+        }
+    }
+}
+
+
+class Si
+{
+    constructor(linea, columna, condicion, bloque, sinosi)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.condicion = condicion;
+        this.bloque = bloque;
+        this.sinosi = sinosi;
+
+        this.ejecutar = function(entorno)
+        {
+            var tipoCondicion = this.condicion.getTipo(entorno);
+            if(tipoCondicion.esBoolean())
+            {
+                if(tipoCondicion)
+                {
+                    return this.bloque.ejecutar(entorno);
+                }
+                else
+                {
+                    if(this.sinosi != null && this.sinosi != undefined)
+                    {
+                        return this.sinosi.ejecutar(entorno);
+                    }
+                }
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'IF','Se espera en la condición una expresión de tipo boolean. Se ha recibido un '+tipoCondicion.getNombreTipo());
+                return;
             }
         }
     }

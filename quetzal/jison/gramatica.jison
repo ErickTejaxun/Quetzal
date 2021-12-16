@@ -82,6 +82,7 @@
 "char"			     %{ debugPrint(yytext);return 'tchar'; %}
 "string"   			 %{ debugPrint(yytext);return 'tstring'; %}
 "void"   			 %{ debugPrint(yytext);return 'tvoid'; %}
+"return"   			 %{ debugPrint(yytext);return 'retorno'; %}
 /*Funciones nativas*/
 "pow"   			 %{ debugPrint(yytext);return 'pow'; %}
 "sqrt"   			 %{ debugPrint(yytext);return 'sqrt'; %}
@@ -132,6 +133,9 @@ INSTRUCCIONESG: INSTRUCCIONESG  INSTRUCCIONG
 
 INSTRUCCIONG : 
 			  FUNCION { $$ = $1;}
+			| ASIGNACION {$$ = $1;}
+			| DECLARACION {$$ = $1;}			  
+			  
 			  /*Declaracion y Struct*/
 ;
 
@@ -150,7 +154,8 @@ INSTRUCCION:  PRINTLN { $$ = $1;}
 			| PRINT { $$ = $1;}	
 			| LLAMADA ';' {$$ =$1;}	
 			| ASIGNACION {$$ = $1;}
-			| DECLARACION {$$ = $1;}						
+			| DECLARACION {$$ = $1;}
+			| RETORNO {$$ = $1;}								
 			| error { 	
 						Utils.registrarErrorSintactico(@1.first_line-1,@1.first_column-1, $1, $1);
 						$$ = null;						
@@ -162,8 +167,8 @@ ASIGNACION : id '=' E ';' { $$ = new Asignacion(@1.first_line-1,@1.first_column-
 ;
 
 
-DECLARACION : TIPOVAR LID ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,null);}
-			| TIPOVAR LID '=' E ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,$4);}
+DECLARACION : TIPO LID ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,null);}
+			| TIPO LID '=' E ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,$4);}
 ;
 
 
@@ -171,26 +176,31 @@ LID : LID ',' id {$$  =$1; $$.push($3);}
 	| id { $$ = new Array; $$.push($1); }
 ;
 
+RETORNO : retorno E ';'  { $$= new Retorno(@1.first_line-1,@1.first_column-1, $2);}
+;
+
 FUNCION : 		
 		  TIPO id '(' LPARAMETROS ')' BLOQUE 
 			{ $$ = new Funcion(@1.first_line-1,@1.first_column-1, $1, $2, $4,$6);}
 		| TIPO id '('  ')' BLOQUE 
-			{ $$ = new Funcion(@1.first_line-1,@1.first_column-1, $1, $2, null,$5);}			
+			{ $$ = new Funcion(@1.first_line-1,@1.first_column-1, $1, $2, new Array,$5);}			
 ;
 
-LPARAMETROS: LPARAMETROS PARAMETRO 
-			| PARAMETRO 
+LPARAMETROS: LPARAMETROS ',' PARAMETRO {$$ =$1; $$.push($3);}
+			| PARAMETRO {$$ = new Array; $$.push($1);}
 ;
 
-PARAMETRO : TIPOVAR id { $$ = new Parametro(@1.first_line-1,@1.first_column-1, $1, $2);}
+PARAMETRO : TIPO id { $$ = new Parametro(@1.first_line-1,@1.first_column-1, $1, $2);}
 ;
 
+/*
 TIPOVAR :  tint { $$ = new Tipo(TipoPrimitivo.INT);}
 		| tdouble { $$ = new Tipo(TipoPrimitivo.DOUBLE);}
 		| tstring { $$ = new Tipo(TipoPrimitivo.STRING);}
 		| tchar { $$ = new Tipo(TipoPrimitivo.CHAR);}
 		| id {$$ = new Tipo(TipoPrimitivo.STRUCT, $1);}
 ;
+*/
 
 TIPO :    tint { $$ = new Tipo(TipoPrimitivo.INT);}
 		| tdouble { $$ = new Tipo(TipoPrimitivo.DOUBLE);}
@@ -354,6 +364,21 @@ E   : '(' E ')'
 	| LLAMADA {$$= $1;}
 	;
 
-LLAMADA : id '(' ')' { $$ = new Llamada(@1.first_line-1,@1.first_column-1, $1, null);}
+LLAMADA : id '(' ')' { $$ = new Llamada(@1.first_line-1,@1.first_column-1, $1, new Array);}
+		| id '(' LExpr ')' { $$ = new Llamada(@1.first_line-1,@1.first_column-1, $1, $3);}
 ;
+
+LExpr : LExpr ',' E {$$ = $1; $$.push($3);}
+		| E {$$= new Array; $$.push($1);}
+;
+
+
+SI:   si '(' E ')' BLOQUE 
+	| si '(' E ')' INSTRUCCION 
+	| si '(' E ')' BLOQUE ELSEIF %prec SI_SIMPLE
+	| si '(' E ')' INSTRUCCION ELSEIF %prec SI_SIMPLE
+;
+
+ELSEIF : sino 
+
 
