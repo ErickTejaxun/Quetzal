@@ -97,6 +97,7 @@
 "toString"           %{ debugPrint(yytext);return 'ToString'; %}
 "toInt"              %{ debugPrint(yytext);return 'ToInt'; %}
 "toDouble"           %{ debugPrint(yytext);return 'ToDouble'; %}
+"parse"              %{ debugPrint(yytext);return 'parse'; %}
 
 
 
@@ -374,6 +375,9 @@ E   : '(' E ')'
 	{
 		$$ = new TipoDe(@1.first_line-1,@1.first_column-1,$3);
 	}
+	| PARSEBOOL {$$= $1;}
+	| PARSEDOUBLE {$$= $1;}
+	| PARSEINT {$$= $1;}
 	| NATIVATOINT {$$= $1;}
 	| NATIVATOSTRING {$$= $1;}
 	| NATIVATODOUBLE {$$= $1;}
@@ -401,6 +405,18 @@ SI:   si '(' E ')' BLOQUE
 	| si '(' E ')' INSTRUCCION ELSEIF %prec SI_SIMPLE
 ;
 */
+
+
+PARSEBOOL : boolean '.' parse '(' E ')' { $$ = new ParseBool(@1.first_line-1,@1.first_column-1,$5);}
+;
+
+
+PARSEDOUBLE : tdouble '.' parse '(' E ')' { $$ = new ParseDouble(@1.first_line-1,@1.first_column-1,$5);}
+;
+
+
+PARSEINT : tint '.' parse '(' E ')' { $$ = new ParseInt(@1.first_line-1,@1.first_column-1,$5);}
+;
 
 
 NATIVATOINT : ToInt '(' E ')' { $$ = new NativaToInt(@1.first_line-1,@1.first_column-1,$3);}
