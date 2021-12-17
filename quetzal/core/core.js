@@ -86,6 +86,8 @@ class Simbolo
         {
             return this.valor;
         }
+
+        this.getPosicion = function(){ return this.posicion.toString();}
     }
 }
 
@@ -110,6 +112,7 @@ class Variable
         {
             return this.valor;
         }
+        this.getPosicion = function(){ return this.posicion.toString();}
     }    
 }
 
@@ -251,14 +254,24 @@ class Raiz
             {
                 if (instruccion instanceof Funcion)
                 {
-                    instruccion.generar3D(entorno);                    
-                }
-                /*else
-                {
-                    instruccion.generar3D(entorno);
-                }*/               
+                    if(instruccion.id != 'main')
+                    {
+                        instruccion.generar3D(entorno);
+                    }                    
+                }              
             });  
-                        
+                
+            
+            this.bloqueInstrucciones.instrucciones.forEach(function (instruccion) 
+            {
+                if (instruccion instanceof Funcion)
+                {
+                    if(instruccion.id == 'main')
+                    {
+                        instruccion.generar3D(entorno);
+                    }                    
+                }              
+            });             
             
         }
     }
@@ -2022,7 +2035,8 @@ class Llamada
         
         this.generar3D = function(entorno)
         {
-            var idBuscado = this.id ;             
+            var idBuscado = this.id ; 
+            //
             this.parametros.forEach(parametro => {
                 var tipoParametro = parametro.getTipo(entorno);
                 idBuscado += '_' + tipoParametro.getNombreTipo();
@@ -2035,7 +2049,8 @@ class Llamada
                 if(funcionBuscada!='main')
                 {
                     nuevoEntorno = new Entorno(entorno.getEntornoGlobal());
-                }                                
+                }                
+                
                 /* Ahora tenemos que crear los parametros en este nuevo entorno */
                 /* Aquí los parametros actuales son una lista de Expresiones */
                 var indiceArreglo = 0;
@@ -2047,17 +2062,19 @@ class Llamada
                     
                     var simboloTmp = nuevoEntorno.getSimbolo(parametro.id);
                     if(simboloTmp == null || simboloTmp == undefined)
-                    {
-                        var valorInicial = expresionActual.getValor(entorno);
-                        var nuevoVariable = new Simbolo(parametro.linea, parametro.columna,parametro.id, parametro.tipo, valorInicial);
-                        nuevoEntorno.registrarSimbolo(nuevoVariable);                        
+                    {                                                
+                        // Pasar valor en tresdirecciones
+                        var t0 = Utils.generarTemporal();
+                        Utils.imprimirConsola(t0+'=P+'+nuevoVariable.getPosicion()+'; //Posicion parametros '+parametro.id+'\n');
+                        Utils.imprimirConsola('stack[(int)'+t0+']='+valorInicial+';\n');                        
                     }
                     else
                     {
                         Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','Ya se ha declarado una variable llamada '+id +'.');
                     }                                        
-                }              
-                funcionBuscada.bloqueInstrucciones.ejecutar(nuevoEntorno);
+                } 
+
+                //funcionBuscada.bloqueInstrucciones.generar3D(nuevoEntorno);
             }
             else
             {
@@ -2946,13 +2963,38 @@ class Funcion
 
         this.generar3D = function(entorno)
         {
+
+            var idFuncion = this.id;
+            this.parametrosFormales.forEach(parametro => {
+                idFuncion += '_'+ parametro.tipo.getNombreTipo();
+            });
+            var nuevaFuncion = new SimboloFuncion(this.linea, this.columna, idFuncion, this.tipo, this.parametrosFormales, this.bloqueInstrucciones);            
+            entorno.registrarSimbolo(nuevaFuncion);  
+
             // Codigo para codigo del método. 
-            Utils.imprimirConsola('\n\nvoid '+this.id+'() {\n');
+            var EtiquetaSalida = Utils.generarEtiqueta();
+            Utils.EtiquetaSalida = EtiquetaSalida;
+            Utils.imprimirConsola('\n\nvoid '+idFuncion+'() {\n');
             if(this.id=='main')
             {
                 Utils.imprimirConsola('INIT_global_variables();\n');
             }
-            this.bloqueInstrucciones.generar3D(entorno);
+            /*Antes de ejecutar las instrucciones tenemos que almacenar los parámetros en el entorno*/
+            var entornoActual = new Entorno(entorno.getEntornoGlobal());
+            this.parametrosFormales.forEach(parametro => {
+                var simboloTmp = entornoActual.getSimbolo(parametro.id);
+                if(simboloTmp== null || simboloTmp== undefined)
+                {
+                    var nuevoParametro = new Simbolo(parametro.linea, parametro.columna, parametro.id, parametro.tipo, null);
+                    entornoActual.registrarSimbolo(nuevoParametro);
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración parametros','Ya se ha declarado un parámetro/variable con el nombre '+parametro.id);                    
+                }
+            });
+            this.bloqueInstrucciones.generar3D(entornoActual);
+            Utils.imprimirConsola(EtiquetaSalida+'://Salida\n');
             Utils.imprimirConsola('return;\n');
             Utils.imprimirConsola('}//Fin main\n');                       
         }
@@ -3505,6 +3547,7 @@ class Retorno
         {
             var valor = this.expresion.generar3D(entorno);
             Utils.imprimirConsola('stack[(int)P] = '+valor+';\n');
+            Utils.imprimirSaltoSalida();
         }
     }
 }
