@@ -176,12 +176,58 @@ void main()
 	println(null & null & 123 & "Continuar");
 	println(contador_global+100);
 	println(mensaje_global);
-	println(suma(contador/2, 1));
+	suma(contador/2, 1);
 }
 
 int suma(int a, int b)
 {
-	int c = a + b;
+	int c = a + b;	
+	println(c);	
+	//return c;
+}
+
+
+
+
+
+
+
+int contador_global = 033;
+string mensaje_global = "Mensaje global";
+
+void main()
+{
+	mensaje_global = mensaje_global & " paso por el main";
+	int contador, contador2, var = 10;
+	string mensaje = "mensaje de bienvenida " & 2021;
+	println(typeof(contador*contador2));
+	println(contador*contador2);
+	println(typeof(mensaje));
+	println(mensaje);
+
+	contador = 100*33;
+	contador2 = -1;
+	mensaje = mensaje & " Feliz noche";
+	println(typeof(contador*contador2));
+	println(contador*contador2);
+	println(typeof(mensaje));
+	println(mensaje);
+
+	
+	println("hijos" & 100.00 & " terminamos");
+	println("hola" & '5'  & 100.00 & null & " terminamos");
+	println("hola" & false & true & "hola");
+	println(1234 & 123);
+	println(null & null & 123 & "Continuar");
+	println(contador_global+100);
+	println(mensaje_global);
+	println(suma(contador,666));
+}
+
+int suma(int a, int b)
+{
+	int c = a + b;	
+	//println(c);	
 	return c;
 }
 

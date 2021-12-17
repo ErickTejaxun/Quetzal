@@ -59,6 +59,7 @@ class Utilidades
         this.contadorTemporales = 0;
         this.contadorEtiquetas =0;
         this.finalCadena = 7823797;
+        this.EtiquetaSalida = '';
 
         this.registrarErrorLexico=function(linea, columna, id, descripcion, archivo)
         {
@@ -84,6 +85,11 @@ class Utilidades
         this.imprimirConsola = function(valor)
         {
             this.consolaSalida.push(valor.toString());
+        }
+
+        this.imprimirSaltoSalida = function()
+        {
+            this.imprimirConsola('goto '+this.EtiquetaSalida+';\n');
         }
 
         this.getCadenaSalida = function()

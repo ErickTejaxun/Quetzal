@@ -86,6 +86,8 @@ class Simbolo
         {
             return this.valor;
         }
+
+        this.getPosicion = function(){ return this.posicion.toString();}
     }
 }
 
@@ -110,6 +112,7 @@ class Variable
         {
             return this.valor;
         }
+        this.getPosicion = function(){ return this.posicion.toString();}
     }    
 }
 
@@ -124,10 +127,16 @@ class SimboloFuncion
         this.listaParametrosFormales = listaParametrosFormales;
         this.bloqueInstrucciones = bloqueInstrucciones;
         this.rol = 'FUNCION';
+        this.entorno = null;
 
         this.getTipo = function()
         {
             return this.tipo;
+        }
+
+        this.setEntornoFuncion = function(entorno)
+        {
+            this.entorno =entorno;
         }
 
     }    
@@ -139,7 +148,7 @@ class Entorno
     {
         this.padre = padre;
         this.tabla = new Map();
-        this.contador = 0;
+        this.contador = 1;
 
         this.getSimbolo= function(id)
         {
@@ -251,14 +260,24 @@ class Raiz
             {
                 if (instruccion instanceof Funcion)
                 {
-                    instruccion.generar3D(entorno);                    
-                }
-                /*else
-                {
-                    instruccion.generar3D(entorno);
-                }*/               
+                    if(instruccion.id != 'main')
+                    {
+                        instruccion.generar3D(entorno);
+                    }                    
+                }              
             });  
-                        
+                
+            
+            this.bloqueInstrucciones.instrucciones.forEach(function (instruccion) 
+            {
+                if (instruccion instanceof Funcion)
+                {
+                    if(instruccion.id == 'main')
+                    {
+                        instruccion.generar3D(entorno);
+                    }                    
+                }              
+            });             
             
         }
     }
@@ -2008,8 +2027,15 @@ class Llamada
                 {
                     if(posibleRetorno instanceof Retorno)
                     {
-                        var valorRetorno = posibleRetorno.expresion.getValor(nuevoEntorno);
-                        return valorRetorno;
+                        if(posibleRetorno.expresion==null)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var valorRetorno = posibleRetorno.expresion.getValor(nuevoEntorno);
+                            return valorRetorno;                            
+                        }
                     }
                 }
             }
@@ -2022,7 +2048,8 @@ class Llamada
         
         this.generar3D = function(entorno)
         {
-            var idBuscado = this.id ;             
+            var idBuscado = this.id ; 
+            //
             this.parametros.forEach(parametro => {
                 var tipoParametro = parametro.getTipo(entorno);
                 idBuscado += '_' + tipoParametro.getNombreTipo();
@@ -2031,33 +2058,46 @@ class Llamada
             var funcionBuscada = entorno.getSimbolo(idBuscado);
             if(funcionBuscada != null || funcionBuscada!= undefined)
             {
-                var nuevoEntorno = entorno;
-                if(funcionBuscada!='main')
+                var nuevoEntorno = funcionBuscada.entorno;
+                /*if(funcionBuscada!='main')
                 {
                     nuevoEntorno = new Entorno(entorno.getEntornoGlobal());
-                }                                
+                } 
+                */               
+                
                 /* Ahora tenemos que crear los parametros en este nuevo entorno */
                 /* Aquí los parametros actuales son una lista de Expresiones */
                 var indiceArreglo = 0;
+                var t0 = Utils.generarTemporal();
+                Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';//Simulacion de cambio de entorno\n');
                 for( indiceArreglo =0 ; indiceArreglo < this.parametros.length ; indiceArreglo++)
                 {
                     var parametro = funcionBuscada.listaParametrosFormales[indiceArreglo];
+                    var simboloParametro = nuevoEntorno.getSimbolo(parametro.id);
                     var expresionActual = this.parametros[indiceArreglo];
+                    var valorInicial= expresionActual.generar3D(entorno);
                     //parametro.ejecutar(nuevoEntorno);
                     
                     var simboloTmp = nuevoEntorno.getSimbolo(parametro.id);
-                    if(simboloTmp == null || simboloTmp == undefined)
-                    {
-                        var valorInicial = expresionActual.getValor(entorno);
-                        var nuevoVariable = new Simbolo(parametro.linea, parametro.columna,parametro.id, parametro.tipo, valorInicial);
-                        nuevoEntorno.registrarSimbolo(nuevoVariable);                        
+                    if(simboloTmp != null || simboloTmp != undefined)
+                    {                                                
+                        // Pasar valor en tresdirecciones
+                        var t1 = Utils.generarTemporal();
+                        Utils.imprimirConsola(t1+'=P+'+simboloParametro.getPosicion()+'; //Posicion parametros '+parametro.id+'\n');
+                        Utils.imprimirConsola('stack[(int)'+t1+']='+valorInicial+';\n');                        
                     }
                     else
                     {
-                        Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','Ya se ha declarado una variable llamada '+id +'.');
+                        Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','No se ha encontrado la variable '+id +'.');
                     }                                        
-                }              
-                funcionBuscada.bloqueInstrucciones.ejecutar(nuevoEntorno);
+                } 
+                Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';//Cambio de entorno\n');
+                Utils.imprimirConsola(idBuscado+'();\n');
+                Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';//Retomar de entorno\n');
+                var t2 = Utils.generarTemporal();
+                Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];//Valor de retorno\n');
+                return t2;
+                //funcionBuscada.bloqueInstrucciones.generar3D(nuevoEntorno);
             }
             else
             {
@@ -3348,15 +3388,42 @@ class Funcion
 
         this.generar3D = function(entorno)
         {
+
+            var idFuncion = this.id;
+            this.parametrosFormales.forEach(parametro => {
+                idFuncion += '_'+ parametro.tipo.getNombreTipo();
+            });
+            var nuevaFuncion = new SimboloFuncion(this.linea, this.columna, idFuncion, this.tipo, this.parametrosFormales, this.bloqueInstrucciones);            
+            entorno.registrarSimbolo(nuevaFuncion);  
+
             // Codigo para codigo del método. 
-            Utils.imprimirConsola('\n\nvoid '+this.id+'() {\n');
+            var EtiquetaSalida = Utils.generarEtiqueta();
+            Utils.EtiquetaSalida = EtiquetaSalida;
+            Utils.imprimirConsola('\n\nvoid '+idFuncion+'() {\n');
             if(this.id=='main')
             {
                 Utils.imprimirConsola('INIT_global_variables();\n');
             }
-            this.bloqueInstrucciones.generar3D(entorno);
+            /*Antes de ejecutar las instrucciones tenemos que almacenar los parámetros en el entorno*/
+            var entornoActual = new Entorno(entorno.getEntornoGlobal());
+            this.parametrosFormales.forEach(parametro => {
+                var simboloTmp = entornoActual.getSimbolo(parametro.id);
+                if(simboloTmp== null || simboloTmp== undefined)
+                {
+                    var nuevoParametro = new Simbolo(parametro.linea, parametro.columna, parametro.id, parametro.tipo, null);
+                    entornoActual.registrarSimbolo(nuevoParametro);
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración parametros','Ya se ha declarado un parámetro/variable con el nombre '+parametro.id);                    
+                }
+            });
+            this.bloqueInstrucciones.generar3D(entornoActual);
+            Utils.imprimirConsola(EtiquetaSalida+'://Salida\n');
             Utils.imprimirConsola('return;\n');
-            Utils.imprimirConsola('}//Fin main\n');                       
+            Utils.imprimirConsola('}//Fin main\n');  
+            // Por último guardamos el entorno actual en el símbolo funcion
+            nuevaFuncion.setEntornoFuncion(entornoActual);
         }
     }
 }
@@ -3907,6 +3974,7 @@ class Retorno
         {
             var valor = this.expresion.generar3D(entorno);
             Utils.imprimirConsola('stack[(int)P] = '+valor+';\n');
+            Utils.imprimirSaltoSalida();
         }
     }
 }
