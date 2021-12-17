@@ -127,10 +127,16 @@ class SimboloFuncion
         this.listaParametrosFormales = listaParametrosFormales;
         this.bloqueInstrucciones = bloqueInstrucciones;
         this.rol = 'FUNCION';
+        this.entorno = null;
 
         this.getTipo = function()
         {
             return this.tipo;
+        }
+
+        this.setEntornoFuncion = function(entorno)
+        {
+            this.entorno =entorno;
         }
 
     }    
@@ -142,7 +148,7 @@ class Entorno
     {
         this.padre = padre;
         this.tabla = new Map();
-        this.contador = 0;
+        this.contador = 1;
 
         this.getSimbolo= function(id)
         {
@@ -2021,8 +2027,15 @@ class Llamada
                 {
                     if(posibleRetorno instanceof Retorno)
                     {
-                        var valorRetorno = posibleRetorno.expresion.getValor(nuevoEntorno);
-                        return valorRetorno;
+                        if(posibleRetorno.expresion==null)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var valorRetorno = posibleRetorno.expresion.getValor(nuevoEntorno);
+                            return valorRetorno;                            
+                        }
                     }
                 }
             }
@@ -2045,35 +2058,45 @@ class Llamada
             var funcionBuscada = entorno.getSimbolo(idBuscado);
             if(funcionBuscada != null || funcionBuscada!= undefined)
             {
-                var nuevoEntorno = entorno;
-                if(funcionBuscada!='main')
+                var nuevoEntorno = funcionBuscada.entorno;
+                /*if(funcionBuscada!='main')
                 {
                     nuevoEntorno = new Entorno(entorno.getEntornoGlobal());
-                }                
+                } 
+                */               
                 
                 /* Ahora tenemos que crear los parametros en este nuevo entorno */
                 /* Aquí los parametros actuales son una lista de Expresiones */
                 var indiceArreglo = 0;
+                var t0 = Utils.generarTemporal();
+                Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';//Simulacion de cambio de entorno\n');
                 for( indiceArreglo =0 ; indiceArreglo < this.parametros.length ; indiceArreglo++)
                 {
                     var parametro = funcionBuscada.listaParametrosFormales[indiceArreglo];
+                    var simboloParametro = nuevoEntorno.getSimbolo(parametro.id);
                     var expresionActual = this.parametros[indiceArreglo];
+                    var valorInicial= expresionActual.generar3D(entorno);
                     //parametro.ejecutar(nuevoEntorno);
                     
                     var simboloTmp = nuevoEntorno.getSimbolo(parametro.id);
-                    if(simboloTmp == null || simboloTmp == undefined)
+                    if(simboloTmp != null || simboloTmp != undefined)
                     {                                                
                         // Pasar valor en tresdirecciones
-                        var t0 = Utils.generarTemporal();
-                        Utils.imprimirConsola(t0+'=P+'+nuevoVariable.getPosicion()+'; //Posicion parametros '+parametro.id+'\n');
-                        Utils.imprimirConsola('stack[(int)'+t0+']='+valorInicial+';\n');                        
+                        var t1 = Utils.generarTemporal();
+                        Utils.imprimirConsola(t1+'=P+'+simboloParametro.getPosicion()+'; //Posicion parametros '+parametro.id+'\n');
+                        Utils.imprimirConsola('stack[(int)'+t1+']='+valorInicial+';\n');                        
                     }
                     else
                     {
-                        Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','Ya se ha declarado una variable llamada '+id +'.');
+                        Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración','No se ha encontrado la variable '+id +'.');
                     }                                        
                 } 
-
+                Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';//Cambio de entorno\n');
+                Utils.imprimirConsola(idBuscado+'();\n');
+                Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';//Retomar de entorno\n');
+                var t2 = Utils.generarTemporal();
+                Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];//Valor de retorno\n');
+                return t2;
                 //funcionBuscada.bloqueInstrucciones.generar3D(nuevoEntorno);
             }
             else
@@ -3404,7 +3427,9 @@ class Funcion
             this.bloqueInstrucciones.generar3D(entornoActual);
             Utils.imprimirConsola(EtiquetaSalida+'://Salida\n');
             Utils.imprimirConsola('return;\n');
-            Utils.imprimirConsola('}//Fin main\n');                       
+            Utils.imprimirConsola('}//Fin main\n');  
+            // Por último guardamos el entorno actual en el símbolo funcion
+            nuevaFuncion.setEntornoFuncion(entornoActual);
         }
     }
 }

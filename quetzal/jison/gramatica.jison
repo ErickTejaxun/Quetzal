@@ -191,6 +191,7 @@ LID : LID ',' id {$$  =$1; $$.push($3);}
 ;
 
 RETORNO : retorno E ';'  { $$= new Retorno(@1.first_line-1,@1.first_column-1, $2);}
+		 | retorno ';'  { $$= new Retorno(@1.first_line-1,@1.first_column-1, null);}
 ;
 
 FUNCION : 		
@@ -442,7 +443,6 @@ PORCIONCADENA : E '.' caracterporcion '(' E ',' E ')' { $$ = new PorcionCadena(@
 
 POSICIONCADENA : E '.' caracterposicion '(' E ')' { $$ = new PosicionCadena(@1.first_line-1,@1.first_column-1,$1,$5);}
 ;
-
 
 
 
