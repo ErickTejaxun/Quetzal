@@ -90,6 +90,17 @@
 "cos"   			 %{ debugPrint(yytext);return 'cos'; %}
 "tan"   			 %{ debugPrint(yytext);return 'tan'; %}
 "caracterOfPosition" %{ debugPrint(yytext);return 'caracterposicion'; %}
+"subString"          %{ debugPrint(yytext);return 'caracterporcion'; %}
+"length"             %{ debugPrint(yytext);return 'caracterlength'; %}
+"toUppercase"        %{ debugPrint(yytext);return 'caracterupper'; %}
+"toLowercase"        %{ debugPrint(yytext);return 'caracterlower'; %}
+"toString"           %{ debugPrint(yytext);return 'ToString'; %}
+"toInt"              %{ debugPrint(yytext);return 'ToInt'; %}
+"toDouble"           %{ debugPrint(yytext);return 'ToDouble'; %}
+"parse"              %{ debugPrint(yytext);return 'parse'; %}
+
+
+
 ([a-zA-Z]|"_"|"$")([a-zA-Z]|[0-9]|"_"|"$")* %{ debugPrint(yytext); return 'id'; %}
 
 <<EOF>>               return 'EOF'
@@ -364,7 +375,17 @@ E   : '(' E ')'
 	{
 		$$ = new TipoDe(@1.first_line-1,@1.first_column-1,$3);
 	}
+	| PARSEBOOL {$$= $1;}
+	| PARSEDOUBLE {$$= $1;}
+	| PARSEINT {$$= $1;}
+	| NATIVATOINT {$$= $1;}
+	| NATIVATOSTRING {$$= $1;}
+	| NATIVATODOUBLE {$$= $1;}
 	| LLAMADA {$$= $1;}
+	| LOWERCADENA {$$= $1;}
+	| UPPERCADENA {$$= $1;}
+	| LENGTHCADENA {$$= $1;}
+	| PORCIONCADENA {$$= $1;}
 	| POSICIONCADENA {$$= $1;}
 	;
 
@@ -386,8 +407,42 @@ SI:   si '(' E ')' BLOQUE
 */
 
 
+PARSEBOOL : boolean '.' parse '(' E ')' { $$ = new ParseBool(@1.first_line-1,@1.first_column-1,$5);}
+;
+
+
+PARSEDOUBLE : tdouble '.' parse '(' E ')' { $$ = new ParseDouble(@1.first_line-1,@1.first_column-1,$5);}
+;
+
+
+PARSEINT : tint '.' parse '(' E ')' { $$ = new ParseInt(@1.first_line-1,@1.first_column-1,$5);}
+;
+
+
+NATIVATOINT : ToInt '(' E ')' { $$ = new NativaToInt(@1.first_line-1,@1.first_column-1,$3);}
+;
+
+NATIVATODOUBLE : ToDouble '(' E ')' { $$ = new NativaToDouble(@1.first_line-1,@1.first_column-1,$3);}
+;
+
+NATIVATOSTRING : ToString '(' E ')' { $$ = new NativaToString(@1.first_line-1,@1.first_column-1,$3);}
+;
+
+LOWERCADENA : E '.' caracterlower '(' ')' { $$ = new LowerCadena(@1.first_line-1,@1.first_column-1,$1);}
+;
+
+UPPERCADENA : E '.' caracterupper '(' ')' { $$ = new UpperCadena(@1.first_line-1,@1.first_column-1,$1);}
+;
+
+LENGTHCADENA : E '.' caracterlength '(' ')' { $$ = new LengthCadena(@1.first_line-1,@1.first_column-1,$1);}
+;
+
+PORCIONCADENA : E '.' caracterporcion '(' E ',' E ')' { $$ = new PorcionCadena(@1.first_line-1,@1.first_column-1,$1,$5,$7);}
+;
+
 POSICIONCADENA : E '.' caracterposicion '(' E ')' { $$ = new PosicionCadena(@1.first_line-1,@1.first_column-1,$1,$5);}
 ;
+
 
 
 

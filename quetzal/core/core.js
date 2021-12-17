@@ -2132,6 +2132,414 @@ class PosicionCadena
     }
 }
 
+class PorcionCadena
+{
+    constructor(linea, columna, expresion, expresionPosicion, expresionPosicion2)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+        this.expresionPosicion = expresionPosicion;
+        this.expresionPosicion2 = expresionPosicion2;
+
+        this.getTipo = function(entorno)
+        {
+            return new Tipo(TipoPrimitivo.STRING);
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esCadena())
+            {
+                var cadena = this.expresion.getValor(entorno);
+                var tipoExpresionPosicion = this.expresionPosicion.getTipo(entorno);
+                var tipoExpresionPosicion2 = this.expresionPosicion2.getTipo(entorno);
+
+                if(tipoExpresionPosicion.esNumerico() && tipoExpresionPosicion2.esNumerico())
+                {
+                    var posicion = parseInt(this.expresionPosicion.getValor(entorno));
+                    var posicion2 = parseInt(this.expresionPosicion2.getValor(entorno));
+
+                    return cadena.substring(posicion, posicion2+1);
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'subString ', 'Se esperaba un valor de tipo númerico para la posición y se ha recibido uno de tipo '+tipoExpresionPosicion.getNombreTipo()+','+tipoExpresionPosicion2.getNombreTipo());
+                    return;
+                }
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'subString ', 'Se esperaba un valor de tipo String y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                return;
+            }
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+class LengthCadena
+{
+    constructor(linea, columna, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+
+        this.getTipo = function(entorno)
+        {
+            return new Tipo(TipoPrimitivo.INT);
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esCadena())
+            {
+                var cadena = this.expresion.getValor(entorno);
+                return cadena.length;
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'length ', 'Se esperaba un valor de tipo String y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                return;
+            }
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+class UpperCadena
+{
+    constructor(linea, columna, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+
+        this.getTipo = function(entorno)
+        {
+            return new Tipo(TipoPrimitivo.INT);
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esCadena())
+            {
+                var cadena = this.expresion.getValor(entorno);
+                return cadena.toUpperCase();
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'length ', 'Se esperaba un valor de tipo String y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                return;
+            }
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+class LowerCadena
+{
+    constructor(linea, columna, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+
+        this.getTipo = function(entorno)
+        {
+            return new Tipo(TipoPrimitivo.INT);
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esCadena())
+            {
+                var cadena = this.expresion.getValor(entorno);
+                return cadena.toLowerCase();
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'length ', 'Se esperaba un valor de tipo String y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                return;
+            }
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+
+class NativaToInt
+{
+    constructor(linea, columna, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+
+        this.getTipo = function(entorno)
+        {
+            return new Tipo(TipoPrimitivo.INT);
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esDouble())
+            {
+                var valor = this.expresion.getValor(entorno);
+                if (valor != null || valor != undefined || !isNaN(valor)){
+                    return parseInt(valor);
+                }else{
+                    return 0;
+                }
+
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'toInt ', 'Se esperaba un valor de tipo flotante y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                return;
+            }
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+
+class NativaToString
+{
+    constructor(linea, columna, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+
+        this.getTipo = function(entorno)
+        {
+            return new Tipo(TipoPrimitivo.INT);
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion != null || tipoExpresion != undefined)
+            {
+                var valor = this.expresion.getValor(entorno);
+                if (valor != null || valor != undefined || !isNaN(valor)){
+                    return "\""+String(valor)+"\"";
+                }else{
+                    return 0;
+                }
+
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'toString ', 'Se esperaba un valor diferente a null o undefined');
+                return;
+            }
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+
+class NativaToDouble
+{
+    constructor(linea, columna, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+
+        this.getTipo = function(entorno)
+        {
+            return new Tipo(TipoPrimitivo.INT);
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esEntero())
+            {
+                var valor = this.expresion.getValor(entorno);
+                if (valor != null || valor != undefined || !isNaN(valor)){
+                    return valor.toFixed(2)
+                }else{
+                    return 0;
+                }
+
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'toDouble ', 'Se esperaba un valor de tipo entero y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                return;
+            }
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+
+class ParseInt
+{
+    constructor(linea, columna, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+
+        this.getTipo = function(entorno)
+        {
+            return new Tipo(TipoPrimitivo.INT);
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esCadena())
+            {
+                var valor = this.expresion.getValor(entorno);
+                if (valor != null || valor != undefined || !isNaN(valor)){
+                    return parseInt(valor);
+                }else{
+                    return 0;
+                }
+
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'int.parse ', 'Se esperaba un valor de tipo cadena y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                return;
+            }
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+
+class ParseDouble
+{
+    constructor(linea, columna, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+
+        this.getTipo = function(entorno)
+        {
+            return new Tipo(TipoPrimitivo.DOUBLE);
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esCadena())
+            {
+                var valor = this.expresion.getValor(entorno);
+                if (valor != null || valor != undefined || !isNaN(valor)){
+                    return Number.parseFloat(valor);
+                }else{
+                    return 0;
+                }
+
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'double.parse ', 'Se esperaba un valor de tipo cadena y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                return;
+            }
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
+
+class ParseBool
+{
+    constructor(linea, columna, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+
+        this.getTipo = function(entorno)
+        {
+            return new Tipo(TipoPrimitivo.BOOL);
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esCadena())
+            {
+                var valor = this.expresion.getValor(entorno);
+                if (valor != null || valor != undefined || !isNaN(valor)){
+
+                    if(valor == 1){
+                        return true;
+                    }else{
+                        return false;
+                    }
+
+                }else{
+                    return 0;
+                }
+
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'boolean.parse ', 'Se esperaba un valor de tipo cadena y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                return;
+            }
+        }
+
+        this.generar3D = function(entorno)
+        {
+
+        }
+    }
+}
+
 
 /*Expresiones Relacionales------------------------------------------------> */
 
