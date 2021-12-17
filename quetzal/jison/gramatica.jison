@@ -99,6 +99,13 @@
 "toDouble"           %{ debugPrint(yytext);return 'ToDouble'; %}
 "parse"              %{ debugPrint(yytext);return 'parse'; %}
 
+//instrucciones
+"switch"             %{ debugPrint(yytext);return 'Rswitch'; %}
+"case"               %{ debugPrint(yytext);return 'Rcase'; %}
+"break"              %{ debugPrint(yytext);return 'Rbreak'; %}
+"default"            %{ debugPrint(yytext);return 'Rdefault'; %}
+"while"              %{ debugPrint(yytext);return 'Rwhile'; %}
+"do"              %{ debugPrint(yytext);return 'Rdo'; %}
 
 
 ([a-zA-Z]|"_"|"$")([a-zA-Z]|[0-9]|"_"|"$")* %{ debugPrint(yytext); return 'id'; %}
@@ -169,7 +176,11 @@ INSTRUCCION:  PRINTLN { $$ = $1;}
 			| LLAMADA ';' {$$ =$1;}	
 			| ASIGNACION {$$ = $1;}
 			| DECLARACION {$$ = $1;}
-			| RETORNO {$$ = $1;}								
+			| RETORNO {$$ = $1;}
+			| SWITCHINST {$$ = $1;}
+			| BREAKINST {$$ = $1;}
+			| WHILEINST {$$ = $1;}
+			| DOWHILEINST {$$ = $1;}
 			| error { 	
 						Utils.registrarErrorSintactico(@1.first_line-1,@1.first_column-1, $1, $1);
 						$$ = null;						
@@ -406,6 +417,33 @@ SI:   si '(' E ')' BLOQUE
 	| si '(' E ')' INSTRUCCION ELSEIF %prec SI_SIMPLE
 ;
 */
+
+SWITCHINST : Rswitch '(' E ')' '{' LISTACASE  DEFAULTINST '}' { $$= new SwitchInst(@1.first_line-1,@1.first_column-1,$3,$6,$7);}
+;
+
+LISTACASE: LISTACASE CASE {$$ =$1; $$.push($2);}
+		| CASE {$$ = new Array; $$.push($1);}
+;
+
+CASE : Rcase E ':' INSTRUCCIONES { $$= new CaseInst(@1.first_line-1,@1.first_column-1,$2,$4);}
+;
+
+BREAKINST : Rbreak ';'  { $$= new BreakInst(@1.first_line-1,@1.first_column-1);}
+;
+
+DEFAULTINST: Rdefault ':' INSTRUCCIONES { $$= new DefaultInst(@1.first_line-1,@1.first_column-1,$3);}
+            | /*empty*/
+;
+
+WHILEINST : Rwhile '(' E ')' BLOQUE { $$= new WhileInst(@1.first_line-1,@1.first_column-1,$3,$5);}
+;
+
+DOWHILEINST : Rdo BLOQUE Rwhile '(' E ')' ';' { $$= new DoWhileInst(@1.first_line-1,@1.first_column-1,$2,$5);}
+;
+
+
+
+
 
 
 PARSEBOOL : boolean '.' parse '(' E ')' { $$ = new ParseBool(@1.first_line-1,@1.first_column-1,$5);}
