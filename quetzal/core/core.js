@@ -4129,3 +4129,43 @@ class DoWhileInst
         }
     }
 }
+
+class ForInst
+{
+    constructor(linea, columna, declarion_asignacion, condicion, aumento_disminucion, bloque)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.declarion_asignacion = declarion_asignacion;
+        this.condicion = condicion;
+        this.aumento_disminucion = aumento_disminucion;
+        this.bloque = bloque;
+
+        this.ejecutar = function(entorno)
+        {
+        }
+
+        this.generar3D = function(entorno)
+        {
+        }
+    }
+}
+
+class For2Inst
+{
+    constructor(linea, columna, expresion_valor, expresion_condicion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion_valor = expresion_valor;
+        this.expresion_condicion = expresion_condicion;
+
+        this.ejecutar = function(entorno)
+        {
+        }
+
+        this.generar3D = function(entorno)
+        {
+        }
+    }
+}

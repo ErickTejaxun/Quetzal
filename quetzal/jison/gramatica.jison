@@ -108,8 +108,8 @@
 "do"                 %{ debugPrint(yytext);return 'Rdo'; %}
 "if"                 %{ debugPrint(yytext);return 'Rif'; %}
 "else"               %{ debugPrint(yytext);return 'Relse'; %}
-
-
+"for"                %{ debugPrint(yytext);return 'Rfor'; %}
+"in"                 %{ debugPrint(yytext);return 'Rin'; %}
 
 
 ([a-zA-Z]|"_"|"$")([a-zA-Z]|[0-9]|"_"|"$")* %{ debugPrint(yytext); return 'id'; %}
@@ -488,5 +488,19 @@ WHILEINST : Rwhile '(' E ')' BLOQUE { $$= new WhileInst(@1.first_line-1,@1.first
 DOWHILEINST : Rdo BLOQUE Rwhile '(' E ')' ';' { $$= new DoWhileInst(@1.first_line-1,@1.first_column-1,$2,$5);}
 ;
 
+/*
 
+FORINST : Rfor '(' FOROPCIONES ';' E ';' E ')' BLOQUE { $$= new ForInst(@1.first_line-1,@1.first_column-1,$3,$5.$7,$9);}
+        | Rfor E Rin E BLOQUE   { $$= new For2Inst(@1.first_line-1,@1.first_column-1,$2,$4,$5);}
+;
 
+FOROPCIONES : ASIGNACION
+            | DECLARACION
+;
+
+Expresiones que faltan agregar a la produccion para la instruccion for
+i++
+["perro", "gato", "tortuga"]
+arr[2:4]
+
+*/
