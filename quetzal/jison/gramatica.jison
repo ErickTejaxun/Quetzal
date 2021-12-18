@@ -229,16 +229,48 @@ BLOQUE: '{' INSTRUCCIONES '}'
 		{$$ = $2; }
 		;
 
-PRINTLN : println '(' E ')' ';'
-		{
-			$$ = new Println(@1.first_line-1,@1.first_column-1, $3);			
+PRINTLN : println '(' LExpr ')' ';'
+		{				
+			var nodo_concatenar = null;
+			if($3.length== 1)
+			{
+				nodo_concatenar = $3[0];
+			}				
+			else
+			{
+				var nodoTmp = $3[0]; // primer expresion
+				var i = 1;
+				for( i=1; i<$3.length; i++)
+				{
+					var nodo = $3[i];
+					var nodoTmp = new Concatenar(nodoTmp.linea, nodoTmp.columna, nodoTmp, nodo);					
+				}											
+				nodo_concatenar = nodoTmp;
+			}		
+			$$ = new Println(@1.first_line-1,@1.first_column-1, nodo_concatenar);						
 		}
 		;
 
 
-PRINT : print '(' E ')' ';'
+PRINT : print '(' LExpr ')' ';'
 		{
-			$$ = new Print(@1.first_line-1,@1.first_column-1, $3);			
+			var nodo_concatenar = null;
+			if($3.length== 1)
+			{
+				nodo_concatenar = $3[0];
+			}				
+			else
+			{
+				var nodoTmp = $3[0]; // primer expresion
+				var i = 1;
+				for( i=1; i<$3.length; i++)
+				{
+					var nodo = $3[i];
+					var nodoTmp = new Concatenar(nodoTmp.linea, nodoTmp.columna, nodoTmp, nodo);					
+				}											
+				nodo_concatenar = nodoTmp;
+			}		
+			$$ = new Print(@1.first_line-1,@1.first_column-1, nodo_concatenar);			
 		}
 		;
 

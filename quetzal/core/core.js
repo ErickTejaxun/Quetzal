@@ -2059,14 +2059,6 @@ class Llamada
             if(funcionBuscada != null || funcionBuscada!= undefined)
             {
                 var nuevoEntorno = funcionBuscada.entorno;
-                /*if(funcionBuscada!='main')
-                {
-                    nuevoEntorno = new Entorno(entorno.getEntornoGlobal());
-                } 
-                */               
-                
-                /* Ahora tenemos que crear los parametros en este nuevo entorno */
-                /* Aquí los parametros actuales son una lista de Expresiones */
                 var indiceArreglo = 0;
                 var t0 = Utils.generarTemporal();
                 Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';//Simulacion de cambio de entorno\n');
@@ -2083,7 +2075,7 @@ class Llamada
                     {                                                
                         // Pasar valor en tresdirecciones
                         var t1 = Utils.generarTemporal();
-                        Utils.imprimirConsola(t1+'=P+'+simboloParametro.getPosicion()+'; //Posicion parametros '+parametro.id+'\n');
+                        Utils.imprimirConsola(t1+'='+t0+'+'+simboloParametro.getPosicion()+'; //Posicion parametros '+parametro.id+'\n');
                         Utils.imprimirConsola('stack[(int)'+t1+']='+valorInicial+';\n');                        
                     }
                     else
