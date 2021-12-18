@@ -2303,7 +2303,6 @@ class LowerCadena
     }
 }
 
-
 class NativaToInt
 {
     constructor(linea, columna, expresion)
@@ -2343,7 +2342,6 @@ class NativaToInt
         }
     }
 }
-
 
 class NativaToString
 {
@@ -2385,7 +2383,6 @@ class NativaToString
     }
 }
 
-
 class NativaToDouble
 {
     constructor(linea, columna, expresion)
@@ -2425,7 +2422,6 @@ class NativaToDouble
         }
     }
 }
-
 
 class ParseInt
 {
@@ -2467,7 +2463,6 @@ class ParseInt
     }
 }
 
-
 class ParseDouble
 {
     constructor(linea, columna, expresion)
@@ -2507,7 +2502,6 @@ class ParseDouble
         }
     }
 }
-
 
 class ParseBool
 {
