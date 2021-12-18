@@ -195,6 +195,10 @@ class Utilidades
             this.DoubleToString();
             this.CharToString();
             this.BooleanToString();
+            this.UpperCase();
+            this.LowerCase();
+            this.NativaStringToInt();
+            this.NativaStringToDouble();
         }
         
         this.NativaImpresion = function()
@@ -644,6 +648,216 @@ class Utilidades
             this.imprimirConsola('\n');               
         }
 
+        this.UpperCase = function()
+        {            
+
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            var t2 = this.generarTemporal();
+            var t3 = this.generarTemporal();
+            var t4 = this.generarTemporal();
+            var t5 = this.generarTemporal();
+        
+            var L1 = this.generarEtiqueta();
+            var L2 = this.generarEtiqueta();
+            var L3 = this.generarEtiqueta();
+            var L4 = this.generarEtiqueta();
+            var L5 = this.generarEtiqueta();
+            var L6 = this.generarEtiqueta();
+        
+        
+            this.imprimirConsola('void uppercase_Nativa(){\n');
+            this.imprimirConsola(t0+'=P+1;// Direccion parametro 1\n');
+            this.imprimirConsola(t1+'=stack[(int)'+t0+'];// Obtener inicio cadena\n');
+            this.imprimirConsola(t2+'=H;//Inicio de la nueva cadena\n');
+            this.imprimirConsola(L1+':\n');
+            this.imprimirConsola(t3+'=heap[(int)'+t1+'];// caracter actual\n');
+            this.imprimirConsola('if('+t3+'=='+this.obtenerFinCadena()+') goto '+L2+'; // fin de la cadena;\n');
+            this.imprimirConsola('goto '+L3+'; // Traslado de caracter\n');
+            this.imprimirConsola(L3+': // Traslado de caracter\n');
+            this.imprimirConsola('if('+t3+'>=97) goto '+L4+';//Ir a segunda verificacion\n');
+            this.imprimirConsola('goto '+L5+';//Almacenar el caracter\n');
+            this.imprimirConsola(L4+':\n');
+            this.imprimirConsola('if('+t3+'<=122)goto '+L6+';// Hay que pasarlo mayúscula\n');
+            this.imprimirConsola('goto '+L5+';//Almacenar el caracter\n');
+            this.imprimirConsola(L6+':\n');
+            this.imprimirConsola(t3+'='+t3+'-32;//Pasando a mayúscula\n');
+            //this.imprimirConsola('goto '+L4+';//Almacenar el caracter\n');
+            this.imprimirConsola(L5+':\n');
+            this.imprimirConsola(t4+'=H;//Direccion cadena\n');
+            this.imprimirConsola('H=H+1;//Reservando espacio\n');
+            this.imprimirConsola('heap[(int)'+t4+']='+t3+';\n');
+            this.imprimirConsola(t1+'='+t1+'+1;\n');
+            this.imprimirConsola('goto '+L1+';\n');
+            this.imprimirConsola(L2+':\n');
+            this.imprimirConsola(t5+'=H;\n');
+            this.imprimirConsola('H=H+1;//Reservando espacio\n');
+            this.imprimirConsola('heap[(int)'+t5+']='+this.obtenerFinCadena()+';\n');
+            this.imprimirConsola('stack[(int)P]='+t2+';//Set retorno\n');
+            this.imprimirConsola('return;');
+            this.imprimirConsola('}\n');
+            this.imprimirConsola(' \n');
+
+        }
+
+        this.LowerCase = function()
+        {
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            var t2 = this.generarTemporal();
+            var t3 = this.generarTemporal();
+            var t4 = this.generarTemporal();
+            var t5 = this.generarTemporal();
+        
+            var L1 = this.generarEtiqueta();
+            var L2 = this.generarEtiqueta();
+            var L3 = this.generarEtiqueta();
+            var L4 = this.generarEtiqueta();
+            var L5 = this.generarEtiqueta();
+            var L6 = this.generarEtiqueta();
+        
+        
+            this.imprimirConsola('void lowercase_Nativa(){\n');
+            this.imprimirConsola(t0+'=P+1;// Direccion parametro 1\n');
+            this.imprimirConsola(t1+'=stack[(int)'+t0+'];// Obtener inicio cadena\n');
+            this.imprimirConsola(t2+'=H;//Inicio de la nueva cadena\n');
+            this.imprimirConsola(L1+':\n');
+            this.imprimirConsola(t3+'=heap[(int)'+t1+'];// caracter actual\n');
+            this.imprimirConsola('if('+t3+'=='+this.obtenerFinCadena()+') goto '+L2+'; // fin de la cadena;\n');
+            this.imprimirConsola('goto '+L3+'; // Traslado de caracter\n');
+            this.imprimirConsola(L3+': // Traslado de caracter\n');
+            this.imprimirConsola('if('+t3+'>=65)goto '+L4+';//Ir a segunda verificacion\n');
+            this.imprimirConsola('goto '+L5+';//Almacenar el caracter\n');
+            this.imprimirConsola(L4+':\n');
+            this.imprimirConsola('if('+t3+'<=90)goto '+L6+';// Hay que pasarlo mayúscula\n');
+            this.imprimirConsola('goto '+L5+';//Almacenar el caracter\n');
+            this.imprimirConsola(L6+':\n');
+            this.imprimirConsola(t3+'='+t3+'+32;//Pasando a mayúscula\n');
+            //this.imprimirConsola('goto '+L4+';//Almacenar el caracter\n');
+            this.imprimirConsola(L5+':\n');
+            this.imprimirConsola(t4+'=H;//Direccion cadena\n');
+            this.imprimirConsola('H=H+1;//Reservando espacio\n');
+            this.imprimirConsola('heap[(int)'+t4+']='+t3+';\n');
+            this.imprimirConsola(t1+'='+t1+'+1;\n');
+            this.imprimirConsola('goto '+L1+';\n');
+            this.imprimirConsola(L2+':\n');
+            this.imprimirConsola(t5+'=H;\n');
+            this.imprimirConsola('H=H+1;//Reservando espacio\n');
+            this.imprimirConsola('heap[(int)'+t5+']='+this.obtenerFinCadena()+';\n');
+            this.imprimirConsola('stack[(int)P]='+t2+';//Set retorno\n');
+            this.imprimirConsola('return;\n');
+            this.imprimirConsola('}\n');
+            this.imprimirConsola(' \n');
+        }
+
+        this.NativaStringToInt = function()
+        {
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            var t2 = this.generarTemporal();
+            var t3 = this.generarTemporal();
+            var t100 = this.generarTemporal();            
+        
+            var L1 = this.generarEtiqueta();
+            var L2 = this.generarEtiqueta();
+            var L3 = this.generarEtiqueta();
+            var L4 = this.generarEtiqueta();
+            var L5 = this.generarEtiqueta();
+            var L6 = this.generarEtiqueta(); 
+
+            this.imprimirConsola('void Nativa_StringtoInt(){\n');
+            this.imprimirConsola(t0+'=P+1;// Direccion parametro 1\n');
+            this.imprimirConsola(t1+'=stack[(int)'+t0+'];// Obtener inicio cadena\n');
+            this.imprimirConsola(t2+'=0;//Inicio Nuevo entero\n');  
+            this.imprimirConsola(L1+':\n');
+            this.imprimirConsola(t3+'=heap[(int)'+t1+'];// caracter actual\n');
+            this.imprimirConsola('if('+t3+'=='+this.obtenerFinCadena()+') goto '+L2+'; // fin de la cadena;\n');
+            this.imprimirConsola('goto '+L3+'; // Traslado de caracter\n');
+            this.imprimirConsola(L3+': // Traslado de caracter\n');
+            this.imprimirConsola('if('+t3+'>=48)goto '+L4+';//Ir a segunda verificacion\n');
+            this.imprimirConsola('goto '+L5+';//Error\n');
+            this.imprimirConsola(L4+':\n');
+            this.imprimirConsola('if('+t3+'<=57)goto '+L6+';// Comprobamos que es un dígito\n');
+            this.imprimirConsola('goto '+L5+';//Error\n');
+            this.imprimirConsola(L6+':\n');
+            this.imprimirConsola(t2+'='+t2+'*10;//Corrimiento a la izquierda\n');
+            this.imprimirConsola(t100+'='+t3+'-48;//Obtenemos su valor real\n');
+            this.imprimirConsola(t2+'='+t2+'+'+t100+';//Agregamos el nuevo valor\n');        
+            this.imprimirConsola(t1+'='+t1+'+1;\n');
+            this.imprimirConsola('goto '+L1+';\n');
+            this.imprimirConsola(L5+':\n');
+            //Agregar mensaje de error, si queda tiempo :'v
+            this.imprimirConsola(L2+':\n');
+            this.imprimirConsola('stack[(int)P]='+t2+';//Set retorno\n');
+            this.imprimirConsola('return;\n');
+            this.imprimirConsola('}\n');
+            this.imprimirConsola(' \n');            
+        }
+
+        this.NativaStringToDouble = function()
+        {
+            var t0 = this.generarTemporal();
+            var t1 = this.generarTemporal();
+            var t2 = this.generarTemporal();
+            var t3 = this.generarTemporal();
+            var t4 = this.generarTemporal();
+            var t5 = this.generarTemporal();
+            var t100 = this.generarTemporal();            
+        
+            var L0 = this.generarEtiqueta();
+            var L1 = this.generarEtiqueta();
+            var L2 = this.generarEtiqueta();
+            var L3 = this.generarEtiqueta();
+            var L4 = this.generarEtiqueta();
+            var L5 = this.generarEtiqueta();
+            var L6 = this.generarEtiqueta(); 
+            var L7 = this.generarEtiqueta(); 
+            var LFin = this.generarEtiqueta(); 
+
+            this.imprimirConsola('void Nativa_StringtoDouble(){\n');
+            this.imprimirConsola(t0+'=P+1;// Direccion parametro 1\n');
+            this.imprimirConsola(t1+'=stack[(int)'+t0+'];// Obtener inicio cadena\n');
+            this.imprimirConsola(t2+'=0;//Inicio Nuevo entero\n');  
+            this.imprimirConsola(L0+':\n');
+            this.imprimirConsola(t3+'=heap[(int)'+t1+'];// caracter actual\n');
+            this.imprimirConsola('if('+t3+'==46) goto '+L2+'; // Punto, inicio decimales;\n');
+            this.imprimirConsola(L1+':\n');                        
+            this.imprimirConsola('if('+t3+'=='+this.obtenerFinCadena()+') goto '+LFin+'; // fin de la cadena;\n');
+            this.imprimirConsola('goto '+L3+'; // Traslado de caracter\n');
+            this.imprimirConsola(L3+': // Traslado de caracter\n');
+            this.imprimirConsola('if('+t3+'>=48)goto '+L4+';//Ir a segunda verificacion\n');
+            this.imprimirConsola('goto '+L5+';//Error\n');
+            this.imprimirConsola(L4+':\n');
+            this.imprimirConsola('if('+t3+'<=57)goto '+L6+';// Comprobamos que es un dígito\n');
+            this.imprimirConsola('goto '+L5+';//Error\n');
+            this.imprimirConsola(L6+':\n');
+            this.imprimirConsola(t2+'='+t2+'*10;//Corrimiento a la izquierda\n');
+            this.imprimirConsola(t100+'='+t3+'-48;//Obtenemos su valor real\n');
+            this.imprimirConsola(t2+'='+t2+'+'+t100+';//Agregamos el nuevo valor\n');        
+            this.imprimirConsola(t1+'='+t1+'+1;\n');
+            this.imprimirConsola('goto '+L0+';\n');                        
+            this.imprimirConsola(L2+':\n');
+            this.imprimirConsola(t4+'=1; // Factor de corrimiento hacia la derecha\n');
+            this.imprimirConsola(t1+'='+t1+'+1;\n');
+            this.imprimirConsola(L7+': //Digito siguiente a pasar a decimal\n');
+            this.imprimirConsola(t3+'=heap[(int)'+t1+'];// caracter actual\n');            
+            this.imprimirConsola('if('+t3+'=='+this.obtenerFinCadena()+') goto '+LFin+'; // fin de la cadena;\n');
+            //Agregamos el ciclo para decimales            
+            this.imprimirConsola(t4+'='+t4+'*10; // Factor de corrimiento hacia la derecha\n');
+            this.imprimirConsola(t3+'='+t3+'-48;//Obtenemos su valor real\n');
+            this.imprimirConsola(t5+'='+t3+'/'+t4+';\n');            
+            this.imprimirConsola(t2+'='+t2+'+'+t5+';\n');
+            this.imprimirConsola(t1+'='+t1+'+1;//Siguiente caracter\n');
+            this.imprimirConsola('goto '+L7+';\n');
+
+            this.imprimirConsola(L5+':\n');
+            //Agregar mensaje de error, si queda tiempo :'v                        
+            this.imprimirConsola(LFin+':\n');        
+            this.imprimirConsola('stack[(int)P]='+t2+';//Set retorno\n');
+            this.imprimirConsola('return;\n');
+            this.imprimirConsola('}\n');
+            this.imprimirConsola(' \n');            
+        }        
 
 
         this.tenemosEtiquetas = function(objecto)
