@@ -99,6 +99,17 @@
 "toDouble"           %{ debugPrint(yytext);return 'ToDouble'; %}
 "parse"              %{ debugPrint(yytext);return 'parse'; %}
 
+//instrucciones
+"switch"             %{ debugPrint(yytext);return 'Rswitch'; %}
+"case"               %{ debugPrint(yytext);return 'Rcase'; %}
+"break"              %{ debugPrint(yytext);return 'Rbreak'; %}
+"default"            %{ debugPrint(yytext);return 'Rdefault'; %}
+"while"              %{ debugPrint(yytext);return 'Rwhile'; %}
+"do"                 %{ debugPrint(yytext);return 'Rdo'; %}
+"if"                 %{ debugPrint(yytext);return 'Rif'; %}
+"else"               %{ debugPrint(yytext);return 'Relse'; %}
+"for"                %{ debugPrint(yytext);return 'Rfor'; %}
+"in"                 %{ debugPrint(yytext);return 'Rin'; %}
 
 
 ([a-zA-Z]|"_"|"$")([a-zA-Z]|[0-9]|"_"|"$")* %{ debugPrint(yytext); return 'id'; %}
@@ -169,7 +180,12 @@ INSTRUCCION:  PRINTLN { $$ = $1;}
 			| LLAMADA ';' {$$ =$1;}	
 			| ASIGNACION {$$ = $1;}
 			| DECLARACION {$$ = $1;}
-			| RETORNO {$$ = $1;}								
+			| RETORNO {$$ = $1;}
+			| IFINST {$$ = $1;}
+			| SWITCHINST {$$ = $1;}
+			| BREAKINST {$$ = $1;}
+			| WHILEINST {$$ = $1;}
+			| DOWHILEINST {$$ = $1;}
 			| error { 	
 						Utils.registrarErrorSintactico(@1.first_line-1,@1.first_column-1, $1, $1);
 						$$ = null;						
@@ -430,16 +446,6 @@ LExpr : LExpr ',' E {$$ = $1; $$.push($3);}
 		| E {$$= new Array; $$.push($1);}
 ;
 
-
-/*
-SI:   si '(' E ')' BLOQUE 
-	| si '(' E ')' INSTRUCCION 
-	| si '(' E ')' BLOQUE ELSEIF %prec SI_SIMPLE
-	| si '(' E ')' INSTRUCCION ELSEIF %prec SI_SIMPLE
-;
-*/
-
-
 PARSEBOOL : boolean '.' parse '(' E ')' { $$ = new ParseBool(@1.first_line-1,@1.first_column-1,$5);}
 ;
 
@@ -477,7 +483,56 @@ POSICIONCADENA : E '.' caracterposicion '(' E ')' { $$ = new PosicionCadena(@1.f
 ;
 
 
+IFINST: Rif '(' E ')' BLOQUE
+	| Rif '(' E ')' INSTRUCCION
+	| Rif '(' E ')' BLOQUE ELSEIFINSTSS Relse BLOQUE
+	| Rif '(' E ')' BLOQUE Relse BLOQUE
+;
+
+ELSEIFINSTSS : ELSEIFINSTSS ELSEIFINST {$$ = $1; $$.push($2);}
+             | ELSEIFINST   {$$= new Array; $$.push($1);}
+;
+
+ELSEIFINST : Relse Rif '(' E ')' BLOQUE
+;
 
 
+SWITCHINST : Rswitch '(' E ')' '{' LISTACASE  DEFAULTINST '}' { $$= new SwitchInst(@1.first_line-1,@1.first_column-1,$3,$6,$7);}
+;
 
+LISTACASE: LISTACASE CASE {$$ =$1; $$.push($2);}
+		| CASE {$$ = new Array; $$.push($1);}
+;
 
+CASE : Rcase E ':' INSTRUCCIONES { $$= new CaseInst(@1.first_line-1,@1.first_column-1,$2,$4);}
+;
+
+BREAKINST : Rbreak ';'  { $$= new BreakInst(@1.first_line-1,@1.first_column-1);}
+;
+
+DEFAULTINST: Rdefault ':' INSTRUCCIONES { $$= new DefaultInst(@1.first_line-1,@1.first_column-1,$3);}
+            | /*empty*/
+;
+
+WHILEINST : Rwhile '(' E ')' BLOQUE { $$= new WhileInst(@1.first_line-1,@1.first_column-1,$3,$5);}
+;
+
+DOWHILEINST : Rdo BLOQUE Rwhile '(' E ')' ';' { $$= new DoWhileInst(@1.first_line-1,@1.first_column-1,$2,$5);}
+;
+
+/*
+
+FORINST : Rfor '(' FOROPCIONES ';' E ';' E ')' BLOQUE { $$= new ForInst(@1.first_line-1,@1.first_column-1,$3,$5.$7,$9);}
+        | Rfor E Rin E BLOQUE   { $$= new For2Inst(@1.first_line-1,@1.first_column-1,$2,$4,$5);}
+;
+
+FOROPCIONES : ASIGNACION
+            | DECLARACION
+;
+
+Expresiones que faltan agregar a la produccion para la instruccion for
+i++
+["perro", "gato", "tortuga"]
+arr[2:4]
+
+*/

@@ -4007,3 +4007,157 @@ class Si
         }
     }
 }
+
+
+class SwitchInst
+{
+    constructor(linea, columna, expresion, lista_cases, default_inst)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+        this.lista_cases = lista_cases;
+        this.default_inst = default_inst;
+
+        this.ejecutar = function(entorno)
+        {
+        }
+
+        this.generar3D = function(entorno)
+        {
+        }
+    }
+}
+
+class CaseInst
+{
+    constructor(linea, columna, expresion, bloque)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+        this.bloque = bloque;
+
+        this.ejecutar = function(entorno)
+        {
+        }
+
+        this.generar3D = function(entorno)
+        {
+        }
+    }
+}
+
+class BreakInst
+{
+    constructor(linea, columna)
+    {
+        this.linea = linea;
+        this.columna = columna;
+
+        this.ejecutar = function(entorno)
+        {
+        }
+
+        this.generar3D = function(entorno)
+        {
+        }
+    }
+}
+
+class DefaultInst
+{
+    constructor(linea, columna, bloque)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.bloque = bloque;
+
+        this.ejecutar = function(entorno)
+        {
+        }
+
+        this.generar3D = function(entorno)
+        {
+        }
+    }
+}
+
+
+class WhileInst
+{
+    constructor(linea, columna, expresion, bloque)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+        this.bloque = bloque;
+
+        this.ejecutar = function(entorno)
+        {
+        }
+
+        this.generar3D = function(entorno)
+        {
+        }
+    }
+}
+
+class DoWhileInst
+{
+    constructor(linea, columna, do_bloque, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.do_bloque = do_bloque;
+        this.expresion = expresion;
+
+        this.ejecutar = function(entorno)
+        {
+        }
+
+        this.generar3D = function(entorno)
+        {
+        }
+    }
+}
+
+class ForInst
+{
+    constructor(linea, columna, declarion_asignacion, condicion, aumento_disminucion, bloque)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.declarion_asignacion = declarion_asignacion;
+        this.condicion = condicion;
+        this.aumento_disminucion = aumento_disminucion;
+        this.bloque = bloque;
+
+        this.ejecutar = function(entorno)
+        {
+        }
+
+        this.generar3D = function(entorno)
+        {
+        }
+    }
+}
+
+class For2Inst
+{
+    constructor(linea, columna, expresion_valor, expresion_condicion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion_valor = expresion_valor;
+        this.expresion_condicion = expresion_condicion;
+
+        this.ejecutar = function(entorno)
+        {
+        }
+
+        this.generar3D = function(entorno)
+        {
+        }
+    }
+}
