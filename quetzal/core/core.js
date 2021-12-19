@@ -76,6 +76,7 @@ class Simbolo
         this.id = id;
         this.tipo = tipo;
         this.valor = valor;
+        this.rol = '';
 
         this.getTipo = function()
         {
@@ -3713,6 +3714,70 @@ class NotLog
 
 
 
+class AccesoArreglo
+{
+    constructor(linea, columna, expresion, listaIndices )
+    {
+        this.linea=linea;
+        this.columna=columna;
+        this.expresion = expresion;
+        this.listaIndices=listaIndices;
+
+        this.getTipo = function(entorno)
+        {
+            return this.expresion.getTipo(entorno);
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            var valorExpresion = this.expresion.getValor(entorno);
+            if(valorExpresion instanceof Array)
+            {
+                var indiceExpresion = 0;
+                for(indiceExpresion =0 ; indiceExpresion < this.listaIndices.length; indiceExpresion++)
+                {
+                    var expresionActual = this.listaIndices[indiceExpresion];
+                    var tipoIndice = expresionActual.getTipo(entorno);
+                    if(tipoIndice.esNumerico())
+                    {
+                        var valorIndice = expresionActual.getValor(entorno);
+                        if(valorIndice>=0)
+                        {
+                            if(valorIndice<=(valorExpresion.length-1))
+                            {
+                                return valorExpresion[valorIndice].valor;
+                            }
+                            else
+                            {
+                                Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','Indice mayor al tamaño del arreglo.');
+                                return;                                 
+                            }
+                        }
+                        else
+                        {
+                            Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','No es posible usar indices negativos.');
+                            return;                            
+                        }
+                    }   
+                    else
+                    {
+                        Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','Se esperaba una expresion númerica.');
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','La expresion no corresponde a un arreglo');
+                return;
+            }
+        }
+
+    }
+}
+
+
 /*Instrucciones---------------------------------------->*/
 
 class Funcion 
@@ -3835,7 +3900,14 @@ class Bloque
                     } 
                     else
                     {
-                        instruccion.ejecutar(entorno);                    
+                        var posibleRetorno = instruccion.ejecutar(entorno);                    
+                        if(posibleRetorno!= null && posibleRetorno!= undefined)
+                        {
+                            if(posibleRetorno instanceof Retorno)
+                            {
+                                return posibleRetorno;
+                            }
+                        }
                     }
                 }                
             }
@@ -4347,7 +4419,8 @@ class Si
             var tipoCondicion = this.condicion.getTipo(entorno);
             if(tipoCondicion.esBoolean())
             {
-                if(tipoCondicion)
+                var valorCondicion = this.condicion.getValor(entorno);
+                if(valorCondicion)
                 {
                     return this.bloque.ejecutar(entorno);
                 }
@@ -4518,6 +4591,78 @@ class For2Inst
 
         this.generar3D = function(entorno)
         {
+        }
+    }
+}
+
+
+class DeclaracionArreglo 
+{
+    constructor(linea, columna, tipo, id, arregloExpresion)
+    {
+        this.linea = linea;
+        this.columna= columna;
+        this.tipo = tipo;
+        this.id = id;
+        this.arregloExpresion = arregloExpresion;
+
+        this.getTipo = function(entorno)
+        {
+            return this.tipo;
+        }
+
+        this.ejecutar = function(entorno)
+        {
+            var simboloPosible = entorno.getSimbolo(this.id);
+            if(simboloPosible==null || simboloPosible == undefined)
+            {
+                var index = 0;
+                var nuevoArreglo = new Array;
+                for(index = 0 ; index<this.arregloExpresion.length; index++)
+                {
+                    var nuevoSimboloArreglo = this.obtenerValor(entorno, tipo, this.arregloExpresion[index],index);
+                    nuevoArreglo.push(nuevoSimboloArreglo);
+                }
+                var nuevoArreglo = new Simbolo(this.linea, this.columna, this.id, this.tipo, nuevoArreglo);
+                nuevoArreglo.rol = 'ARREGLO';
+                entorno.registrarSimbolo(nuevoArreglo);
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración Arreglo','Ya existe un símbolo con el identificador '+this.id);
+                return;
+            }
+        }
+
+        this.obtenerValor = function(entorno,tipo, expresionActual,indice)
+        {            
+            if(expresionActual instanceof Array)
+            {
+                var index = 0;
+                var nuevoArreglo = new Array;
+                for(index = 0 ; index<expresionActual.length; index++)
+                {
+                    var nuevoSimboloArreglo = this.obtenerValor(entorno, tipo, expresionActual[index],index);
+                    nuevoArreglo.push(nuevoSimboloArreglo);
+                }                   
+                var tmp =   new Simbolo(this.linea, this.columna, this.id, this.tipo, nuevoArreglo);             
+                tmp.rol = 'ARREGLO';
+                return tmp;
+            }
+            else
+            {
+                var tipoActual = expresionActual.getTipo(entorno);
+                if(tipoActual.esIgual(this.tipo))
+                {
+                    var valorActual = expresionActual.getValor(entorno);            
+                    return  new Simbolo(this.linea, this.columna, this.id, this.tipo, valorActual);
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración Arreglo','El valor en el índice '+indice +' no coincide con el tipo declarado. '+this.tipo.getNombreTipo());
+                    return;                        
+                }                
+            }
         }
     }
 }

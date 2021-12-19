@@ -17,6 +17,7 @@
 \n+                   /* skip whitespace */
 \t+                   /* skip whitespace */
 
+
 //comentarios
 "/*"[^'*']*"*/"         return;
 "//"[^\r\n]*[^\r\n]     return;
@@ -24,7 +25,7 @@
 
 [0-9]+"."[0-9]+	 	  return 'double'
 [0-9]+				  return 'entero'
-\"(\\.|[^"])*\" 	  return 'texto'
+\"(\\.|[^"])*\" 	  return 'texto'	  
 \'(\\.|[^'])\' 	      return 'caracter'
 
 
@@ -78,7 +79,7 @@
 "null"               %{ debugPrint(yytext);return 'tnull'; %}
 "int"   			 %{ debugPrint(yytext);return 'tint'; %}
 "double"   			 %{ debugPrint(yytext);return 'tdouble'; %}
-"boolean"   		 %{ debugPrint(yytext);return 'boolean'; %}
+"boolean"   		 %{ debugPrint(yytext);return 'tboolean'; %}
 "char"			     %{ debugPrint(yytext);return 'tchar'; %}
 "string"   			 %{ debugPrint(yytext);return 'tstring'; %}
 "void"   			 %{ debugPrint(yytext);return 'tvoid'; %}
@@ -186,6 +187,7 @@ INSTRUCCION:  PRINTLN { $$ = $1;}
 			| BREAKINST {$$ = $1;}
 			| WHILEINST {$$ = $1;}
 			| DOWHILEINST {$$ = $1;}
+			| DECLARACCIONARREGLO {$$ = $1;}
 			| error { 	
 						Utils.registrarErrorSintactico(@1.first_line-1,@1.first_column-1, $1, $1);
 						$$ = null;						
@@ -204,6 +206,18 @@ DECLARACION : TIPO LID ';' { $$ = new Declaracion(@1.first_line-1,@1.first_colum
 
 LID : LID ',' id {$$  =$1; $$.push($3);}
 	| id { $$ = new Array; $$.push($1); }
+;
+
+DECLARACCIONARREGLO : TIPO '[' ']' id '=' EXPARREGLO ';' {$$ = new DeclaracionArreglo(@1.first_line-1,@1.first_column-1,$1,$4,$6);}
+;
+
+EXPARREGLO: '[' LExprArreglo  ']' { $$ =$2;}
+;
+
+LExprArreglo : LExprArreglo ',' E {$$ = $1; $$.push($3);}
+			  |	LExprArreglo ',' EXPARREGLO {$$ = $1; $$.push($3);}
+			  | E {$$= new Array; $$.push($1);}
+			  |	EXPARREGLO {$$= new Array; $$.push($1);}
 ;
 
 RETORNO : retorno E ';'  { $$= new Retorno(@1.first_line-1,@1.first_column-1, $2);}
@@ -235,6 +249,7 @@ TIPOVAR :  tint { $$ = new Tipo(TipoPrimitivo.INT);}
 
 TIPO :    tint { $$ = new Tipo(TipoPrimitivo.INT);}
 		| tdouble { $$ = new Tipo(TipoPrimitivo.DOUBLE);}
+		| tboolean { $$ = new Tipo(TipoPrimitivo.BOOL);}
 		| tstring { $$ = new Tipo(TipoPrimitivo.STRING);}
 		| tchar { $$ = new Tipo(TipoPrimitivo.CHAR);}
 		| id {$$ = new Tipo(TipoPrimitivo.STRUCT, $1);}
@@ -436,7 +451,20 @@ E   : '(' E ')'
 	| LENGTHCADENA {$$= $1;}
 	| PORCIONCADENA {$$= $1;}
 	| POSICIONCADENA {$$= $1;}
+	| ACCESOARREGLO {$$ =$1;}
 	;
+
+
+
+ACCESOARREGLO : id LINDICES {$$= new AccesoArreglo(@1.first_line-1,@1.first_column-1,new ExpVariable(@1.first_line-1,@1.first_column-1,$1),$2);}
+;
+
+LINDICES : LINDICES INDICE  {$$=$1; $$.push($2);}
+		| INDICE {$$=$1;}
+;
+
+INDICE : '[' E ']' {$$ = new Array; $$.push($2);}
+;
 
 LLAMADA : id '(' ')' { $$ = new Llamada(@1.first_line-1,@1.first_column-1, $1, new Array);}
 		| id '(' LExpr ')' { $$ = new Llamada(@1.first_line-1,@1.first_column-1, $1, $3);}
@@ -446,7 +474,7 @@ LExpr : LExpr ',' E {$$ = $1; $$.push($3);}
 		| E {$$= new Array; $$.push($1);}
 ;
 
-PARSEBOOL : boolean '.' parse '(' E ')' { $$ = new ParseBool(@1.first_line-1,@1.first_column-1,$5);}
+PARSEBOOL : tboolean '.' parse '(' E ')' { $$ = new ParseBool(@1.first_line-1,@1.first_column-1,$5);}
 ;
 
 
@@ -483,17 +511,30 @@ POSICIONCADENA : E '.' caracterposicion '(' E ')' { $$ = new PosicionCadena(@1.f
 ;
 
 
-IFINST: Rif '(' E ')' BLOQUE
-	| Rif '(' E ')' INSTRUCCION
-	| Rif '(' E ')' BLOQUE ELSEIFINSTSS Relse BLOQUE
-	| Rif '(' E ')' BLOQUE Relse BLOQUE
+IFINST: 
+      Rif '(' E ')' BLOQUE {$$= new Si(@1.first_line-1,@1.first_column-1,$3,$5, null);}
+	| Rif '(' E ')' INSTRUCCION { 
+									var BloqueInstruccion = new Bloque(@1.first_line-1,@1.first_column-1); 
+									BloqueInstruccion.registrarInstruccion($5);
+									$$= new Si(@1.first_line-1,@1.first_column-1,$3,BloqueInstruccion, null);
+								}
+	| Rif '(' E ')' BLOQUE ELSEIFINSTSS 
+								{ 
+									$$= new Si(@1.first_line-1,@1.first_column-1,$3,$5, $6);
+								}	
+	/*| Rif '(' E ')' BLOQUE Relse BLOQUE */
 ;
 
-ELSEIFINSTSS : ELSEIFINSTSS ELSEIFINST {$$ = $1; $$.push($2);}
-             | ELSEIFINST   {$$= new Array; $$.push($1);}
+ELSEIFINSTSS : ELSEIFINST ELSEIFINSTSS  {$$= $1;  $$.sinosi = $2;}
+			 | ELSEFINAL ELSEIFINSTSS  {$$= $1;  $$.sinosi = $2;}
+             | ELSEIFINST   {$$= $1;}
+			 | ELSEFINAL {$$= $1;}
 ;
 
-ELSEIFINST : Relse Rif '(' E ')' BLOQUE
+ELSEFINAL : Relse BLOQUE {$$= new Si(@1.first_line-1,@1.first_column-1,new ExpBooleana(@1.first_line-1,@1.first_column-1,true),$2,null); }
+;
+
+ELSEIFINST : Relse Rif '(' E ')' BLOQUE {$$= new Si(@1.first_line-1,@1.first_column-1,$4,$6, null);}
 ;
 
 
