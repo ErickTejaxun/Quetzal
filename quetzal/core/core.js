@@ -2462,7 +2462,7 @@ class NativaToInt
         this.getValor = function(entorno)
         {
             var tipoExpresion = this.expresion.getTipo(entorno);
-            if(tipoExpresion.esDouble())
+            if(tipoExpresion.esNumerico())
             {
                 var valor = this.expresion.getValor(entorno);
                 if (valor != null || valor != undefined || !isNaN(valor)){
@@ -2482,26 +2482,14 @@ class NativaToInt
         this.generar3D = function(entorno)
         {
             var tipoExpresion = this.expresion.getTipo(entorno);
-            if(tipoExpresion.esDouble())
+            if(tipoExpresion.esNumerico())
             {
                 var valor = this.expresion.generar3D(entorno);
                 if (valor != null || valor != undefined || !isNaN(valor))
                 {
-
-                    var cadena = valor;
-                    var t0=Utils.generarTemporal()
-                    var t1=Utils.generarTemporal()
-                    var t2=Utils.generarTemporal()
-                    var t3=Utils.generarTemporal()        
-                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';//Simulación de cambio de entorno\n');
-                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
-                    Utils.imprimirConsola('stack[(int)'+t1+']='+cadena+';//Paso de parametro 1\n');
-                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';// Cambio de entorno\n');
-                    Utils.imprimirConsola('Nativa_StringtoInt();\n');
-                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';// Retomar entorno\n');
-                    Utils.imprimirConsola(t2+'='+t0+'+0;// Direccion retorno\n');
-                    Utils.imprimirConsola(t3+'=stack[(int)'+t2+'];// Valor de retorno\n');
-                    return t3;
+                    var t0 = Utils.generarTemporal();
+                    Utils.imprimirConsola(t0+'=(int)'+valor+';// Casteo a entero\n');
+                    return t0;
                 }
                 else
                 {
@@ -2528,7 +2516,7 @@ class NativaToString
 
         this.getTipo = function(entorno)
         {
-            return new Tipo(TipoPrimitivo.INT);
+            return new Tipo(TipoPrimitivo.STRING);
         }
 
         this.getValor = function(entorno)
@@ -2538,7 +2526,8 @@ class NativaToString
             {
                 var valor = this.expresion.getValor(entorno);
                 if (valor != null || valor != undefined || !isNaN(valor)){
-                    return "\""+String(valor)+"\"";
+                    //return "\""+String(valor)+"\"";
+                    return String(valor);
                 }else{
                     return 0;
                 }
@@ -2553,7 +2542,79 @@ class NativaToString
 
         this.generar3D = function(entorno)
         {
+            //Cast to string 
 
+            var tipoI = this.expresion.getTipo(entorno);
+            var valorI = this.expresion.generar3D(entorno);             
+            if (tipoI.esNulo())
+            {
+                /*var NodoStringNulo = new ExpString(0,0,"null");                    
+                valorI = NodoStringNulo.generar3D(null);
+                return valorI;                  
+                */
+            }else                             
+            if(tipoI.esEntero())
+            {
+                var t0 =Utils.generarTemporal();       
+                var t1 =Utils.generarTemporal();
+                var t2 =Utils.generarTemporal();                    
+                Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+'; // Paso valor parametro 1\n');                    
+                Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                Utils.imprimirConsola('IntToString_Nativa();\n');
+                Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                valorI = t2;
+                return valorI;
+            }
+            else if (tipoI.esDouble())
+            {
+                var t0 =Utils.generarTemporal();       
+                var t1 =Utils.generarTemporal();
+                var t2 =Utils.generarTemporal();                                  
+                Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+'; // Paso valor parametro 1\n');                    
+                Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                Utils.imprimirConsola('DoubleToString_Nativa();\n');
+                Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');
+                valorI = t2;
+                return valorI;
+            }
+            else if (tipoI.esChar())
+            {
+                var t0 =Utils.generarTemporal();       
+                var t1 =Utils.generarTemporal();
+                var t2 =Utils.generarTemporal();                                    
+                Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+'; // Paso valor parametro 1\n');                    
+                Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                Utils.imprimirConsola('CharToString_Nativa();\n');
+                Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                valorI = t2; 
+                return valorI;                   
+            }
+            else if (tipoI.esBoolean())
+            {
+                var t0 =Utils.generarTemporal();       
+                var t1 =Utils.generarTemporal();
+                var t2 =Utils.generarTemporal();                   
+                
+                Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+'; // Paso valor parametro 1\n');                    
+                Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                Utils.imprimirConsola('BooleanToString_Nativa();\n');
+                Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                valorI = t2;
+                return valorI;
+            }     
+            // Falta arreglos e instancias        
         }
     }
 }
@@ -2568,7 +2629,7 @@ class NativaToDouble
 
         this.getTipo = function(entorno)
         {
-            return new Tipo(TipoPrimitivo.INT);
+            return new Tipo(TipoPrimitivo.DOUBLE);
         }
 
         this.getValor = function(entorno)
@@ -2593,7 +2654,27 @@ class NativaToDouble
 
         this.generar3D = function(entorno)
         {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esNumerico())
+            {
+                var valor = this.expresion.generar3D(entorno);
+                if (valor != null || valor != undefined || !isNaN(valor))
+                {
+                    var t0 = Utils.generarTemporal();
+                    Utils.imprimirConsola(t0+'=(float)'+valor+';// Casteo a entero\n');
+                    return t0;                    
+                }
+                else
+                {
+                    return 0;
+                }
 
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'toDouble ', 'Se esperaba un valor de tipo entero y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                return;
+            }
         }
     }
 }
@@ -2749,19 +2830,42 @@ class ParseBool
             return new Tipo(TipoPrimitivo.BOOL);
         }
 
-        this.getValor = function(entorno)
+        this.generar3D = function(entorno)
         {
             var tipoExpresion = this.expresion.getTipo(entorno);
             if(tipoExpresion.esCadena())
             {
                 var valor = this.expresion.getValor(entorno);
-                if (valor != null || valor != undefined || !isNaN(valor)){
+                if (valor != null || valor != undefined || !isNaN(valor))
+                {
+                    var cadenaTrue = new ExpString(this.linea, this.columna, "1");                    
 
-                    if(valor == 1){
-                        return true;
-                    }else{
-                        return false;
-                    }
+                    this.LV = Utils.generarEtiqueta();
+                    this.LF = Utils.generarEtiqueta();
+                    var valorI = cadenaTrue.generar3D(entorno);
+                    var valorD = this.expresion.generar3D(entorno);
+                    
+    
+                    //Temporales
+                    var t0 = Utils.generarTemporal();
+                    var t1 = Utils.generarTemporal();
+                    var t2 = Utils.generarTemporal();
+                    var t3 = Utils.generarTemporal();
+                    var t4 = Utils.generarTemporal();
+    
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulacion de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1; //Direccion Cadena 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+'] = '+valorI+'; // Pasando primer cadena\n');
+                    Utils.imprimirConsola(t2+'='+t0+'+2; //Direccion Cadena 2\n');
+                    Utils.imprimirConsola('stack[(int)'+t2+'] = '+valorD+'; // Pasando segunda cadena\n');
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                    Utils.imprimirConsola('Nativa_Comparar_Cadenas();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Retomar de entorno\n');
+                    Utils.imprimirConsola(t3+'='+t0+'+0; //Direccion retorno\n');
+                    Utils.imprimirConsola(t4+'=stack[(int)'+t3+']; //Valor de retorno\n');
+                    Utils.imprimirConsola('if('+t4+'==1) goto '+this.LV+'; \n');
+                    Utils.imprimirConsola('goto '+this.LF+'; \n');
+                    return this;
 
                 }else{
                     return 0;
@@ -2775,9 +2879,32 @@ class ParseBool
             }
         }
 
-        this.generar3D = function(entorno)
+        this.getValor = function(entorno)
         {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esCadena())
+            {
+                var valor = this.expresion.getValor(entorno);
+                if (valor != null || valor != undefined || !isNaN(valor))
+                {
 
+                    if(valor == 1){
+                        return true;
+                    }else{
+                        return false;
+                    }
+
+                }else
+                {
+                    return 0;
+                }
+
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'boolean.parse ', 'Se esperaba un valor de tipo cadena y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                return;
+            }
         }
     }
 }

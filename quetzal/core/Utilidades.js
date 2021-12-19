@@ -863,7 +863,7 @@ class Utilidades
         this.tenemosEtiquetas = function(objecto)
         {
             return (objecto instanceof Igualdad) || (objecto instanceof Diferenciacion) || (objecto instanceof MayorQue) || (objecto instanceof MenorQue) || (objecto instanceof MenorIgual)
-                    || (objecto instanceof MayorIgual) || (objecto instanceof AndLog) || (objecto instanceof OrLog)|| (objecto instanceof NotLog);
+                    || (objecto instanceof MayorIgual) || (objecto instanceof AndLog) || (objecto instanceof OrLog)|| (objecto instanceof NotLog) || (objecto instanceof ParseBool);
         }
     }
 }

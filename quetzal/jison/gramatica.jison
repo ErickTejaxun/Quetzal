@@ -464,7 +464,7 @@ NATIVATOINT : ToInt '(' E ')' { $$ = new NativaToInt(@1.first_line-1,@1.first_co
 NATIVATODOUBLE : ToDouble '(' E ')' { $$ = new NativaToDouble(@1.first_line-1,@1.first_column-1,$3);}
 ;
 
-NATIVATOSTRING : ToString '(' E ')' { $$ = new NativaToString(@1.first_line-1,@1.first_column-1,$3);}
+NATIVATOSTRING : tstring '(' E ')' { $$ = new NativaToString(@1.first_line-1,@1.first_column-1,$3);}
 ;
 
 LOWERCADENA : E '.' caracterlower '(' ')' { $$ = new LowerCadena(@1.first_line-1,@1.first_column-1,$1);}
