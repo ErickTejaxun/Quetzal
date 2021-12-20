@@ -4528,7 +4528,25 @@ class WhileInst
 
         this.ejecutar = function(entorno)
         {
+            var condicion = this.expresion.getValor(entorno);
+            var tipo = this.expresion.getTipo(entorno);
+
+            if(tipo.esBoolean()){
+                while(condicion){
+                    var resultado = this.bloque.ejecutar(entorno);
+                    if(resultado != null || resultado != undefined){
+                        if(resultado instanceof BreakInst){
+
+                        }
+                    }
+                    condicion = this.expresion.getValor(entorno);
+                }
+            }else{
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'instruccion while','Se esperaba una expresion booleana','');
+                return;
+            }
         }
+
 
         this.generar3D = function(entorno)
         {
