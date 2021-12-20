@@ -113,6 +113,7 @@
 "else"               %{ debugPrint(yytext);return 'Relse'; %}
 "for"                %{ debugPrint(yytext);return 'Rfor'; %}
 "in"                 %{ debugPrint(yytext);return 'Rin'; %}
+"continue"           %{ debugPrint(yytext);return 'Rcontinue'; %}
 "begin"                 %{ debugPrint(yytext);return 'Rbegin'; %}
 "end"                 %{ debugPrint(yytext);return 'Rend'; %}
 
@@ -209,6 +210,9 @@ INSTRUCCION:  PRINTLN { $$ = $1;}
 			| BREAKINST {$$ = $1;}
 			| WHILEINST {$$ = $1;}			
 			| DOWHILEINST {$$ = $1;}
+            | AUMENTO ';' {$$ =$1;}
+            | DECREMENTO ';' {$$ =$1;}
+            | CONTINUEINST {$$ =$1;}
 			| DECLARACCIONARREGLO {$$ = $1;}
 			| FORINST {$$=$1;}
 			| error { 	
@@ -598,6 +602,8 @@ WHILEINST : Rwhile '(' E ')' BLOQUE { $$= new WhileInst(@1.first_line-1,@1.first
 DOWHILEINST : Rdo BLOQUE Rwhile '(' E ')' ';' { $$= new DoWhileInst(@1.first_line-1,@1.first_column-1,$2,$5);}
 ;
 
+CONTINUEINST : Rcontinue ';'  { $$= new ContinueInst(@1.first_line-1,@1.first_column-1);}
+;
 
 
 FORINST : Rfor '(' FOROPCIONES  E ';' E ')' BLOQUE { $$= new ForInst(@1.first_line-1,@1.first_column-1,$3,$4,$6,$8);}
@@ -622,11 +628,11 @@ AUMENTO : id '++' {$$= new Aumento(@1.first_line-1,@1.first_column-1,new ExpVari
 ;
 DECREMENTO : id '--' {$$= new Decremento(@1.first_line-1,@1.first_column-1,new ExpVariable(@1.first_line-1,@1.first_column-1,$1));}
 ;
+
 /*
 Expresiones que faltan agregar a la produccion para la instruccion for
 i++
 ["perro", "gato", "tortuga"]
 arr[2:4]
-
 */
 
