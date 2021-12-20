@@ -278,15 +278,55 @@ void ackerman(int m, int n)
 	}    
 }
 
-function ackerman(m::Int64, n::Int64)
-    if m == 0
-        return n + 1;
-    elseif m > 0 && n == 0
-        return ackerman(m - 1, 1);
-    else
-        return ackerman(m - 1, ackerman(m, n - 1));
-    end;
-end;
+void main()
+{
+	int[] arreglo = [1,2,3,4,555*34];
+	println(arreglo[5]);
+}
+
+
+
+
+
+
+
+
+void main()
+{
+	int a  =  0;
+	println(a++);
+	println(a--);
+	println(a--);
+
+	for(int i =0 ; i<10 ; i++)
+	{
+		println(i);
+	}
+
+  	string mensaje = "Buenos días";
+	for letra in mensaje
+	{
+		print(letra,"-");
+	}  
+    println("");
+	for letra in "Hola xxxxxxxxx"
+	{
+		print(letra,"-");
+	}
+      
+	for animal in ["Perro", "Gato", "Caballo", "pez"]
+	{
+		println(animal);
+	}
+
+  	string[] paises = ["Guatemala","España","Costa Rica","Honduras"];
+	for pais in paises
+	{
+		println(pais);
+	}
+        
+  
+}
 
 
 */

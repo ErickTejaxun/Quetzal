@@ -3773,10 +3773,160 @@ class AccesoArreglo
                 return;
             }
         }
-
     }
 }
 
+
+class Aumento
+{
+    constructor(linea, columna, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+
+        this.getTipo = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esEntero())
+            {
+                return tipoExpresion;
+            }
+            else
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.getTipo(entorno);
+            if(!tipoExpresion.esError())
+            {
+                if(expresion instanceof ExpVariable)
+                {
+                    var valorExpresion = this.expresion.getValor(entorno);
+                    var variableBuscada = entorno.getSimbolo(expresion.id);
+                    variableBuscada.valor++;
+                    return variableBuscada.valor;
+                }
+                else
+                {
+                    var valorExpresion = this.expresion.getValor(entorno);
+                    return valorExpresion + 1;                    
+                }
+
+            }
+            else
+            {
+                var tipo = this.expresion.getTipo(entorno);
+                Utils.registrarErrorSemantico(this.linea, this.columna, '++','Se esperaba un tipo entero.'+ tipo.getNombreTipo());
+                return 0; 
+            }
+
+        }
+    }
+}
+
+
+
+class Decremento
+{
+    constructor(linea, columna, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+
+        this.getTipo = function(entorno)
+        {
+            var tipoExpresion = this.expresion.getTipo(entorno);
+            if(tipoExpresion.esEntero())
+            {
+                return tipoExpresion;
+            }
+            else
+            {
+                return new Tipo(TipoPrimitivo.ERROR);
+            }
+        }
+
+        this.getValor = function(entorno)
+        {
+            var tipoExpresion = this.getTipo(entorno);
+            if(!tipoExpresion.esError())
+            {
+                if(expresion instanceof ExpVariable)
+                {
+                    var valorExpresion = this.expresion.getValor(entorno);
+                    var variableBuscada = entorno.getSimbolo(expresion.id);
+                    variableBuscada.valor--;
+                    return variableBuscada.valor;
+                }
+                else
+                {
+                    var valorExpresion = this.expresion.getValor(entorno);
+                    return valorExpresion - 1;                    
+                }
+
+            }
+            else
+            {
+                var tipo = this.expresion.getTipo(entorno);
+                Utils.registrarErrorSemantico(this.linea, this.columna, '++','Se esperaba un tipo entero.'+ tipo.getNombreTipo());
+                return 0; 
+            }
+
+        }
+    }
+}
+
+
+class Limites
+{
+    constructor(linea, columna, inicio, final)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.inicio = inicio;
+        this.final = final;
+
+        this.getValor = function(entorno)
+        {
+            var limiteInferior = 0;
+            var limiteFinal = -1;
+            if(this.inicio != null)
+            {
+                var tipoInicio = this.inicio.getTipo(entorno);
+                if(tipoInicio.esEntero())
+                {
+                    var valorInicio = this.inicio.getValor(entorno);
+                    limiteInferior = valorInicio;
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Arreglo','Se espera un valor de tipo entero como límite inferior.');
+                }
+            }
+            if(this.final != null)
+            {
+                var tipoFinal = this.final.getTipo(entorno);
+                if(tipoFinal.esEntero())
+                {
+                    var valorFinal = this.final.getValor(entorno);
+                    limiteFinal = valorFinal;
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Arreglo','Se espera un valor de tipo entero como límite superior.');
+                }
+            }            
+            this.limiteInferior = limiteInferior;
+            this.limiteSuperior = limiteFinal;
+            return this;
+        }
+    }
+}
 
 /*Instrucciones---------------------------------------->*/
 
@@ -4568,25 +4718,120 @@ class ForInst
 
         this.ejecutar = function(entorno)
         {
-        }
+            this.declarion_asignacion.ejecutar(entorno);
+            var tipoCondicion = this.condicion.getTipo(entorno);
+            if(!tipoCondicion.esBoolean())
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'For','La condición debe ser de tipo boolean. Recibido '+tipoCondicion.getNombreTipo());
+                return;
+            }
 
+            var valorCondicion = this.condicion.getValor(entorno);
+            while(valorCondicion)
+            {
+                // Induce un nuevo entorno ? 
+                var posibleRetorno = this.bloque.ejecutar(entorno);
+                if(posibleRetorno!= null && posibleRetorno!= undefined)
+                {
+                    if(posibleRetorno instanceof Retorno)
+                    {
+                        return posibleRetorno;
+                    }
+                }                
+                this.aumento_disminucion.getValor(entorno);
+                valorCondicion = this.condicion.getValor(entorno);
+            }
+        }
         this.generar3D = function(entorno)
         {
+
         }
     }
 }
 
 class For2Inst
 {
-    constructor(linea, columna, expresion_valor, expresion_condicion)
+    constructor(linea, columna, id, expresion, bloque)
     {
         this.linea = linea;
         this.columna = columna;
-        this.expresion_valor = expresion_valor;
-        this.expresion_condicion = expresion_condicion;
+        this.id = id;
+        this.expresion = expresion;
+        this.bloque = bloque;
 
         this.ejecutar = function(entorno)
         {
+
+            if (this.expresion instanceof Array)
+            {
+                var index = 0 ;                        
+                for(index = 0; index < this.expresion.length; index++)
+                {
+                    var expresionActual = this.expresion[index];
+                    var valorActual = expresionActual.getValor(entorno);
+                    var tipoActual = expresionActual.getTipo(entorno);
+                    var nuevaVariable = new Simbolo(this.linea, this.columna, this.id, tipoActual,valorActual);
+                    var nuevoEntorno = new Entorno(entorno);
+                    nuevoEntorno.registrarSimbolo(nuevaVariable);
+                    var posibleRetorno = this.bloque.ejecutar(nuevoEntorno);
+                    if(posibleRetorno!= null && posibleRetorno!= undefined)
+                    {
+                        if(posibleRetorno instanceof Retorno)
+                        {
+                            return posibleRetorno;
+                        }
+                    }                    
+                }
+            } 
+            else
+            //if(this.expresion instanceof ExpString)
+            {                
+                if(this.expresion.getTipo(entorno).esCadena())
+                {
+                    var valorExpresion = this.expresion.getValor(entorno);
+                    if (valorExpresion instanceof Array)
+                    {
+                        var index = 0 ;                        
+                        for(index = 0; index < valorExpresion.length; index++)
+                        {
+                            var expresionActual = valorExpresion[index];
+                            var valorActual = expresionActual.valor;
+                            var tipoActual = expresionActual.tipo;
+                            var nuevaVariable = new Simbolo(this.linea, this.columna, this.id, tipoActual,valorActual);
+                            var nuevoEntorno = new Entorno(entorno);
+                            nuevoEntorno.registrarSimbolo(nuevaVariable);
+                            var posibleRetorno = this.bloque.ejecutar(nuevoEntorno);
+                            if(posibleRetorno!= null && posibleRetorno!= undefined)
+                            {
+                                if(posibleRetorno instanceof Retorno)
+                                {
+                                    return posibleRetorno;
+                                }
+                            }                    
+                        }
+                    } 
+                    else
+                    {
+                        var arregloCaracteres = valorExpresion.split("");
+                        var index = 0;
+                        for(index = 0 ; index < arregloCaracteres.length; index++)
+                        {
+                            var valorActual = arregloCaracteres[index];
+                            var nuevaVariable = new Simbolo(this.linea, this.columna, this.id, new Tipo(TipoPrimitivo.CHAR),valorActual.charCodeAt().toString());
+                            var nuevoEntorno = new Entorno(entorno);
+                            nuevoEntorno.registrarSimbolo(nuevaVariable);
+                            var posibleRetorno = this.bloque.ejecutar(nuevoEntorno);
+                            if(posibleRetorno!= null && posibleRetorno!= undefined)
+                            {
+                                if(posibleRetorno instanceof Retorno)
+                                {
+                                    return posibleRetorno;
+                                }
+                            }
+                        }
+                    }
+                }
+            }                       
         }
 
         this.generar3D = function(entorno)
@@ -4595,6 +4840,167 @@ class For2Inst
     }
 }
 
+
+class For3Inst
+{
+    constructor(linea, columna, id, expresion, limites, bloque)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.id = id;
+        this.expresion = expresion;
+        this.bloque = bloque;
+        this.limites = limites;
+
+        this.ejecutar = function(entorno)
+        {
+
+            if (this.expresion instanceof Array)
+            {                
+                var limites = this.limites.getValor(entorno);                
+                var index = limites.limiteInferior; 
+                if(limites.limiteInferior<0)
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','El limite inferior tiene que ser mayor a 0.');
+                    index = 0;
+                }                                               
+                if(limites.limiteSuperior>valorExpresion.length)
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','Limite superior excedido. Máximo ' + this.expresion.length +'. Recibido '+limites.limiteSuperior);
+                    superior = this.expresion.length-1;
+                }                        
+                var superior = limites.limiteSuperior ==-1 ?  this.expresion.length-1 : limites.limiteSuperior;
+                for(index = index; index <= superior ; index++)
+                {
+                    var expresionActual = this.expresion[index];
+                    var valorActual = expresionActual.getValor(entorno);
+                    var tipoActual = expresionActual.getTipo(entorno);
+                    var nuevaVariable = new Simbolo(this.linea, this.columna, this.id, tipoActual,valorActual);
+                    var nuevoEntorno = new Entorno(entorno);
+                    nuevoEntorno.registrarSimbolo(nuevaVariable);
+                    var posibleRetorno = this.bloque.ejecutar(nuevoEntorno);
+                    if(posibleRetorno!= null && posibleRetorno!= undefined)
+                    {
+                        if(posibleRetorno instanceof Retorno)
+                        {
+                            return posibleRetorno;
+                        }
+                    }                    
+                }
+            } 
+            else            
+            {   
+                var valorExpresion = this.expresion.getValor(entorno);
+                if(this.expresion.getTipo(entorno).esCadena())
+                {
+                    var valorExpresion = this.expresion.getValor(entorno);
+                    if (valorExpresion instanceof Array)
+                    {
+                        var limites = this.limites.getValor(entorno);                
+                        var index = limites.limiteInferior; 
+                        if(limites.limiteInferior<0)
+                        {
+                            Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','El limite inferior tiene que ser mayor a 0.');
+                            index = 0;
+                        }                                               
+                        if(limites.limiteSuperior>valorExpresion.length)
+                        {
+                            Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','Limite superior excedido. Máximo ' + valorExpresion.length +'. Recibido '+limites.limiteSuperior);
+                            superior = valorExpresion.length-1;
+                        }                        
+                        var superior = limites.limiteSuperior ==-1 ?  valorExpresion.length-1 : limites.limiteSuperior;
+                        for(index = index; index <= superior ; index++)
+                        {
+                            var expresionActual = valorExpresion[index];
+                            var valorActual = expresionActual.valor;
+                            var tipoActual = expresionActual.tipo;
+                            var nuevaVariable = new Simbolo(this.linea, this.columna, this.id, tipoActual,valorActual);
+                            var nuevoEntorno = new Entorno(entorno);
+                            nuevoEntorno.registrarSimbolo(nuevaVariable);
+                            var posibleRetorno = this.bloque.ejecutar(nuevoEntorno);
+                            if(posibleRetorno!= null && posibleRetorno!= undefined)
+                            {
+                                if(posibleRetorno instanceof Retorno)
+                                {
+                                    return posibleRetorno;
+                                }
+                            }                    
+                        }
+                    } 
+                    else
+                    {
+                        var arregloCaracteres = valorExpresion.split("");
+                        var limites = this.limites.getValor(entorno);                
+                        var index = limites.limiteInferior; 
+                        if(limites.limiteInferior<0)
+                        {
+                            Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','El limite inferior tiene que ser mayor a 0.');
+                            index = 0;
+                        }                                               
+                        if(limites.limiteSuperior>valorExpresion.length)
+                        {
+                            Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','Limite superior excedido. Máximo ' + valorExpresion.length +'. Recibido '+limites.limiteSuperior);
+                            superior = valorExpresion.length-1;
+                        }                        
+                        var superior = limites.limiteSuperior ==-1 ?  valorExpresion.length-1 : limites.limiteSuperior;
+                        for(index = index; index <= superior ; index++)
+                        {
+                            var valorActual = arregloCaracteres[index];
+                            var nuevaVariable = new Simbolo(this.linea, this.columna, this.id, new Tipo(TipoPrimitivo.CHAR),valorActual.charCodeAt().toString());
+                            var nuevoEntorno = new Entorno(entorno);
+                            nuevoEntorno.registrarSimbolo(nuevaVariable);
+                            var posibleRetorno = this.bloque.ejecutar(nuevoEntorno);
+                            if(posibleRetorno!= null && posibleRetorno!= undefined)
+                            {
+                                if(posibleRetorno instanceof Retorno)
+                                {
+                                    return posibleRetorno;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    var valorExpresion = this.expresion.getValor(entorno);
+                    if (valorExpresion instanceof Array)
+                    {
+                        var limites = this.limites.getValor(entorno);                
+                        var index = limites.limiteInferior; 
+                        if(limites.limiteInferior<0)
+                        {
+                            Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','El limite inferior tiene que ser mayor a 0.');
+                            index = 0;
+                        }                        
+                        var superior = limites.limiteSuperior ==-1 ?  valorExpresion.length-1 : limites.limiteSuperior;                       
+                        if(limites.limiteSuperior>valorExpresion.length-1)
+                        {
+                            Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','Limite superior excedido. Máximo ' + (valorExpresion.length-1) +'. Recibido '+limites.limiteSuperior);
+                            superior = valorExpresion.length-1;
+                        }                                                
+                        for(index = index; index <= superior ; index++)
+                        {
+                            var expresionActual = valorExpresion[index];
+                            var valorActual = expresionActual.valor;
+                            var tipoActual = expresionActual.tipo;
+                            var nuevaVariable = new Simbolo(this.linea, this.columna, this.id, tipoActual,valorActual);
+                            var nuevoEntorno = new Entorno(entorno);
+                            nuevoEntorno.registrarSimbolo(nuevaVariable);
+                            var posibleRetorno = this.bloque.ejecutar(nuevoEntorno);
+                            if(posibleRetorno!= null && posibleRetorno!= undefined)
+                            {
+                                if(posibleRetorno instanceof Retorno)
+                                {
+                                    return posibleRetorno;
+                                }
+                            }                    
+                        }
+                    }                    
+                }
+            }                       
+        }
+    }
+}
 
 class DeclaracionArreglo 
 {
