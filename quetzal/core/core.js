@@ -346,12 +346,68 @@ class ExpString
         this.tipo = new Tipo(TipoPrimitivo.STRING);
 
 
-        /*Vamos a ver como obtener arreglo 
+        /*Vamos a ver como obtener arreglo */
         var partes = this.valor.split('$');
-        for(var index = 0; index < partes.length; index++)
+        if(partes.length>1)
         {
-            console.log(partes[index]);
-        }*/
+            var raizExpresion = "";
+            for(var index = 0; index < partes.length; index++)
+            {
+                var parte = partes[index];  
+                if(index == 0)
+                {
+                    raizExpresion = new ExpString(this.linea, this.columna, parte);                    
+                }
+                else
+                {                          
+                    var partesSubCadena = parte.split(" ");
+                    if(partesSubCadena.length>1)
+                    {
+                        var cadeExpresion = partesSubCadena[0];
+                        var cadenaTemporal = "";
+                        try 
+                        {
+                            var raiz = expresiones.parse(cadeExpresion);    
+                            if(raiz != null)
+                            {
+                                raizExpresion = new Concatenar(this.linea, this.columna, raizExpresion, raiz);
+                            }
+                            for(var i = 1;i < partesSubCadena.length; i++)
+                            {
+                                cadenaTemporal = cadenaTemporal + " " + partesSubCadena[i];                                
+                            }                            
+                            raizExpresion = new Concatenar(this.linea, this.columna, raizExpresion, new ExpString(this.linea, this.columna,cadenaTemporal));
+                        } catch (error) 
+                        {
+
+                        }                        
+                    }
+                    else
+                    {
+                        var cadeExpresion = partesSubCadena[0];
+                        var cadenaTemporal = "";
+                        try 
+                        {
+                            var raiz = expresiones.parse(cadeExpresion);    
+                            if(raiz != null)
+                            {
+                                raizExpresion = new Concatenar(this.linea, this.columna, raizExpresion, raiz);
+                            }
+                            for(var i = 1;i < partesSubCadena.length; i++)
+                            {
+                                cadenaTemporal = cadenaTemporal + " " + partesSubCadena[i];                                
+                            }                            
+                            raizExpresion = new Concatenar(this.linea, this.columna, raizExpresion, new ExpString(this.linea, this.columna,cadenaTemporal));
+                        } catch (error) 
+                        {
+
+                        }                          
+                    }
+                }            
+            }  
+            return raizExpresion;          
+        }
+
 
 
         this.getTipo=function()

@@ -157,9 +157,11 @@
 
 %error-verbose
 
-%start E
+%start INICIO
 
 %% /* language grammar */
+
+INICIO : E EOF {return $1;};
 
 
 E   : '(' E ')'
