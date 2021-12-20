@@ -3825,6 +3825,34 @@ class Aumento
             }
 
         }
+
+        this.ejecutar = function(entorno)
+        {
+            var tipoExpresion = this.getTipo(entorno);
+            if(!tipoExpresion.esError())
+            {
+                if(expresion instanceof ExpVariable)
+                {
+                    var valorExpresion = this.expresion.getValor(entorno);
+                    var variableBuscada = entorno.getSimbolo(expresion.id);
+                    variableBuscada.valor++;
+                    return variableBuscada.valor;
+                }
+                else
+                {
+                    var valorExpresion = this.expresion.getValor(entorno);
+                    return valorExpresion + 1;
+                }
+
+            }
+            else
+            {
+                var tipo = this.expresion.getTipo(entorno);
+                Utils.registrarErrorSemantico(this.linea, this.columna, '++','Se esperaba un tipo entero.'+ tipo.getNombreTipo());
+                return 0;
+            }
+
+        }
     }
 }
 
@@ -3875,6 +3903,34 @@ class Decremento
                 var tipo = this.expresion.getTipo(entorno);
                 Utils.registrarErrorSemantico(this.linea, this.columna, '++','Se esperaba un tipo entero.'+ tipo.getNombreTipo());
                 return 0; 
+            }
+
+        }
+
+        this.ejecutar = function(entorno)
+        {
+            var tipoExpresion = this.getTipo(entorno);
+            if(!tipoExpresion.esError())
+            {
+                if(expresion instanceof ExpVariable)
+                {
+                    var valorExpresion = this.expresion.getValor(entorno);
+                    var variableBuscada = entorno.getSimbolo(expresion.id);
+                    variableBuscada.valor--;
+                    return variableBuscada.valor;
+                }
+                else
+                {
+                    var valorExpresion = this.expresion.getValor(entorno);
+                    return valorExpresion - 1;
+                }
+
+            }
+            else
+            {
+                var tipo = this.expresion.getTipo(entorno);
+                Utils.registrarErrorSemantico(this.linea, this.columna, '++','Se esperaba un tipo entero.'+ tipo.getNombreTipo());
+                return 0;
             }
 
         }
@@ -4047,14 +4103,24 @@ class Bloque
                     if(instruccion instanceof Retorno)
                     {
                         return instruccion;
-                    } 
-                    else
-                    {
+                    }else if(instruccion instanceof BreakInst){
+
+                        return instruccion;
+                    }else if (instruccion instanceof ContinueInst){
+
+                        return instruccion;
+                    }else{
                         var posibleRetorno = instruccion.ejecutar(entorno);                    
                         if(posibleRetorno!= null && posibleRetorno!= undefined)
                         {
                             if(posibleRetorno instanceof Retorno)
                             {
+                                return posibleRetorno;
+                            }else if(posibleRetorno instanceof BreakInst){
+
+                                return posibleRetorno;
+                            }else if (posibleRetorno instanceof ContinueInst){
+
                                 return posibleRetorno;
                             }
                         }
@@ -4604,6 +4670,44 @@ class SwitchInst
 
         this.ejecutar = function(entorno)
         {
+            var condicion = this.expresion.getValor(entorno);
+
+            if(condicion != null && condicion != undefined){
+
+                var hay_break = false;
+                var continuar = false;
+
+                var index = 0;
+                for(index = 0 ; index < this.lista_cases.length; index++){
+                    var caso = this.lista_cases[index];
+                    caso.condicion = condicion;
+                    caso.continuar = continuar;
+
+                    var resultado = caso.ejecutar(entorno);
+
+                    continuar = caso.continuar; //ya coincidio pero no habia break
+
+                    if(resultado != null){//coincide
+                        if(resultado instanceof BreakInst){
+                            hay_break = true;
+                            break;
+                        }else if(resultado instanceof Return){
+                            return resultado;
+                        }
+                    }
+                    //no coincide
+                }
+
+                if(!hay_break){//ejecuta default
+                    return this.default_inst.ejecutar(entorno);
+                }
+
+
+            }else{
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'instruccion switch','error al obtener el valor de la expresion','');
+                return;
+            }
+
         }
 
         this.generar3D = function(entorno)
@@ -4621,8 +4725,19 @@ class CaseInst
         this.expresion = expresion;
         this.bloque = bloque;
 
+        this.condicion = null;
+        this.continuar = false;
+
         this.ejecutar = function(entorno)
         {
+            var valor_case = this.expresion.getValor(entorno);
+            if(this.condicion == valor_case || this.continuar){
+                this.continuar = true;
+                return this.bloque.ejecutar(entorno); //Break, Return
+            }else{
+                return null;
+            }
+
         }
 
         this.generar3D = function(entorno)
@@ -4640,6 +4755,7 @@ class BreakInst
 
         this.ejecutar = function(entorno)
         {
+            return this;
         }
 
         this.generar3D = function(entorno)
@@ -4658,6 +4774,7 @@ class DefaultInst
 
         this.ejecutar = function(entorno)
         {
+            return this.bloque.ejecutar(entorno);
         }
 
         this.generar3D = function(entorno)
@@ -4666,6 +4783,22 @@ class DefaultInst
     }
 }
 
+class ContinueInst{
+    constructor(linea, columna)
+    {
+        this.linea = linea;
+        this.columna = columna;
+
+        this.ejecutar = function(entorno)
+        {
+            return this;
+        }
+
+        this.generar3D = function(entorno)
+        {
+        }
+    }
+}
 
 class WhileInst
 {
@@ -4684,19 +4817,25 @@ class WhileInst
             if(tipo.esBoolean()){
                 while(condicion){
                     var resultado = this.bloque.ejecutar(entorno);
-                    if(resultado != null || resultado != undefined){
+                    if(resultado != null && resultado != undefined){
                         if(resultado instanceof BreakInst){
+                            break;
+                        }else if(resultado instanceof Retorno){
+                            return  resultado;
+                        }else if(resultado instanceof ContinueInst){
 
+                            condicion = this.expresion.getValor(entorno);
+                            continue;
                         }
                     }
                     condicion = this.expresion.getValor(entorno);
                 }
+
             }else{
                 Utils.registrarErrorSemantico(this.linea, this.columna, 'instruccion while','Se esperaba una expresion booleana','');
                 return;
             }
         }
-
 
         this.generar3D = function(entorno)
         {
@@ -4706,15 +4845,39 @@ class WhileInst
 
 class DoWhileInst
 {
-    constructor(linea, columna, do_bloque, expresion)
+    constructor(linea, columna, bloque, expresion)
     {
         this.linea = linea;
         this.columna = columna;
-        this.do_bloque = do_bloque;
+        this.bloque = bloque;
         this.expresion = expresion;
 
         this.ejecutar = function(entorno)
         {
+            var condicion = this.expresion.getValor(entorno);
+            var tipo = this.expresion.getTipo(entorno);
+
+            if(tipo.esBoolean()){
+
+                do{
+                    var resultado = this.bloque.ejecutar(entorno);
+                    if(resultado != null && resultado != undefined){
+                        if(resultado instanceof BreakInst){
+                            break;
+                        }else if(resultado instanceof Retorno){
+                            return  resultado;
+                        }else if(resultado instanceof ContinueInst){
+                            condicion = this.expresion.getValor(entorno);
+                            continue;
+                        }
+                    }
+                    condicion = this.expresion.getValor(entorno);
+                }while(condicion);
+
+            }else{
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'instruccion while','Se esperaba una expresion booleana','');
+                return;
+            }
         }
 
         this.generar3D = function(entorno)
@@ -4754,7 +4917,14 @@ class ForInst
                     if(posibleRetorno instanceof Retorno)
                     {
                         return posibleRetorno;
+                    }else if(posibleRetorno instanceof BreakInst){
+                        break;
+                    }else if(posibleRetorno instanceof ContinueInst){
+                        this.aumento_disminucion.getValor(entorno);
+                        valorCondicion = this.condicion.getValor(entorno);
+                        continue;
                     }
+
                 }                
                 this.aumento_disminucion.getValor(entorno);
                 valorCondicion = this.condicion.getValor(entorno);
@@ -4797,6 +4967,13 @@ class For2Inst
                         if(posibleRetorno instanceof Retorno)
                         {
                             return posibleRetorno;
+                        }else if(posibleRetorno instanceof BreakInst){
+                            break;
+                        }else if(posibleRetorno instanceof ContinueInst){
+                            /*
+                            TODO: falta esta parte
+                            continue;
+                             */
                         }
                     }                    
                 }
@@ -4824,6 +5001,12 @@ class For2Inst
                                 if(posibleRetorno instanceof Retorno)
                                 {
                                     return posibleRetorno;
+                                }else if(posibleRetorno instanceof BreakInst){
+                                    break;
+                                }else if(posibleRetorno instanceof ContinueInst){
+                                    /*
+                                    continue;
+                                     */
                                 }
                             }                    
                         }
@@ -4844,6 +5027,12 @@ class For2Inst
                                 if(posibleRetorno instanceof Retorno)
                                 {
                                     return posibleRetorno;
+                                }else if(posibleRetorno instanceof BreakInst){
+                                    break;
+                                }else if(posibleRetorno instanceof ContinueInst){
+                                    /*
+                                    continue;
+                                     */
                                 }
                             }
                         }
@@ -5090,3 +5279,4 @@ class DeclaracionArreglo
         }
     }
 }
+
