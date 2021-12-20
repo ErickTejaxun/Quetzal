@@ -345,6 +345,15 @@ class ExpString
         this.valor = valor;
         this.tipo = new Tipo(TipoPrimitivo.STRING);
 
+
+        /*Vamos a ver como obtener arreglo 
+        var partes = this.valor.split('$');
+        for(var index = 0; index < partes.length; index++)
+        {
+            console.log(partes[index]);
+        }*/
+
+
         this.getTipo=function()
         {
             return this.tipo;
@@ -3730,47 +3739,78 @@ class AccesoArreglo
 
         this.getValor = function(entorno)
         {
-            var tipoExpresion = this.expresion.getTipo(entorno);
-            var valorExpresion = this.expresion.getValor(entorno);
-            if(valorExpresion instanceof Array)
+            if(this.listaIndices instanceof Array)
+            // Esto significa que está de la forma id [x][y][z]
             {
-                var indiceExpresion = 0;
-                for(indiceExpresion =0 ; indiceExpresion < this.listaIndices.length; indiceExpresion++)
+                //var tipoExpresion = this.expresion.getTipo(entorno);
+                var valorExpresion = this.expresion.getValor(entorno);
+                if(valorExpresion instanceof Array)
                 {
-                    var expresionActual = this.listaIndices[indiceExpresion];
-                    var tipoIndice = expresionActual.getTipo(entorno);
-                    if(tipoIndice.esNumerico())
+                    var indiceExpresion = 0;
+                    for(indiceExpresion =0 ; indiceExpresion < this.listaIndices.length; indiceExpresion++)
                     {
-                        var valorIndice = expresionActual.getValor(entorno);
-                        if(valorIndice>=0)
+                        var expresionActual = this.listaIndices[indiceExpresion];
+                        var tipoIndice = expresionActual.getTipo(entorno);
+                        if(tipoIndice.esNumerico())
                         {
-                            if(valorIndice<=(valorExpresion.length-1))
+                            var valorIndice = expresionActual.getValor(entorno);
+                            if(valorIndice>=0)
                             {
-                                return valorExpresion[valorIndice].valor;
+                                if(valorIndice<=(valorExpresion.length-1))
+                                {
+                                    return  valorExpresion[valorIndice].valor;
+                                }
+                                else
+                                {
+                                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','Indice mayor al tamaño del arreglo.');
+                                    return;                                 
+                                }
                             }
                             else
                             {
-                                Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','Indice mayor al tamaño del arreglo.');
-                                return;                                 
+                                Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','No es posible usar indices negativos.');
+                                return;                            
                             }
-                        }
+                        }   
                         else
                         {
-                            Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','No es posible usar indices negativos.');
-                            return;                            
+                            Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','Se esperaba una expresion númerica.');
+                            return;
                         }
-                    }   
-                    else
-                    {
-                        Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','Se esperaba una expresion númerica.');
-                        return;
                     }
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','La expresion no corresponde a un arreglo');
+                    return;
                 }
             }
             else
+            // Significa que buscamos un framgento
             {
-                Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','La expresion no corresponde a un arreglo');
-                return;
+                var limites = this.listaIndices.getValor(entorno);                              
+                var index = limites.limiteInferior; 
+                var valorExpresion = this.expresion.getValor(entorno);
+                limites.limiteSuperior = limites.limiteSuperior == -1 ? valorExpresion.length-1:limites.limiteSuperior;               
+                if(limites.limiteInferior<0)
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','El limite inferior tiene que ser mayor a 0.');
+                    index = 0;
+                }                                               
+                if(limites.limiteSuperior>valorExpresion.length)
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','Limite superior excedido. Máximo ' + this.expresion.length +'. Recibido '+limites.limiteSuperior);
+                    superior = this.expresion.length-1;
+                }                        
+                var superior = limites.limiteSuperior ==-1 ?  this.expresion.length-1 : limites.limiteSuperior;
+                var subArreglo = new Array;
+                var valorExpresion = this.expresion.getValor(entorno);
+                for(index = index; index <= superior ; index++)
+                {
+                    subArreglo.push(valorExpresion[index]);
+                }                
+                //console.log(subArreglo);
+                return subArreglo;
             }
         }
     }
@@ -4267,9 +4307,91 @@ class Println
             // Si no es lo anterior, se imprime el valor.
             if(valor != undefined)
             {
-                Utils.imprimirConsola('\n'+valor);
+                var cadena = '\n';
+                if(valor instanceof Array)
+                {
+                    cadena = cadena + this.recogerArreglo(entorno, valor);                    
+                }
+                else
+                if(valor instanceof Simbolo)
+                {
+                    if(valor.valor instanceof Array)
+                    {
+                        cadena = cadena + this.recogerArreglo(entorno, valor.valor);                        
+                    }                    
+                    else
+                    {
+                        cadena = cadena + valor.valor.toString();
+                    }
+                }
+                else
+                {
+                     cadena = cadena +  valor;
+                }                
+                Utils.imprimirConsola(cadena);
             }                                    
         }
+
+        this.recogerArreglo = function(entorno, arreglo)
+        {
+            var cadena = "[";
+            var index = 0;
+            for(index = 0; index < arreglo.length; index++)
+            {
+                var item = arreglo[index];
+                if(item instanceof Array)
+                {
+                    if(cadena == '[')
+                    {
+                        cadena = cadena + this.recogerArreglo(entorno, item);
+                    }
+                    else
+                    {
+                        cadena = cadena + ',' + this.recogerArreglo(entorno, item);
+                    }                    
+                }else
+                if(item instanceof Simbolo)
+                {
+                    var valorActual = item.valor;
+                    if(valorActual instanceof Array)
+                    {
+                        if(cadena == '[')
+                        {
+                            cadena = cadena + this.recogerArreglo(entorno, valorActual);
+                        }
+                        else
+                        {
+                            cadena = cadena + ',' + this.recogerArreglo(entorno, valorActual);
+                        }   
+                    }
+                    else
+                    {
+                        if(cadena == '[')
+                        {
+                            cadena = cadena + valorActual;
+                        }
+                        else
+                        {
+                            cadena = cadena + ',' + valorActual;
+                        }                    
+                    }
+                }                
+                else
+                {
+                    if(cadena == '[')
+                    {
+                        cadena = cadena + item;
+                    }
+                    else
+                    {
+                        cadena = cadena + ',' + item;
+                    }                    
+                }
+            }
+            cadena = cadena + "]";
+            return cadena;
+        }
+
         
         this.generar3D = function(entorno)
         {
@@ -4388,9 +4510,10 @@ class Declaracion
 
         this.ejecutar = function(entorno)
         {
-            var tipoExpresion = this.expresion.getTipo(entorno);            
+                       
             if(this.expresion != null)
             {
+                var tipoExpresion = this.expresion.getTipo(entorno); 
                 var valorExpresion = this.expresion.getValor(entorno);            
                 if(tipoExpresion.esIgual(this.tipo))
                 {
@@ -4414,7 +4537,7 @@ class Declaracion
                 }
             }
             else
-            {
+            {                
                 this.listaId.forEach( id =>
                     {
                         var simboloTmp = entorno.getSimbolo(id);
@@ -4446,9 +4569,10 @@ class Declaracion
 
         this.generar3D = function(entorno)
         {
-            var tipoExpresion = this.expresion.getTipo(entorno);            
+                       
             if(this.expresion != null)
             {
+                var tipoExpresion = this.expresion.getTipo(entorno); 
                 var valorExpresion = this.expresion.generar3D(entorno);            
                 if(tipoExpresion.esIgual(this.tipo))
                 {
@@ -4949,15 +5073,15 @@ class For2Inst
 
         this.ejecutar = function(entorno)
         {
-
-            if (this.expresion instanceof Array)
+            var valorExpresion = this.expresion.getValor(entorno);
+            if (valorExpresion instanceof Array)
             {
                 var index = 0 ;                        
-                for(index = 0; index < this.expresion.length; index++)
+                for(index = 0; index < valorExpresion.length; index++)
                 {
-                    var expresionActual = this.expresion[index];
-                    var valorActual = expresionActual.getValor(entorno);
-                    var tipoActual = expresionActual.getTipo(entorno);
+                    var expresionActual = valorExpresion[index];
+                    var valorActual = expresionActual.valor;
+                    var tipoActual = expresionActual.tipo;
                     var nuevaVariable = new Simbolo(this.linea, this.columna, this.id, tipoActual,valorActual);
                     var nuevoEntorno = new Entorno(entorno);
                     nuevoEntorno.registrarSimbolo(nuevaVariable);
