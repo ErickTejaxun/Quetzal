@@ -345,6 +345,15 @@ class ExpString
         this.valor = valor;
         this.tipo = new Tipo(TipoPrimitivo.STRING);
 
+
+        /*Vamos a ver como obtener arreglo 
+        var partes = this.valor.split('$');
+        for(var index = 0; index < partes.length; index++)
+        {
+            console.log(partes[index]);
+        }*/
+
+
         this.getTipo=function()
         {
             return this.tipo;
@@ -3733,7 +3742,7 @@ class AccesoArreglo
             if(this.listaIndices instanceof Array)
             // Esto significa que está de la forma id [x][y][z]
             {
-                var tipoExpresion = this.expresion.getTipo(entorno);
+                //var tipoExpresion = this.expresion.getTipo(entorno);
                 var valorExpresion = this.expresion.getValor(entorno);
                 if(valorExpresion instanceof Array)
                 {
@@ -3749,7 +3758,7 @@ class AccesoArreglo
                             {
                                 if(valorIndice<=(valorExpresion.length-1))
                                 {
-                                    return valorExpresion[valorIndice].valor;
+                                    return  valorExpresion[valorIndice].valor;
                                 }
                                 else
                                 {
@@ -4435,9 +4444,10 @@ class Declaracion
 
         this.ejecutar = function(entorno)
         {
-            var tipoExpresion = this.expresion.getTipo(entorno);            
+                       
             if(this.expresion != null)
             {
+                var tipoExpresion = this.expresion.getTipo(entorno); 
                 var valorExpresion = this.expresion.getValor(entorno);            
                 if(tipoExpresion.esIgual(this.tipo))
                 {
@@ -4461,7 +4471,7 @@ class Declaracion
                 }
             }
             else
-            {
+            {                
                 this.listaId.forEach( id =>
                     {
                         var simboloTmp = entorno.getSimbolo(id);
@@ -4493,9 +4503,10 @@ class Declaracion
 
         this.generar3D = function(entorno)
         {
-            var tipoExpresion = this.expresion.getTipo(entorno);            
+                       
             if(this.expresion != null)
             {
+                var tipoExpresion = this.expresion.getTipo(entorno); 
                 var valorExpresion = this.expresion.generar3D(entorno);            
                 if(tipoExpresion.esIgual(this.tipo))
                 {

@@ -157,176 +157,10 @@
 
 %error-verbose
 
-%start INICIO
+%start E
 
 %% /* language grammar */
 
-INICIO	:  INSTRUCCIONESG EOF{		
-	return new Raiz($1.linea, $1.columna, $1); 
-};
-
-/*G de global*/
-INSTRUCCIONESG: INSTRUCCIONESG  INSTRUCCIONG
-				{ 
-				  	$$ = $1; 
-					$$.registrarInstruccion($2);
-				}
-				|INSTRUCCIONG
-				{ 
-					$$ = new Bloque(@1.first_line-1,@1.first_column-1); 
-					if($1!=null){$$.registrarInstruccion($1);} // Si es nulo, viene de un error manejado en otras producciones.
-				}
-;
-
-INSTRUCCIONG : 
-			  FUNCION { $$ = $1;}
-			| ASIGNACION  {$$ = $1;}
-			| DECLARACION  {$$ = $1;}	
-			| DECLARACCIONARREGLO {$$ = $1;}		  
-			  
-			  /*Declaracion y Struct*/
-;
-
-INSTRUCCIONES : 
-              INSTRUCCIONES INSTRUCCION { 
-				  	$$ = $1; 
-					$$.registrarInstruccion($2);
-				}
-			| INSTRUCCION { 
-							$$ = new Bloque(@1.first_line-1,@1.first_column-1); 
-							if($1!=null){$$.registrarInstruccion($1);} // Si es nulo, viene de un error manejado en otras producciones.
-						  }
-;
-
-INSTRUCCION:  PRINTLN { $$ = $1;}
-			| PRINT { $$ = $1;}	
-			| LLAMADA ';' {$$ =$1;}	
-			| ASIGNACION  {$$ = $1;}
-			| DECLARACION {$$ = $1;}
-			| RETORNO {$$ = $1;}
-			| IFINST {$$ = $1;}
-			| SWITCHINST {$$ = $1;}
-			| BREAKINST {$$ = $1;}
-			| WHILEINST {$$ = $1;}			
-			| DOWHILEINST {$$ = $1;}
-			| DECLARACCIONARREGLO {$$ = $1;}
-			| FORINST {$$=$1;}
-			| error { 	
-						Utils.registrarErrorSintactico(@1.first_line-1,@1.first_column-1, $1, $1);
-						$$ = null;						
-					}				
-;
-
-
-ASIGNACION : id '=' E ';' { $$ = new Asignacion(@1.first_line-1,@1.first_column-1,$1,$3); }
-;
-
-
-DECLARACION : TIPO LID  ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,null);}
-			| TIPO LID '=' E ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,$4);}
-;
-
-
-LID : LID ',' id {$$  =$1; $$.push($3);}
-	| id { $$ = new Array; $$.push($1); }
-;
-
-DECLARACCIONARREGLO : TIPO '[' ']' id '=' EXPARREGLO ';' {$$ = new DeclaracionArreglo(@1.first_line-1,@1.first_column-1,$1,$4,$6);}
-;
-
-EXPARREGLO: '[' LExprArreglo  ']' { $$ =$2;}
-;
-
-LExprArreglo : LExprArreglo ',' E {$$ = $1; $$.push($3);}
-			  |	LExprArreglo ',' EXPARREGLO {$$ = $1; $$.push($3);}
-			  | E {$$= new Array; $$.push($1);}
-			  |	EXPARREGLO {$$= new Array; $$.push($1);}
-;
-
-RETORNO : retorno E ';'  { $$= new Retorno(@1.first_line-1,@1.first_column-1, $2);}
-		 | retorno ';'  { $$= new Retorno(@1.first_line-1,@1.first_column-1, null);}
-;
-
-FUNCION : 		
-		  TIPO id '(' LPARAMETROS ')' BLOQUE 
-			{ $$ = new Funcion(@1.first_line-1,@1.first_column-1, $1, $2, $4,$6);}
-		| TIPO id '('  ')' BLOQUE 
-			{ $$ = new Funcion(@1.first_line-1,@1.first_column-1, $1, $2, new Array,$5);}			
-;
-
-LPARAMETROS: LPARAMETROS ',' PARAMETRO {$$ =$1; $$.push($3);}
-			| PARAMETRO {$$ = new Array; $$.push($1);}
-;
-
-PARAMETRO : TIPO id { $$ = new Parametro(@1.first_line-1,@1.first_column-1, $1, $2);}
-;
-
-/*
-TIPOVAR :  tint { $$ = new Tipo(TipoPrimitivo.INT);}
-		| tdouble { $$ = new Tipo(TipoPrimitivo.DOUBLE);}
-		| tstring { $$ = new Tipo(TipoPrimitivo.STRING);}
-		| tchar { $$ = new Tipo(TipoPrimitivo.CHAR);}
-		| id {$$ = new Tipo(TipoPrimitivo.STRUCT, $1);}
-;
-*/
-
-TIPO :    tint { $$ = new Tipo(TipoPrimitivo.INT);}
-		| tdouble { $$ = new Tipo(TipoPrimitivo.DOUBLE);}
-		| tboolean { $$ = new Tipo(TipoPrimitivo.BOOL);}
-		| tstring { $$ = new Tipo(TipoPrimitivo.STRING);}
-		| tchar { $$ = new Tipo(TipoPrimitivo.CHAR);}
-		| id {$$ = new Tipo(TipoPrimitivo.STRUCT, $1);}
-		| tvoid { $$ = new Tipo(TipoPrimitivo.VOID);}
-		;
-
-BLOQUE: '{' INSTRUCCIONES '}' 
-		{$$ = $2; }
-		;
-
-PRINTLN : println '(' LExpr ')' ';'
-		{				
-			var nodo_concatenar = null;
-			if($3.length== 1)
-			{
-				nodo_concatenar = $3[0];
-			}				
-			else
-			{
-				var nodoTmp = $3[0]; // primer expresion
-				var i = 1;
-				for( i=1; i<$3.length; i++)
-				{
-					var nodo = $3[i];
-					var nodoTmp = new Concatenar(nodoTmp.linea, nodoTmp.columna, nodoTmp, nodo);					
-				}											
-				nodo_concatenar = nodoTmp;
-			}		
-			$$ = new Println(@1.first_line-1,@1.first_column-1, nodo_concatenar);						
-		}
-		;
-
-
-PRINT : print '(' LExpr ')' ';'
-		{
-			var nodo_concatenar = null;
-			if($3.length== 1)
-			{
-				nodo_concatenar = $3[0];
-			}				
-			else
-			{
-				var nodoTmp = $3[0]; // primer expresion
-				var i = 1;
-				for( i=1; i<$3.length; i++)
-				{
-					var nodo = $3[i];
-					var nodoTmp = new Concatenar(nodoTmp.linea, nodoTmp.columna, nodoTmp, nodo);					
-				}											
-				nodo_concatenar = nodoTmp;
-			}		
-			$$ = new Print(@1.first_line-1,@1.first_column-1, nodo_concatenar);			
-		}
-		;
 
 E   : '(' E ')'
 	{
@@ -476,11 +310,8 @@ E   : '(' E ')'
 	| POSICIONCADENA {$$= $1;}
 	| ACCESOARREGLO {$$ =$1;}
 	| AUMENTO {$$ =$1;}
-	| DECREMENTO{$$ =$1;}	
-	//| FRAGMENTOARRAY{$$ =$1;}	
+	| DECREMENTO{$$ =$1;}
 	;
-
-
 
 ACCESOARREGLO : id LINDICES {$$= new AccesoArreglo(@1.first_line-1,@1.first_column-1,new ExpVariable(@1.first_line-1,@1.first_column-1,$1),$2);}
 ;
@@ -547,73 +378,6 @@ PORCIONCADENA : E '.' caracterporcion '(' E ',' E ')' { $$ = new PorcionCadena(@
 POSICIONCADENA : E '.' caracterposicion '(' E ')' { $$ = new PosicionCadena(@1.first_line-1,@1.first_column-1,$1,$5);}
 ;
 
-
-IFINST: 
-      Rif '(' E ')' BLOQUE {$$= new Si(@1.first_line-1,@1.first_column-1,$3,$5, null);}
-	| Rif '(' E ')' INSTRUCCION { 
-									var BloqueInstruccion = new Bloque(@1.first_line-1,@1.first_column-1); 
-									BloqueInstruccion.registrarInstruccion($5);
-									$$= new Si(@1.first_line-1,@1.first_column-1,$3,BloqueInstruccion, null);
-								}
-	| Rif '(' E ')' BLOQUE ELSEIFINSTSS 
-								{ 
-									$$= new Si(@1.first_line-1,@1.first_column-1,$3,$5, $6);
-								}	
-	/*| Rif '(' E ')' BLOQUE Relse BLOQUE */
-;
-
-ELSEIFINSTSS : ELSEIFINST ELSEIFINSTSS  {$$= $1;  $$.sinosi = $2;}
-			 | ELSEFINAL ELSEIFINSTSS  {$$= $1;  $$.sinosi = $2;}
-             | ELSEIFINST   {$$= $1;}
-			 | ELSEFINAL {$$= $1;}
-;
-
-ELSEFINAL : Relse BLOQUE {$$= new Si(@1.first_line-1,@1.first_column-1,new ExpBooleana(@1.first_line-1,@1.first_column-1,true),$2,null); }
-;
-
-ELSEIFINST : Relse Rif '(' E ')' BLOQUE {$$= new Si(@1.first_line-1,@1.first_column-1,$4,$6, null);}
-;
-
-
-SWITCHINST : Rswitch '(' E ')' '{' LISTACASE  DEFAULTINST '}' { $$= new SwitchInst(@1.first_line-1,@1.first_column-1,$3,$6,$7);}
-;
-
-LISTACASE: LISTACASE CASE {$$ =$1; $$.push($2);}
-		| CASE {$$ = new Array; $$.push($1);}
-;
-
-CASE : Rcase E ':' INSTRUCCIONES { $$= new CaseInst(@1.first_line-1,@1.first_column-1,$2,$4);}
-;
-
-BREAKINST : Rbreak ';'  { $$= new BreakInst(@1.first_line-1,@1.first_column-1);}
-;
-
-DEFAULTINST: Rdefault ':' INSTRUCCIONES { $$= new DefaultInst(@1.first_line-1,@1.first_column-1,$3);}
-            | /*empty*/
-;
-
-WHILEINST : Rwhile '(' E ')' BLOQUE { $$= new WhileInst(@1.first_line-1,@1.first_column-1,$3,$5);}
-;
-
-DOWHILEINST : Rdo BLOQUE Rwhile '(' E ')' ';' { $$= new DoWhileInst(@1.first_line-1,@1.first_column-1,$2,$5);}
-;
-
-
-
-FORINST : Rfor '(' FOROPCIONES  E ';' E ')' BLOQUE { $$= new ForInst(@1.first_line-1,@1.first_column-1,$3,$4,$6,$8);}
-        | Rfor id Rin E BLOQUE   { $$= new For2Inst(@1.first_line-1,@1.first_column-1,$2,$4,$5);}
-		/*
-		| Rfor id Rin EXPARREGLO BLOQUE   { $$= new For2Inst(@1.first_line-1,@1.first_column-1,$2,$4,$5);}
-		| Rfor id Rin FRAGMENTOARRAY BLOQUE   { $$= new For3Inst(@1.first_line-1,@1.first_column-1,$2, new ExpVariable(@1.first_line-1,@1.first_column-1,$4), new Limites(@1.first_line-1,@1.first_column-1,$6,$8),$10);}
-		*/
-;
-
-
-
-FOROPCIONES : ASIGNACION {$$=$1;}
-            | DECLARACION {$$=$1;}
-;
-
 ACTUALIZACION : AUMENTO{$$=$1;}
 				|DECREMENTO {$$=$1;}
 ;
@@ -622,11 +386,5 @@ AUMENTO : id '++' {$$= new Aumento(@1.first_line-1,@1.first_column-1,new ExpVari
 ;
 DECREMENTO : id '--' {$$= new Decremento(@1.first_line-1,@1.first_column-1,new ExpVariable(@1.first_line-1,@1.first_column-1,$1));}
 ;
-/*
-Expresiones que faltan agregar a la produccion para la instruccion for
-i++
-["perro", "gato", "tortuga"]
-arr[2:4]
 
-*/
 
