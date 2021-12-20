@@ -30,13 +30,13 @@
 
 
 //Eeradores relacionales
-">"                   %{ debugPrint('>');return '>'; %}
-"<"                   %{ debugPrint('<');return '<'; %}
+
 ">="                  %{ debugPrint('>=');return '>='; %}
 "<="                  %{ debugPrint('<=');return '<='; %}
 "=="                  %{ debugPrint('==');return '=='; %}
 "!="                  %{ debugPrint('!=');return '!='; %}
-
+">"                   %{ debugPrint('>');return '>'; %}
+"<"                   %{ debugPrint('<');return '<'; %}
 //Eeradores Logicos
 "||"                  %{ debugPrint('||');return '||'; %}
 "?"                  %{ debugPrint('?');return '?'; %}
@@ -113,6 +113,8 @@
 "else"               %{ debugPrint(yytext);return 'Relse'; %}
 "for"                %{ debugPrint(yytext);return 'Rfor'; %}
 "in"                 %{ debugPrint(yytext);return 'Rin'; %}
+"begin"                 %{ debugPrint(yytext);return 'Rbegin'; %}
+"end"                 %{ debugPrint(yytext);return 'Rend'; %}
 
 
 ([a-zA-Z]|"_"|"$")([a-zA-Z]|[0-9]|"_"|"$")* %{ debugPrint(yytext); return 'id'; %}
@@ -473,8 +475,8 @@ E   : '(' E ')'
 	| POSICIONCADENA {$$= $1;}
 	| ACCESOARREGLO {$$ =$1;}
 	| AUMENTO {$$ =$1;}
-	| DECREMENTO{$$ =$1;}
-	
+	| DECREMENTO{$$ =$1;}	
+	//| FRAGMENTOARRAY{$$ =$1;}	
 	;
 
 
@@ -483,10 +485,21 @@ ACCESOARREGLO : id LINDICES {$$= new AccesoArreglo(@1.first_line-1,@1.first_colu
 ;
 
 LINDICES : LINDICES INDICE  {$$=$1; $$.push($2);}
-		| INDICE {$$=$1;}
+		| '[' E ']' {$$ = new Array; $$.push($2);}
+		| '[' INICIOA ':' FINA ']' { $$= new Limites(@1.first_line-1,@1.first_column-1,$2,$4);} 
 ;
 
 INDICE : '[' E ']' {$$ = new Array; $$.push($2);}
+;
+
+/*FRAGMENTOARRAY : '[' INICIOA ':' FINA ']' { $$= new Fragmento(@1.first_line-1,@1.first_column-1,$1,$3,$5);} 
+;
+*/
+INICIOA: E {$$= $1;}
+       | Rbegin{$$=null;} 
+;
+FINA : E {$$= $1;}
+		| Rend {$$=null;}
 ;
 
 LLAMADA : id '(' ')' { $$ = new Llamada(@1.first_line-1,@1.first_column-1, $1, new Array);}
@@ -588,9 +601,13 @@ DOWHILEINST : Rdo BLOQUE Rwhile '(' E ')' ';' { $$= new DoWhileInst(@1.first_lin
 
 FORINST : Rfor '(' FOROPCIONES  E ';' E ')' BLOQUE { $$= new ForInst(@1.first_line-1,@1.first_column-1,$3,$4,$6,$8);}
         | Rfor id Rin E BLOQUE   { $$= new For2Inst(@1.first_line-1,@1.first_column-1,$2,$4,$5);}
+		/*
 		| Rfor id Rin EXPARREGLO BLOQUE   { $$= new For2Inst(@1.first_line-1,@1.first_column-1,$2,$4,$5);}
-		| Rfor id Rin id '[' E ':' E ']' BLOQUE   { $$= new For3Inst(@1.first_line-1,@1.first_column-1,$2, new ExpVariable(@1.first_line-1,@1.first_column-1,$4), new Limites(@1.first_line-1,@1.first_column-1,$6,$8),$10);}
+		| Rfor id Rin FRAGMENTOARRAY BLOQUE   { $$= new For3Inst(@1.first_line-1,@1.first_column-1,$2, new ExpVariable(@1.first_line-1,@1.first_column-1,$4), new Limites(@1.first_line-1,@1.first_column-1,$6,$8),$10);}
+		*/
 ;
+
+
 
 FOROPCIONES : ASIGNACION {$$=$1;}
             | DECLARACION {$$=$1;}
