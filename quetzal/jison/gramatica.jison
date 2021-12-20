@@ -47,6 +47,8 @@
 //Eeradores aritmeticos
 "*"                   %{ debugPrint('*');return '*'; %}
 "/"                   %{ debugPrint('/');return '/'; %}
+"++"                   %{ debugPrint('++');return '++'; %}
+"--"                   %{ debugPrint('--');return '--'; %}
 "-"                   %{ debugPrint('-');return '-'; %}
 "+"                   %{ debugPrint('+');return '+'; %}
 "%"                   %{ debugPrint('%');return '%'; %}
@@ -120,7 +122,6 @@
 /lex
 
 /* Eerator associations and precedence */
-
 %left '?'
 %left '&&' '||'
 %left '==' '!=' '>' '>=' '<' '<='
@@ -128,10 +129,28 @@
 %left '*' '/' '%'
 %left '^'
 %left '(' ')'
+%left '[' ']'
 %left UMINUS
 %left '='
 %right '!'
 %left '.'
+%left '++' '--'
+
+/*
+%left '?'
+%left '+' '-'
+%left '*' '/' '%'
+%left '^'
+%left '(' ')'
+%left UMINUS
+%left '||' '&&'
+%left '=' 
+%left '==' '!=' '>' '>=' '<' '<='
+%left '+=' '-=' '*=' '/=' 
+%left '++' '--'
+%right '!'
+*/
+
 
 
 %error-verbose
@@ -159,8 +178,8 @@ INSTRUCCIONESG: INSTRUCCIONESG  INSTRUCCIONG
 
 INSTRUCCIONG : 
 			  FUNCION { $$ = $1;}
-			| ASIGNACION {$$ = $1;}
-			| DECLARACION {$$ = $1;}			  
+			| ASIGNACION  {$$ = $1;}
+			| DECLARACION  {$$ = $1;}			  
 			  
 			  /*Declaracion y Struct*/
 ;
@@ -179,16 +198,16 @@ INSTRUCCIONES :
 INSTRUCCION:  PRINTLN { $$ = $1;}
 			| PRINT { $$ = $1;}	
 			| LLAMADA ';' {$$ =$1;}	
-			| ASIGNACION {$$ = $1;}
+			| ASIGNACION  {$$ = $1;}
 			| DECLARACION {$$ = $1;}
 			| RETORNO {$$ = $1;}
 			| IFINST {$$ = $1;}
 			| SWITCHINST {$$ = $1;}
 			| BREAKINST {$$ = $1;}
-			| WHILEINST {$$ = $1;}
+			| WHILEINST {$$ = $1;}			
 			| DOWHILEINST {$$ = $1;}
 			| DECLARACCIONARREGLO {$$ = $1;}
-			| FORINST
+			| FORINST {$$=$1;}
 			| error { 	
 						Utils.registrarErrorSintactico(@1.first_line-1,@1.first_column-1, $1, $1);
 						$$ = null;						
@@ -200,7 +219,7 @@ ASIGNACION : id '=' E ';' { $$ = new Asignacion(@1.first_line-1,@1.first_column-
 ;
 
 
-DECLARACION : TIPO LID ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,null);}
+DECLARACION : TIPO LID  ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,null);}
 			| TIPO LID '=' E ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,$4);}
 ;
 
@@ -453,6 +472,9 @@ E   : '(' E ')'
 	| PORCIONCADENA {$$= $1;}
 	| POSICIONCADENA {$$= $1;}
 	| ACCESOARREGLO {$$ =$1;}
+	| AUMENTO {$$ =$1;}
+	| DECREMENTO{$$ =$1;}
+	
 	;
 
 
@@ -563,17 +585,29 @@ DOWHILEINST : Rdo BLOQUE Rwhile '(' E ')' ';' { $$= new DoWhileInst(@1.first_lin
 ;
 
 
-FORINST : Rfor '(' FOROPCIONES ';' E ';' E ')' BLOQUE { $$= new ForInst(@1.first_line-1,@1.first_column-1,$3,$5.$7,$9);}
+
+FORINST : Rfor '(' FOROPCIONES  E ';' E ')' BLOQUE { $$= new ForInst(@1.first_line-1,@1.first_column-1,$3,$4,$6,$8);}
         | Rfor id Rin E BLOQUE   { $$= new For2Inst(@1.first_line-1,@1.first_column-1,$2,$4,$5);}
+		| Rfor id Rin EXPARREGLO BLOQUE   { $$= new For2Inst(@1.first_line-1,@1.first_column-1,$2,$4,$5);}
+		| Rfor id Rin id '[' E ':' E ']' BLOQUE   { $$= new For3Inst(@1.first_line-1,@1.first_column-1,$2, new ExpVariable(@1.first_line-1,@1.first_column-1,$4), new Limites(@1.first_line-1,@1.first_column-1,$6,$8),$10);}
 ;
 
-FOROPCIONES : ASIGNACION
-            | DECLARACION
+FOROPCIONES : ASIGNACION {$$=$1;}
+            | DECLARACION {$$=$1;}
 ;
 
+ACTUALIZACION : AUMENTO{$$=$1;}
+				|DECREMENTO {$$=$1;}
+;
+
+AUMENTO : id '++' {$$= new Aumento(@1.first_line-1,@1.first_column-1,new ExpVariable(@1.first_line-1,@1.first_column-1,$1));}
+;
+DECREMENTO : id '--' {$$= new Decremento(@1.first_line-1,@1.first_column-1,new ExpVariable(@1.first_line-1,@1.first_column-1,$1));}
+;
 /*
 Expresiones que faltan agregar a la produccion para la instruccion for
 i++
 ["perro", "gato", "tortuga"]
 arr[2:4]
 */
+
