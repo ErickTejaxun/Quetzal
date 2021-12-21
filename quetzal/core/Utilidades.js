@@ -60,6 +60,7 @@ class Utilidades
         this.contadorEtiquetas =0;
         this.finalCadena = 7823797;
         this.EtiquetaSalida = '';
+        this.listaEntornos = new Array;
 
         this.registrarErrorLexico=function(linea, columna, id, descripcion, archivo)
         {
@@ -99,6 +100,11 @@ class Utilidades
                 cadenaSalida = cadenaSalida == ''? (linea):(cadenaSalida+linea);
             });
             return cadenaSalida;
+        }
+
+        this.registrarEntorno = function(entorno)
+        {
+            this.listaEntornos.push(entorno);
         }
 
 

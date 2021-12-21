@@ -22,6 +22,7 @@
 "/*"[^'*']*"*/"         return;
 "//"[^\r\n]*[^\r\n]     return;
 "/*"[^"*"]~"*/"         return;
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/] return;
 
 [0-9]+"."[0-9]+	 	  return 'double'
 [0-9]+				  return 'entero'
@@ -101,6 +102,8 @@
 "toInt"              %{ debugPrint(yytext);return 'ToInt'; %}
 "toDouble"           %{ debugPrint(yytext);return 'ToDouble'; %}
 "parse"              %{ debugPrint(yytext);return 'parse'; %}
+"pop"              %{ debugPrint(yytext);return 'Rpop'; %}
+"push"              %{ debugPrint(yytext);return 'Rpush'; %}
 
 //instrucciones
 "switch"             %{ debugPrint(yytext);return 'Rswitch'; %}
@@ -138,6 +141,7 @@
 %right '!'
 %left '.'
 %left '++' '--'
+
 
 /*
 %left '?'
@@ -202,6 +206,7 @@ INSTRUCCIONES :
 INSTRUCCION:  PRINTLN { $$ = $1;}
 			| PRINT { $$ = $1;}	
 			| LLAMADA ';' {$$ =$1;}	
+			| ASIGNACIONARREGLO
 			| ASIGNACION  {$$ = $1;}
 			| DECLARACION {$$ = $1;}
 			| RETORNO {$$ = $1;}
@@ -212,19 +217,23 @@ INSTRUCCION:  PRINTLN { $$ = $1;}
 			| DOWHILEINST {$$ = $1;}
             | AUMENTO ';' {$$ =$1;}
             | DECREMENTO ';' {$$ =$1;}
-            | CONTINUEINST {$$ =$1;}
+            | CONTINUEINST {$$ =$1;}			
 			| DECLARACCIONARREGLO {$$ = $1;}
-			| FORINST {$$=$1;}
+			| FORINST {$$=$1;}	
+			| PUSH 		{$$=$1;}
 			| error { 	
 						Utils.registrarErrorSintactico(@1.first_line-1,@1.first_column-1, $1, $1);
 						$$ = null;						
 					}				
 ;
-
-
-ASIGNACION : id '=' E ';' { $$ = new Asignacion(@1.first_line-1,@1.first_column-1,$1,$3); }
+PUSH :  E '.' Rpush '(' E ')' ';' { $$ = new Push(@1.first_line-1,@1.first_column-1, $1,$5);}
 ;
 
+ASIGNACION : id '=' E ';' { $$ = new Asignacion(@1.first_line-1,@1.first_column-1,$1,$3); }					
+;
+
+ASIGNACIONARREGLO : ACCESOARREGLO '=' E ';' {} 
+;
 
 DECLARACION : TIPO LID  ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,null);}
 			| TIPO LID '=' E ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,$4);}
@@ -263,6 +272,7 @@ LPARAMETROS: LPARAMETROS ',' PARAMETRO {$$ =$1; $$.push($3);}
 ;
 
 PARAMETRO : TIPO id { $$ = new Parametro(@1.first_line-1,@1.first_column-1, $1, $2);}
+		
 ;
 
 /*
@@ -279,10 +289,11 @@ TIPO :    tint { $$ = new Tipo(TipoPrimitivo.INT);}
 		| tboolean { $$ = new Tipo(TipoPrimitivo.BOOL);}
 		| tstring { $$ = new Tipo(TipoPrimitivo.STRING);}
 		| tchar { $$ = new Tipo(TipoPrimitivo.CHAR);}
-		| id {$$ = new Tipo(TipoPrimitivo.STRUCT, $1);}
+		//| id {$$ = new Tipo(TipoPrimitivo.STRUCT, $1);}
 		| tvoid { $$ = new Tipo(TipoPrimitivo.VOID);}
 		;
-
+// persona[]  arreglo = ;
+// persona[2]  = E ;
 BLOQUE: '{' INSTRUCCIONES '}' 
 		{$$ = $2; }
 		;
@@ -480,7 +491,8 @@ E   : '(' E ')'
 	| POSICIONCADENA {$$= $1;}
 	| ACCESOARREGLO {$$ =$1;}
 	| AUMENTO {$$ =$1;}
-	| DECREMENTO{$$ =$1;}	
+	| DECREMENTO{$$ =$1;}
+	| E '.' Rpop '(' ')' { $$ = new Pop(@1.first_line-1,@1.first_column-1, $1);}	
 	//| FRAGMENTOARRAY{$$ =$1;}	
 	;
 
@@ -490,7 +502,7 @@ ACCESOARREGLO : id LINDICES {$$= new AccesoArreglo(@1.first_line-1,@1.first_colu
 ;
 
 LINDICES : LINDICES INDICE  {$$=$1; $$.push($2);}
-		| '[' E ']' {$$ = new Array; $$.push($2);}
+		| INDICE {$$ = $1;}
 		| '[' INICIOA ':' FINA ']' { $$= new Limites(@1.first_line-1,@1.first_column-1,$2,$4);} 
 ;
 
@@ -607,6 +619,7 @@ CONTINUEINST : Rcontinue ';'  { $$= new ContinueInst(@1.first_line-1,@1.first_co
 
 
 FORINST : Rfor '(' FOROPCIONES  E ';' E ')' BLOQUE { $$= new ForInst(@1.first_line-1,@1.first_column-1,$3,$4,$6,$8);}
+		|  Rfor id Rin EXPARREGLO BLOQUE { $$= new For2Inst(@1.first_line-1,@1.first_column-1,$2,$4,$5);}
         | Rfor id Rin E BLOQUE   { $$= new For2Inst(@1.first_line-1,@1.first_column-1,$2,$4,$5);}
 		/*
 		| Rfor id Rin EXPARREGLO BLOQUE   { $$= new For2Inst(@1.first_line-1,@1.first_column-1,$2,$4,$5);}

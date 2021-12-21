@@ -191,16 +191,20 @@
                     listaErrores.forEach(item => {
                         tablaErrores.row.add([contador, item.id, item.getCadenaTipo(),item.descripcion, item.linea, item.columna, item.fecha, item.archivo]);
                     });  
-                    tablaErrores.draw();                
+                    tablaErrores.draw();
+                    reporteSimbolos(Utils.listaEntornos);
                 }            
                 else
                 {
+                    console.log(Utils.listaEntornos);
                     toastr.success('Ejecución exitosa');
+                    reporteSimbolos(Utils.listaEntornos);
                 }
                 editorOutput.setValue(cadenaSalida); 
             }
             else
             {
+                console.log(Utils.listaEntornos);
                 toastr.error('Ha ocurrido algún error.');
             }  
         }
@@ -216,15 +220,30 @@
                 listaErrores.forEach(item => {
                     tablaErrores.row.add([contador, item.id, item.getCadenaTipo(),item.descripcion, item.linea, item.columna, item.fecha, item.archivo]);
                 });  
-                tablaErrores.draw();             
+                tablaErrores.draw(); 
+                reporteSimbolos(Utils.listaEntornos);           
             }            
             else
             {
+                reporteSimbolos(Utils.listaEntornos);
                 toastr.success('Ejecución exitosa');
-            }            
+            }               
+            reporteSimbolos(Utils.listaEntornos);
             console.log(error);
         }              
-    }  
+    } 
+    
+    function reporteSimbolos(arreglo)
+    {
+      var contador = 1;
+      arreglo.forEach(entorno => {
+          entorno.tabla.forEach( item =>
+          {
+            tablaSimbolos.row.add([contador, item.id, item.tipo.getNombreTipo(), item.rol,'',item.linea, item.columna]);
+          });         
+      });
+      tablaSimbolos.draw(); 
+    }
 
 
     function generar3d()

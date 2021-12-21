@@ -145,8 +145,9 @@ class SimboloFuncion
 
 class Entorno
 {
-    constructor(padre)
+    constructor(padre, guardar=true)
     {
+        
         this.padre = padre;
         this.tabla = new Map();
         this.contador = 1;
@@ -208,7 +209,13 @@ class Entorno
         this.getStringTamanioEntorno = function()
         {
             return (this.tabla.size+1).toString();
-        }        
+        }  
+        
+        if(guardar)
+        {
+            Utils.registrarEntorno(this);
+        }
+        
     }
 }
 
@@ -219,6 +226,12 @@ class Raiz
         this.linea = linea;
         this.columna = columna;
         this.bloqueInstrucciones = bloqueInstrucciones;
+
+        this.graficar = function()
+        {
+
+        }
+
 
         this.ejecutar = function(entorno)
         {
@@ -559,8 +572,16 @@ class ExpVariable
                 if(varBuscada!= null && varBuscada!= undefined)
                 {
                     return varBuscada.valor;
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Variable','No se ha encontrado la variable '+this.id +' en el entorno actual.');
                 } 
-            }            
+            } 
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'Variable','No se ha encontrado la variable '+this.id +' en el entorno actual.');
+            }                        
         } 
         
         this.generar3D = function(entorno)
@@ -650,9 +671,9 @@ class Concatenar
             var valorI = this.expresionI.getValor(entorno);
             var valorD = this.expresionD.getValor(entorno);
             
-            if(tipoI.esChar()){ valorI = String.fromCharCode(valorI); }
-            if(tipoD.esChar()){ valorD = String.fromCharCode(valorD); }
-            return valorI.toString()  + valorD.toString() + "";
+            if(tipoI.esChar()){ valorI = String.fromCharCode(valorI.charCodeAt()); }
+            if(tipoD.esChar()){ valorD = String.fromCharCode(valorD.charCodeAt()); }
+            return String(valorI)  + String(valorD) + "";
         }
 
         this.generar3D = function(entorno)
@@ -2357,11 +2378,26 @@ class LengthCadena
             {
                 var cadena = this.expresion.getValor(entorno);
                 return cadena.length;
-            }
+            }            
             else
             {
-                Utils.registrarErrorSemantico(this.linea, this.columna, 'length ', 'Se esperaba un valor de tipo String y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
-                return;
+                var valor = this.expresion.getValor(entorno);
+                if(valor instanceof Array)
+                {
+                    return valor.length;
+                }
+                else if (valor instanceof Simbolo)
+                {
+                    if(valor.valor instanceof Array)
+                    {
+                        return valor.valor.length;
+                    }
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'length ', 'Se esperaba un valor de tipo String y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
+                    return;
+                }
             }
         }
 
@@ -3022,7 +3058,8 @@ class Igualdad
             var valorI = this.expresionI.getValor(entorno);
             var valorD = this.expresionD.getValor(entorno);
 
-            return parseFloat(valorI) === parseFloat(valorD);
+            //return parseFloat(valorI) === parseFloat(valorD);
+            return valorI == valorD;
         }
 
         this.generar3D = function(entorno)
@@ -3134,9 +3171,8 @@ class Diferenciacion
 
             //TODO:validar las cadenas o caracteres
             var valorI = this.expresionI.getValor(entorno);
-            var valorD = this.expresionD.getValor(entorno);
-
-            return parseFloat(valorI) != parseFloat(valorD);
+            var valorD = this.expresionD.getValor(entorno);            
+            return  valorI != valorD;
         }
 
         this.generar3D = function(entorno)
@@ -3250,7 +3286,8 @@ class MayorQue
             var valorI = this.expresionI.getValor(entorno);
             var valorD = this.expresionD.getValor(entorno);
 
-            return parseFloat(valorI) > parseFloat(valorD);
+            //return parseFloat(valorI) > parseFloat(valorD);
+            return valorI > valorD;
         }
 
         this.generar3D = function(entorno)
@@ -3324,7 +3361,8 @@ class MenorQue
             var valorI = this.expresionI.getValor(entorno);
             var valorD = this.expresionD.getValor(entorno);
 
-            return parseFloat(valorI) < parseFloat(valorD);
+            //return parseFloat(valorI) < parseFloat(valorD);
+            return valorI < valorD;
         }
 
         this.generar3D = function(entorno)
@@ -3398,7 +3436,8 @@ class MayorIgual
             var valorI = this.expresionI.getValor(entorno);
             var valorD = this.expresionD.getValor(entorno);
 
-            return parseFloat(valorI) >= parseFloat(valorD);
+            //return parseFloat(valorI) >= parseFloat(valorD);
+            return valorI >= valorD;
         }
 
         this.generar3D = function(entorno)
@@ -3472,9 +3511,9 @@ class MenorIgual
             var valorI = this.expresionI.getValor(entorno);
             var valorD = this.expresionD.getValor(entorno);
 
-            return parseFloat(valorI) <= parseFloat(valorD);
-        }
-
+            //return parseFloat(valorI) <= parseFloat(valorD);
+            return valorI <= valorD;
+        }    
         this.generar3D = function(entorno)
         {
             var tipo = this.getTipo(entorno);
@@ -3802,6 +3841,7 @@ class AccesoArreglo
                 var valorExpresion = this.expresion.getValor(entorno);
                 if(valorExpresion instanceof Array)
                 {
+                    // a[0][2][3];
                     var indiceExpresion = 0;
                     for(indiceExpresion =0 ; indiceExpresion < this.listaIndices.length; indiceExpresion++)
                     {
@@ -4575,7 +4615,8 @@ class Declaracion
                 {
                     this.listaId.forEach( id =>
                         {
-                            var simboloTmp = entorno.getSimbolo(id);
+                            //var simboloTmp = entorno.getSimbolo(id);
+                            var simboloTmp = entorno.tabla.get(id);
                             if(simboloTmp == null || simboloTmp == undefined)
                             {
                                 var nuevoVariable = new Simbolo(this.linea, this.columna, id, this.tipo, valorExpresion);
@@ -5125,19 +5166,21 @@ class ForInst
 
         this.ejecutar = function(entorno)
         {
-            this.declarion_asignacion.ejecutar(entorno);
-            var tipoCondicion = this.condicion.getTipo(entorno);
+            var nuevoEntorno = new Entorno(entorno);
+            this.declarion_asignacion.ejecutar(nuevoEntorno);
+            var tipoCondicion = this.condicion.getTipo(nuevoEntorno);
             if(!tipoCondicion.esBoolean())
             {
                 Utils.registrarErrorSemantico(this.linea, this.columna, 'For','La condición debe ser de tipo boolean. Recibido '+tipoCondicion.getNombreTipo());
                 return;
             }
 
-            var valorCondicion = this.condicion.getValor(entorno);
+            var valorCondicion = this.condicion.getValor(nuevoEntorno);
             while(valorCondicion)
             {
+                var entornoTemporal = new Entorno(nuevoEntorno,false);
                 // Induce un nuevo entorno ? 
-                var posibleRetorno = this.bloque.ejecutar(entorno);
+                var posibleRetorno = this.bloque.ejecutar(entornoTemporal);
                 if(posibleRetorno!= null && posibleRetorno!= undefined)
                 {
                     if(posibleRetorno instanceof Retorno)
@@ -5146,14 +5189,14 @@ class ForInst
                     }else if(posibleRetorno instanceof BreakInst){
                         break;
                     }else if(posibleRetorno instanceof ContinueInst){
-                        this.aumento_disminucion.getValor(entorno);
-                        valorCondicion = this.condicion.getValor(entorno);
+                        this.aumento_disminucion.getValor(entornoTemporal);
+                        valorCondicion = this.condicion.getValor(entornoTemporal);
                         continue;
                     }
 
                 }                
-                this.aumento_disminucion.getValor(entorno);
-                valorCondicion = this.condicion.getValor(entorno);
+                this.aumento_disminucion.getValor(nuevoEntorno);
+                valorCondicion = this.condicion.getValor(nuevoEntorno);                
             }
         }
         this.generar3D = function(entorno)
@@ -5175,7 +5218,14 @@ class For2Inst
 
         this.ejecutar = function(entorno)
         {
-            var valorExpresion = this.expresion.getValor(entorno);
+            if(!(this.expresion instanceof Array))
+            {
+                var valorExpresion = this.expresion.getValor(entorno);                
+            }            
+            else
+            {
+                valorExpresion = this.expresion;
+            }
             if (valorExpresion instanceof Array)
             {
                 var index = 0 ;                        
@@ -5452,7 +5502,8 @@ class DeclaracionArreglo
 
         this.ejecutar = function(entorno)
         {
-            var simboloPosible = entorno.getSimbolo(this.id);
+            //var simboloPosible = entorno.getSimbolo(this.id);
+            var simboloPosible = entorno.tabla.get(this.id);
             if(simboloPosible==null || simboloPosible == undefined)
             {
                 var index = 0;
@@ -5505,4 +5556,93 @@ class DeclaracionArreglo
         }
     }
 }
+
+class Pop 
+{
+    constructor(linea, columna, expresion)
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+
+        this.getTipo = function(entorno)
+        {
+            return this.expresion.getTipo(entorno);
+        }
+
+        this.getValor = function(entorno)
+        {
+            if(!this.getTipo(entorno).esError())
+            {
+                var valor = this.expresion.getValor(entorno);
+                if(valor instanceof Simbolo)
+                {
+                    if(valor.valor instanceof Array)
+                    {
+                        return valor.valor.pop();
+                    }
+                }
+                else if (valor instanceof Array)
+                {
+                    return valor.pop();
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'pop','La variable '+ this.id +' no es un arreglo');
+                    return;
+                }
+            }
+            else
+            {
+                //Reporte
+            }
+        }
+    }
+}
+
+
+
+class Push 
+{
+    constructor(linea, columna, origen,expresion )
+    {
+        this.linea = linea;
+        this.columna = columna;
+        this.expresion = expresion;
+        this.origen = origen;
+
+        this.ejecutar = function(entorno)
+        {
+            var tipoO = this.origen.getTipo(entorno);
+            var tipoE = this.expresion.getTipo(entorno);
+            if(tipoO.esIgual(tipoE))
+            {
+                var origen = this.origen.getValor(entorno);
+                var valor = this.expresion.getValor(entorno);
+                if(origen instanceof Simbolo)
+                {
+                    if(origen.valor instanceof Array)
+                    {
+                        return origen.valor.push(valor);
+                    }
+                }
+                else if (origen instanceof Array)
+                {
+                    return origen.push(valor);
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'pop','La variable '+ this.id +' no es un arreglo');
+                    return;
+                }
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'push','Arreglo  esperaba un valor de tipo ' + this.origen.getTipo(entorno).getNombreTipo());
+                return;
+            }
+        }
+    }
+}
+
 

@@ -1,0 +1,6903 @@
+Processing grammar.
+$accept(0)
+$end(1)
+error(2)
+INICIO(3)
+INSTRUCCIONESG(4)
+EOF(5)
+INSTRUCCIONG(6)
+FUNCION(7)
+ASIGNACION(8)
+DECLARACION(9)
+DECLARACCIONARREGLO(10)
+INSTRUCCIONES(11)
+INSTRUCCION(12)
+PRINTLN(13)
+PRINT(14)
+LLAMADA(15)
+;(16)
+RETORNO(17)
+IFINST(18)
+SWITCHINST(19)
+BREAKINST(20)
+WHILEINST(21)
+DOWHILEINST(22)
+AUMENTO(23)
+DECREMENTO(24)
+CONTINUEINST(25)
+ASIGNACIONARREGLO(26)
+FORINST(27)
+id(28)
+=(29)
+E(30)
+ACCESOARREGLO(31)
+TIPO(32)
+LID(33)
+,(34)
+[(35)
+](36)
+EXPARREGLO(37)
+LExprArreglo(38)
+retorno(39)
+((40)
+LPARAMETROS(41)
+)(42)
+BLOQUE(43)
+PARAMETRO(44)
+tint(45)
+tdouble(46)
+tboolean(47)
+tstring(48)
+tchar(49)
+tvoid(50)
+{(51)
+}(52)
+println(53)
+LExpr(54)
+print(55)
++(56)
+-(57)
+*(58)
+/(59)
+%(60)
+pow(61)
+sqrt(62)
+sin(63)
+cos(64)
+tan(65)
+>=(66)
+<=(67)
+!=(68)
+==(69)
+>(70)
+<(71)
+||(72)
+&&(73)
+!(74)
+&(75)
+^(76)
+?(77)
+:(78)
+entero(79)
+double(80)
+texto(81)
+caracter(82)
+nulo(83)
+verdadero(84)
+falso(85)
+tipode(86)
+PARSEBOOL(87)
+PARSEDOUBLE(88)
+PARSEINT(89)
+NATIVATOINT(90)
+NATIVATOSTRING(91)
+NATIVATODOUBLE(92)
+LOWERCADENA(93)
+UPPERCADENA(94)
+LENGTHCADENA(95)
+PORCIONCADENA(96)
+POSICIONCADENA(97)
+LINDICES(98)
+INDICE(99)
+INICIOA(100)
+FINA(101)
+Rbegin(102)
+Rend(103)
+.(104)
+parse(105)
+ToInt(106)
+ToDouble(107)
+caracterlower(108)
+caracterupper(109)
+caracterlength(110)
+caracterporcion(111)
+caracterposicion(112)
+Rif(113)
+ELSEIFINSTSS(114)
+ELSEIFINST(115)
+ELSEFINAL(116)
+Relse(117)
+Rswitch(118)
+LISTACASE(119)
+DEFAULTINST(120)
+CASE(121)
+Rcase(122)
+Rbreak(123)
+Rdefault(124)
+Rwhile(125)
+Rdo(126)
+Rcontinue(127)
+Rfor(128)
+FOROPCIONES(129)
+Rin(130)
+ACTUALIZACION(131)
+++(132)
+--(133)
+
+Item sets
+------
+
+item set 0 
+$accept -> .INICIO $end #lookaheads= $end
+INICIO -> .INSTRUCCIONESG EOF
+INSTRUCCIONESG -> .INSTRUCCIONESG INSTRUCCIONG
+INSTRUCCIONESG -> .INSTRUCCIONG
+INSTRUCCIONG -> .FUNCION
+INSTRUCCIONG -> .ASIGNACION
+INSTRUCCIONG -> .DECLARACION
+INSTRUCCIONG -> .DECLARACCIONARREGLO
+FUNCION -> .TIPO id ( LPARAMETROS ) BLOQUE
+FUNCION -> .TIPO id ( ) BLOQUE
+ASIGNACION -> .id = E ;
+DECLARACION -> .TIPO LID ;
+DECLARACION -> .TIPO LID = E ;
+DECLARACCIONARREGLO -> .TIPO [ ] id = EXPARREGLO ;
+TIPO -> .tint
+TIPO -> .tdouble
+TIPO -> .tboolean
+TIPO -> .tstring
+TIPO -> .tchar
+TIPO -> .id
+TIPO -> .tvoid 
+transitions ->  {"INICIO":1,"INSTRUCCIONESG":2,"INSTRUCCIONG":3,"FUNCION":4,"ASIGNACION":5,"DECLARACION":6,"DECLARACCIONARREGLO":7,"TIPO":8,"id":9,"tint":10,"tdouble":11,"tboolean":12,"tstring":13,"tchar":14,"tvoid":15}
+
+item set 1 
+$accept -> INICIO .$end #lookaheads= $end 
+transitions ->  {}
+
+item set 2 
+INICIO -> INSTRUCCIONESG .EOF
+INSTRUCCIONESG -> INSTRUCCIONESG .INSTRUCCIONG
+INSTRUCCIONG -> .FUNCION
+INSTRUCCIONG -> .ASIGNACION
+INSTRUCCIONG -> .DECLARACION
+INSTRUCCIONG -> .DECLARACCIONARREGLO
+FUNCION -> .TIPO id ( LPARAMETROS ) BLOQUE
+FUNCION -> .TIPO id ( ) BLOQUE
+ASIGNACION -> .id = E ;
+DECLARACION -> .TIPO LID ;
+DECLARACION -> .TIPO LID = E ;
+DECLARACCIONARREGLO -> .TIPO [ ] id = EXPARREGLO ;
+TIPO -> .tint
+TIPO -> .tdouble
+TIPO -> .tboolean
+TIPO -> .tstring
+TIPO -> .tchar
+TIPO -> .id
+TIPO -> .tvoid 
+transitions ->  {"EOF":16,"INSTRUCCIONG":17,"FUNCION":4,"ASIGNACION":5,"DECLARACION":6,"DECLARACCIONARREGLO":7,"TIPO":8,"id":9,"tint":10,"tdouble":11,"tboolean":12,"tstring":13,"tchar":14,"tvoid":15}
+
+item set 3 
+INSTRUCCIONESG -> INSTRUCCIONG . 
+transitions ->  {}
+
+item set 4 
+INSTRUCCIONG -> FUNCION . 
+transitions ->  {}
+
+item set 5 
+INSTRUCCIONG -> ASIGNACION . 
+transitions ->  {}
+
+item set 6 
+INSTRUCCIONG -> DECLARACION . 
+transitions ->  {}
+
+item set 7 
+INSTRUCCIONG -> DECLARACCIONARREGLO . 
+transitions ->  {}
+
+item set 8 
+FUNCION -> TIPO .id ( LPARAMETROS ) BLOQUE
+FUNCION -> TIPO .id ( ) BLOQUE
+DECLARACION -> TIPO .LID ;
+DECLARACION -> TIPO .LID = E ;
+DECLARACCIONARREGLO -> TIPO .[ ] id = EXPARREGLO ;
+LID -> .LID , id
+LID -> .id 
+transitions ->  {"id":18,"LID":19,"[":20}
+
+item set 9 
+ASIGNACION -> id .= E ;
+TIPO -> id . 
+transitions ->  {"=":21}
+
+item set 10 
+TIPO -> tint . 
+transitions ->  {}
+
+item set 11 
+TIPO -> tdouble . 
+transitions ->  {}
+
+item set 12 
+TIPO -> tboolean . 
+transitions ->  {}
+
+item set 13 
+TIPO -> tstring . 
+transitions ->  {}
+
+item set 14 
+TIPO -> tchar . 
+transitions ->  {}
+
+item set 15 
+TIPO -> tvoid . 
+transitions ->  {}
+
+item set 16 
+INICIO -> INSTRUCCIONESG EOF . 
+transitions ->  {}
+
+item set 17 
+INSTRUCCIONESG -> INSTRUCCIONESG INSTRUCCIONG . 
+transitions ->  {}
+
+item set 18 
+FUNCION -> TIPO id .( LPARAMETROS ) BLOQUE
+FUNCION -> TIPO id .( ) BLOQUE
+LID -> id . 
+transitions ->  {"(":22}
+
+item set 19 
+DECLARACION -> TIPO LID .;
+DECLARACION -> TIPO LID .= E ;
+LID -> LID ., id 
+transitions ->  {";":23,"=":24,",":25}
+
+item set 20 
+DECLARACCIONARREGLO -> TIPO [ .] id = EXPARREGLO ; 
+transitions ->  {"]":26}
+
+item set 21 
+ASIGNACION -> id = .E ;
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":27,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 22 
+FUNCION -> TIPO id ( .LPARAMETROS ) BLOQUE
+FUNCION -> TIPO id ( .) BLOQUE
+LPARAMETROS -> .LPARAMETROS , PARAMETRO
+LPARAMETROS -> .PARAMETRO
+PARAMETRO -> .TIPO id
+TIPO -> .tint
+TIPO -> .tdouble
+TIPO -> .tboolean
+TIPO -> .tstring
+TIPO -> .tchar
+TIPO -> .id
+TIPO -> .tvoid 
+transitions ->  {"LPARAMETROS":66,")":67,"PARAMETRO":68,"TIPO":69,"tint":10,"tdouble":11,"tboolean":12,"tstring":13,"tchar":14,"id":70,"tvoid":15}
+
+item set 23 
+DECLARACION -> TIPO LID ; . 
+transitions ->  {}
+
+item set 24 
+DECLARACION -> TIPO LID = .E ;
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":71,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 25 
+LID -> LID , .id 
+transitions ->  {"id":72}
+
+item set 26 
+DECLARACCIONARREGLO -> TIPO [ ] .id = EXPARREGLO ; 
+transitions ->  {"id":73}
+
+item set 27 
+ASIGNACION -> id = E .;
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {";":74,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 28 
+E -> ( .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":92,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 29 
+E -> pow .( E , E ) 
+transitions ->  {"(":93}
+
+item set 30 
+E -> sqrt .( E ) 
+transitions ->  {"(":94}
+
+item set 31 
+E -> sin .( E ) 
+transitions ->  {"(":95}
+
+item set 32 
+E -> cos .( E ) 
+transitions ->  {"(":96}
+
+item set 33 
+E -> tan .( E ) 
+transitions ->  {"(":97}
+
+item set 34 
+E -> - .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":98,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 35 
+E -> ! .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":99,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 36 
+E -> entero . 
+transitions ->  {}
+
+item set 37 
+E -> double . 
+transitions ->  {}
+
+item set 38 
+E -> id .
+LLAMADA -> id .( )
+LLAMADA -> id .( LExpr )
+ACCESOARREGLO -> id .LINDICES
+AUMENTO -> id .++
+DECREMENTO -> id .--
+LINDICES -> .LINDICES INDICE
+LINDICES -> .INDICE
+LINDICES -> .[ INICIOA : FINA ]
+INDICE -> .[ E ] 
+transitions ->  {"(":100,"LINDICES":101,"++":102,"--":103,"INDICE":104,"[":105}
+
+item set 39 
+E -> texto . 
+transitions ->  {}
+
+item set 40 
+E -> caracter . 
+transitions ->  {}
+
+item set 41 
+E -> nulo . 
+transitions ->  {}
+
+item set 42 
+E -> verdadero . 
+transitions ->  {}
+
+item set 43 
+E -> falso . 
+transitions ->  {}
+
+item set 44 
+E -> tipode .( E ) 
+transitions ->  {"(":106}
+
+item set 45 
+E -> PARSEBOOL . 
+transitions ->  {}
+
+item set 46 
+E -> PARSEDOUBLE . 
+transitions ->  {}
+
+item set 47 
+E -> PARSEINT . 
+transitions ->  {}
+
+item set 48 
+E -> NATIVATOINT . 
+transitions ->  {}
+
+item set 49 
+E -> NATIVATOSTRING . 
+transitions ->  {}
+
+item set 50 
+E -> NATIVATODOUBLE . 
+transitions ->  {}
+
+item set 51 
+E -> LLAMADA . 
+transitions ->  {}
+
+item set 52 
+E -> LOWERCADENA . 
+transitions ->  {}
+
+item set 53 
+E -> UPPERCADENA . 
+transitions ->  {}
+
+item set 54 
+E -> LENGTHCADENA . 
+transitions ->  {}
+
+item set 55 
+E -> PORCIONCADENA . 
+transitions ->  {}
+
+item set 56 
+E -> POSICIONCADENA . 
+transitions ->  {}
+
+item set 57 
+E -> ACCESOARREGLO . 
+transitions ->  {}
+
+item set 58 
+E -> AUMENTO . 
+transitions ->  {}
+
+item set 59 
+E -> DECREMENTO . 
+transitions ->  {}
+
+item set 60 
+PARSEBOOL -> tboolean .. parse ( E ) 
+transitions ->  {".":107}
+
+item set 61 
+PARSEDOUBLE -> tdouble .. parse ( E ) 
+transitions ->  {".":108}
+
+item set 62 
+PARSEINT -> tint .. parse ( E ) 
+transitions ->  {".":109}
+
+item set 63 
+NATIVATOINT -> ToInt .( E ) 
+transitions ->  {"(":110}
+
+item set 64 
+NATIVATOSTRING -> tstring .( E ) 
+transitions ->  {"(":111}
+
+item set 65 
+NATIVATODOUBLE -> ToDouble .( E ) 
+transitions ->  {"(":112}
+
+item set 66 
+FUNCION -> TIPO id ( LPARAMETROS .) BLOQUE
+LPARAMETROS -> LPARAMETROS ., PARAMETRO 
+transitions ->  {")":113,",":114}
+
+item set 67 
+FUNCION -> TIPO id ( ) .BLOQUE
+BLOQUE -> .{ INSTRUCCIONES } 
+transitions ->  {"BLOQUE":115,"{":116}
+
+item set 68 
+LPARAMETROS -> PARAMETRO . 
+transitions ->  {}
+
+item set 69 
+PARAMETRO -> TIPO .id 
+transitions ->  {"id":117}
+
+item set 70 
+TIPO -> id . 
+transitions ->  {}
+
+item set 71 
+DECLARACION -> TIPO LID = E .;
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {";":118,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 72 
+LID -> LID , id . 
+transitions ->  {}
+
+item set 73 
+DECLARACCIONARREGLO -> TIPO [ ] id .= EXPARREGLO ; 
+transitions ->  {"=":119}
+
+item set 74 
+ASIGNACION -> id = E ; . 
+transitions ->  {}
+
+item set 75 
+E -> E + .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":120,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 76 
+E -> E - .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":121,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 77 
+E -> E * .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":122,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 78 
+E -> E / .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":123,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 79 
+E -> E % .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":124,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 80 
+E -> E >= .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":125,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 81 
+E -> E <= .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":126,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 82 
+E -> E != .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":127,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 83 
+E -> E == .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":128,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 84 
+E -> E > .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":129,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 85 
+E -> E < .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":130,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 86 
+E -> E || .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":131,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 87 
+E -> E && .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":132,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 88 
+E -> E & .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":133,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 89 
+E -> E ^ .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":134,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 90 
+E -> E ? .E : E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":135,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 91 
+LOWERCADENA -> E . .caracterlower ( )
+UPPERCADENA -> E . .caracterupper ( )
+LENGTHCADENA -> E . .caracterlength ( )
+PORCIONCADENA -> E . .caracterporcion ( E , E )
+POSICIONCADENA -> E . .caracterposicion ( E ) 
+transitions ->  {"caracterlower":136,"caracterupper":137,"caracterlength":138,"caracterporcion":139,"caracterposicion":140}
+
+item set 92 
+E -> ( E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":141,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 93 
+E -> pow ( .E , E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":142,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 94 
+E -> sqrt ( .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":143,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 95 
+E -> sin ( .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":144,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 96 
+E -> cos ( .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":145,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 97 
+E -> tan ( .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":146,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 98 
+E -> - E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 99 
+E -> ! E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 100 
+LLAMADA -> id ( .)
+LLAMADA -> id ( .LExpr )
+LExpr -> .LExpr , E
+LExpr -> .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {")":147,"LExpr":148,"E":149,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 101 
+ACCESOARREGLO -> id LINDICES .
+LINDICES -> LINDICES .INDICE
+INDICE -> .[ E ] 
+transitions ->  {"INDICE":150,"[":151}
+
+item set 102 
+AUMENTO -> id ++ . 
+transitions ->  {}
+
+item set 103 
+DECREMENTO -> id -- . 
+transitions ->  {}
+
+item set 104 
+LINDICES -> INDICE . 
+transitions ->  {}
+
+item set 105 
+LINDICES -> [ .INICIOA : FINA ]
+INDICE -> [ .E ]
+INICIOA -> .E
+INICIOA -> .Rbegin
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"INICIOA":152,"E":153,"Rbegin":154,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 106 
+E -> tipode ( .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":155,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 107 
+PARSEBOOL -> tboolean . .parse ( E ) 
+transitions ->  {"parse":156}
+
+item set 108 
+PARSEDOUBLE -> tdouble . .parse ( E ) 
+transitions ->  {"parse":157}
+
+item set 109 
+PARSEINT -> tint . .parse ( E ) 
+transitions ->  {"parse":158}
+
+item set 110 
+NATIVATOINT -> ToInt ( .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":159,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 111 
+NATIVATOSTRING -> tstring ( .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":160,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 112 
+NATIVATODOUBLE -> ToDouble ( .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":161,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 113 
+FUNCION -> TIPO id ( LPARAMETROS ) .BLOQUE
+BLOQUE -> .{ INSTRUCCIONES } 
+transitions ->  {"BLOQUE":162,"{":116}
+
+item set 114 
+LPARAMETROS -> LPARAMETROS , .PARAMETRO
+PARAMETRO -> .TIPO id
+TIPO -> .tint
+TIPO -> .tdouble
+TIPO -> .tboolean
+TIPO -> .tstring
+TIPO -> .tchar
+TIPO -> .id
+TIPO -> .tvoid 
+transitions ->  {"PARAMETRO":163,"TIPO":69,"tint":10,"tdouble":11,"tboolean":12,"tstring":13,"tchar":14,"id":70,"tvoid":15}
+
+item set 115 
+FUNCION -> TIPO id ( ) BLOQUE . 
+transitions ->  {}
+
+item set 116 
+BLOQUE -> { .INSTRUCCIONES }
+INSTRUCCIONES -> .INSTRUCCIONES INSTRUCCION
+INSTRUCCIONES -> .INSTRUCCION
+INSTRUCCION -> .PRINTLN
+INSTRUCCION -> .PRINT
+INSTRUCCION -> .LLAMADA ;
+INSTRUCCION -> .ASIGNACION
+INSTRUCCION -> .DECLARACION
+INSTRUCCION -> .RETORNO
+INSTRUCCION -> .IFINST
+INSTRUCCION -> .SWITCHINST
+INSTRUCCION -> .BREAKINST
+INSTRUCCION -> .WHILEINST
+INSTRUCCION -> .DOWHILEINST
+INSTRUCCION -> .AUMENTO ;
+INSTRUCCION -> .DECREMENTO ;
+INSTRUCCION -> .CONTINUEINST
+INSTRUCCION -> .ASIGNACIONARREGLO
+INSTRUCCION -> .DECLARACCIONARREGLO
+INSTRUCCION -> .FORINST
+INSTRUCCION -> .error
+PRINTLN -> .println ( LExpr ) ;
+PRINT -> .print ( LExpr ) ;
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+ASIGNACION -> .id = E ;
+DECLARACION -> .TIPO LID ;
+DECLARACION -> .TIPO LID = E ;
+RETORNO -> .retorno E ;
+RETORNO -> .retorno ;
+IFINST -> .Rif ( E ) BLOQUE
+IFINST -> .Rif ( E ) INSTRUCCION
+IFINST -> .Rif ( E ) BLOQUE ELSEIFINSTSS
+SWITCHINST -> .Rswitch ( E ) { LISTACASE DEFAULTINST }
+BREAKINST -> .Rbreak ;
+WHILEINST -> .Rwhile ( E ) BLOQUE
+DOWHILEINST -> .Rdo BLOQUE Rwhile ( E ) ;
+AUMENTO -> .id ++
+DECREMENTO -> .id --
+CONTINUEINST -> .Rcontinue ;
+ASIGNACIONARREGLO -> .ACCESOARREGLO = E ;
+DECLARACCIONARREGLO -> .TIPO [ ] id = EXPARREGLO ;
+FORINST -> .Rfor ( FOROPCIONES E ; E ) BLOQUE
+FORINST -> .Rfor id Rin E BLOQUE
+TIPO -> .tint
+TIPO -> .tdouble
+TIPO -> .tboolean
+TIPO -> .tstring
+TIPO -> .tchar
+TIPO -> .id
+TIPO -> .tvoid
+ACCESOARREGLO -> .id LINDICES 
+transitions ->  {"INSTRUCCIONES":164,"INSTRUCCION":165,"PRINTLN":166,"PRINT":167,"LLAMADA":168,"ASIGNACION":169,"DECLARACION":170,"RETORNO":171,"IFINST":172,"SWITCHINST":173,"BREAKINST":174,"WHILEINST":175,"DOWHILEINST":176,"AUMENTO":177,"DECREMENTO":178,"CONTINUEINST":179,"ASIGNACIONARREGLO":180,"DECLARACCIONARREGLO":181,"FORINST":182,"error":183,"println":184,"print":185,"id":186,"TIPO":187,"retorno":188,"Rif":189,"Rswitch":190,"Rbreak":191,"Rwhile":192,"Rdo":193,"Rcontinue":194,"ACCESOARREGLO":195,"Rfor":196,"tint":10,"tdouble":11,"tboolean":12,"tstring":13,"tchar":14,"tvoid":15}
+
+item set 117 
+PARAMETRO -> TIPO id . 
+transitions ->  {}
+
+item set 118 
+DECLARACION -> TIPO LID = E ; . 
+transitions ->  {}
+
+item set 119 
+DECLARACCIONARREGLO -> TIPO [ ] id = .EXPARREGLO ;
+EXPARREGLO -> .[ LExprArreglo ] 
+transitions ->  {"EXPARREGLO":197,"[":198}
+
+item set 120 
+E -> E + E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 121 
+E -> E - E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 122 
+E -> E * E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 123 
+E -> E / E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 124 
+E -> E % E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 125 
+E -> E >= E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 126 
+E -> E <= E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 127 
+E -> E != E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 128 
+E -> E == E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 129 
+E -> E > E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 130 
+E -> E < E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 131 
+E -> E || E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 132 
+E -> E && E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 133 
+E -> E & E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 134 
+E -> E ^ E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 135 
+E -> E ? E .: E
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {":":199,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 136 
+LOWERCADENA -> E . caracterlower .( ) 
+transitions ->  {"(":200}
+
+item set 137 
+UPPERCADENA -> E . caracterupper .( ) 
+transitions ->  {"(":201}
+
+item set 138 
+LENGTHCADENA -> E . caracterlength .( ) 
+transitions ->  {"(":202}
+
+item set 139 
+PORCIONCADENA -> E . caracterporcion .( E , E ) 
+transitions ->  {"(":203}
+
+item set 140 
+POSICIONCADENA -> E . caracterposicion .( E ) 
+transitions ->  {"(":204}
+
+item set 141 
+E -> ( E ) . 
+transitions ->  {}
+
+item set 142 
+E -> pow ( E ., E )
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {",":205,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 143 
+E -> sqrt ( E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":206,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 144 
+E -> sin ( E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":207,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 145 
+E -> cos ( E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":208,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 146 
+E -> tan ( E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":209,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 147 
+LLAMADA -> id ( ) . 
+transitions ->  {}
+
+item set 148 
+LLAMADA -> id ( LExpr .)
+LExpr -> LExpr ., E 
+transitions ->  {")":210,",":211}
+
+item set 149 
+LExpr -> E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 150 
+LINDICES -> LINDICES INDICE . 
+transitions ->  {}
+
+item set 151 
+INDICE -> [ .E ]
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":212,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 152 
+LINDICES -> [ INICIOA .: FINA ] 
+transitions ->  {":":213}
+
+item set 153 
+INDICE -> [ E .]
+INICIOA -> E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"]":214,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 154 
+INICIOA -> Rbegin . 
+transitions ->  {}
+
+item set 155 
+E -> tipode ( E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":215,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 156 
+PARSEBOOL -> tboolean . parse .( E ) 
+transitions ->  {"(":216}
+
+item set 157 
+PARSEDOUBLE -> tdouble . parse .( E ) 
+transitions ->  {"(":217}
+
+item set 158 
+PARSEINT -> tint . parse .( E ) 
+transitions ->  {"(":218}
+
+item set 159 
+NATIVATOINT -> ToInt ( E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":219,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 160 
+NATIVATOSTRING -> tstring ( E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":220,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 161 
+NATIVATODOUBLE -> ToDouble ( E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":221,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 162 
+FUNCION -> TIPO id ( LPARAMETROS ) BLOQUE . 
+transitions ->  {}
+
+item set 163 
+LPARAMETROS -> LPARAMETROS , PARAMETRO . 
+transitions ->  {}
+
+item set 164 
+BLOQUE -> { INSTRUCCIONES .}
+INSTRUCCIONES -> INSTRUCCIONES .INSTRUCCION
+INSTRUCCION -> .PRINTLN
+INSTRUCCION -> .PRINT
+INSTRUCCION -> .LLAMADA ;
+INSTRUCCION -> .ASIGNACION
+INSTRUCCION -> .DECLARACION
+INSTRUCCION -> .RETORNO
+INSTRUCCION -> .IFINST
+INSTRUCCION -> .SWITCHINST
+INSTRUCCION -> .BREAKINST
+INSTRUCCION -> .WHILEINST
+INSTRUCCION -> .DOWHILEINST
+INSTRUCCION -> .AUMENTO ;
+INSTRUCCION -> .DECREMENTO ;
+INSTRUCCION -> .CONTINUEINST
+INSTRUCCION -> .ASIGNACIONARREGLO
+INSTRUCCION -> .DECLARACCIONARREGLO
+INSTRUCCION -> .FORINST
+INSTRUCCION -> .error
+PRINTLN -> .println ( LExpr ) ;
+PRINT -> .print ( LExpr ) ;
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+ASIGNACION -> .id = E ;
+DECLARACION -> .TIPO LID ;
+DECLARACION -> .TIPO LID = E ;
+RETORNO -> .retorno E ;
+RETORNO -> .retorno ;
+IFINST -> .Rif ( E ) BLOQUE
+IFINST -> .Rif ( E ) INSTRUCCION
+IFINST -> .Rif ( E ) BLOQUE ELSEIFINSTSS
+SWITCHINST -> .Rswitch ( E ) { LISTACASE DEFAULTINST }
+BREAKINST -> .Rbreak ;
+WHILEINST -> .Rwhile ( E ) BLOQUE
+DOWHILEINST -> .Rdo BLOQUE Rwhile ( E ) ;
+AUMENTO -> .id ++
+DECREMENTO -> .id --
+CONTINUEINST -> .Rcontinue ;
+ASIGNACIONARREGLO -> .ACCESOARREGLO = E ;
+DECLARACCIONARREGLO -> .TIPO [ ] id = EXPARREGLO ;
+FORINST -> .Rfor ( FOROPCIONES E ; E ) BLOQUE
+FORINST -> .Rfor id Rin E BLOQUE
+TIPO -> .tint
+TIPO -> .tdouble
+TIPO -> .tboolean
+TIPO -> .tstring
+TIPO -> .tchar
+TIPO -> .id
+TIPO -> .tvoid
+ACCESOARREGLO -> .id LINDICES 
+transitions ->  {"}":222,"INSTRUCCION":223,"PRINTLN":166,"PRINT":167,"LLAMADA":168,"ASIGNACION":169,"DECLARACION":170,"RETORNO":171,"IFINST":172,"SWITCHINST":173,"BREAKINST":174,"WHILEINST":175,"DOWHILEINST":176,"AUMENTO":177,"DECREMENTO":178,"CONTINUEINST":179,"ASIGNACIONARREGLO":180,"DECLARACCIONARREGLO":181,"FORINST":182,"error":183,"println":184,"print":185,"id":186,"TIPO":187,"retorno":188,"Rif":189,"Rswitch":190,"Rbreak":191,"Rwhile":192,"Rdo":193,"Rcontinue":194,"ACCESOARREGLO":195,"Rfor":196,"tint":10,"tdouble":11,"tboolean":12,"tstring":13,"tchar":14,"tvoid":15}
+
+item set 165 
+INSTRUCCIONES -> INSTRUCCION . 
+transitions ->  {}
+
+item set 166 
+INSTRUCCION -> PRINTLN . 
+transitions ->  {}
+
+item set 167 
+INSTRUCCION -> PRINT . 
+transitions ->  {}
+
+item set 168 
+INSTRUCCION -> LLAMADA .; 
+transitions ->  {";":224}
+
+item set 169 
+INSTRUCCION -> ASIGNACION . 
+transitions ->  {}
+
+item set 170 
+INSTRUCCION -> DECLARACION . 
+transitions ->  {}
+
+item set 171 
+INSTRUCCION -> RETORNO . 
+transitions ->  {}
+
+item set 172 
+INSTRUCCION -> IFINST . 
+transitions ->  {}
+
+item set 173 
+INSTRUCCION -> SWITCHINST . 
+transitions ->  {}
+
+item set 174 
+INSTRUCCION -> BREAKINST . 
+transitions ->  {}
+
+item set 175 
+INSTRUCCION -> WHILEINST . 
+transitions ->  {}
+
+item set 176 
+INSTRUCCION -> DOWHILEINST . 
+transitions ->  {}
+
+item set 177 
+INSTRUCCION -> AUMENTO .; 
+transitions ->  {";":225}
+
+item set 178 
+INSTRUCCION -> DECREMENTO .; 
+transitions ->  {";":226}
+
+item set 179 
+INSTRUCCION -> CONTINUEINST . 
+transitions ->  {}
+
+item set 180 
+INSTRUCCION -> ASIGNACIONARREGLO . 
+transitions ->  {}
+
+item set 181 
+INSTRUCCION -> DECLARACCIONARREGLO . 
+transitions ->  {}
+
+item set 182 
+INSTRUCCION -> FORINST . 
+transitions ->  {}
+
+item set 183 
+INSTRUCCION -> error . 
+transitions ->  {}
+
+item set 184 
+PRINTLN -> println .( LExpr ) ; 
+transitions ->  {"(":227}
+
+item set 185 
+PRINT -> print .( LExpr ) ; 
+transitions ->  {"(":228}
+
+item set 186 
+LLAMADA -> id .( )
+LLAMADA -> id .( LExpr )
+ASIGNACION -> id .= E ;
+AUMENTO -> id .++
+DECREMENTO -> id .--
+TIPO -> id .
+ACCESOARREGLO -> id .LINDICES
+LINDICES -> .LINDICES INDICE
+LINDICES -> .INDICE
+LINDICES -> .[ INICIOA : FINA ]
+INDICE -> .[ E ] 
+transitions ->  {"(":100,"=":21,"++":102,"--":103,"LINDICES":101,"INDICE":104,"[":105}
+
+item set 187 
+DECLARACION -> TIPO .LID ;
+DECLARACION -> TIPO .LID = E ;
+DECLARACCIONARREGLO -> TIPO .[ ] id = EXPARREGLO ;
+LID -> .LID , id
+LID -> .id 
+transitions ->  {"LID":19,"[":20,"id":229}
+
+item set 188 
+RETORNO -> retorno .E ;
+RETORNO -> retorno .;
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":230,";":231,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 189 
+IFINST -> Rif .( E ) BLOQUE
+IFINST -> Rif .( E ) INSTRUCCION
+IFINST -> Rif .( E ) BLOQUE ELSEIFINSTSS 
+transitions ->  {"(":232}
+
+item set 190 
+SWITCHINST -> Rswitch .( E ) { LISTACASE DEFAULTINST } 
+transitions ->  {"(":233}
+
+item set 191 
+BREAKINST -> Rbreak .; 
+transitions ->  {";":234}
+
+item set 192 
+WHILEINST -> Rwhile .( E ) BLOQUE 
+transitions ->  {"(":235}
+
+item set 193 
+DOWHILEINST -> Rdo .BLOQUE Rwhile ( E ) ;
+BLOQUE -> .{ INSTRUCCIONES } 
+transitions ->  {"BLOQUE":236,"{":116}
+
+item set 194 
+CONTINUEINST -> Rcontinue .; 
+transitions ->  {";":237}
+
+item set 195 
+ASIGNACIONARREGLO -> ACCESOARREGLO .= E ; 
+transitions ->  {"=":238}
+
+item set 196 
+FORINST -> Rfor .( FOROPCIONES E ; E ) BLOQUE
+FORINST -> Rfor .id Rin E BLOQUE 
+transitions ->  {"(":239,"id":240}
+
+item set 197 
+DECLARACCIONARREGLO -> TIPO [ ] id = EXPARREGLO .; 
+transitions ->  {";":241}
+
+item set 198 
+EXPARREGLO -> [ .LExprArreglo ]
+LExprArreglo -> .LExprArreglo , E
+LExprArreglo -> .LExprArreglo , EXPARREGLO
+LExprArreglo -> .E
+LExprArreglo -> .EXPARREGLO
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+EXPARREGLO -> .[ LExprArreglo ]
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"LExprArreglo":242,"E":243,"EXPARREGLO":244,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"[":198,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 199 
+E -> E ? E : .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":245,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 200 
+LOWERCADENA -> E . caracterlower ( .) 
+transitions ->  {")":246}
+
+item set 201 
+UPPERCADENA -> E . caracterupper ( .) 
+transitions ->  {")":247}
+
+item set 202 
+LENGTHCADENA -> E . caracterlength ( .) 
+transitions ->  {")":248}
+
+item set 203 
+PORCIONCADENA -> E . caracterporcion ( .E , E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":249,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 204 
+POSICIONCADENA -> E . caracterposicion ( .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":250,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 205 
+E -> pow ( E , .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":251,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 206 
+E -> sqrt ( E ) . 
+transitions ->  {}
+
+item set 207 
+E -> sin ( E ) . 
+transitions ->  {}
+
+item set 208 
+E -> cos ( E ) . 
+transitions ->  {}
+
+item set 209 
+E -> tan ( E ) . 
+transitions ->  {}
+
+item set 210 
+LLAMADA -> id ( LExpr ) . 
+transitions ->  {}
+
+item set 211 
+LExpr -> LExpr , .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":252,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 212 
+INDICE -> [ E .]
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"]":214,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 213 
+LINDICES -> [ INICIOA : .FINA ]
+FINA -> .E
+FINA -> .Rend
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"FINA":253,"E":254,"Rend":255,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 214 
+INDICE -> [ E ] . 
+transitions ->  {}
+
+item set 215 
+E -> tipode ( E ) . 
+transitions ->  {}
+
+item set 216 
+PARSEBOOL -> tboolean . parse ( .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":256,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 217 
+PARSEDOUBLE -> tdouble . parse ( .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":257,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 218 
+PARSEINT -> tint . parse ( .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":258,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 219 
+NATIVATOINT -> ToInt ( E ) . 
+transitions ->  {}
+
+item set 220 
+NATIVATOSTRING -> tstring ( E ) . 
+transitions ->  {}
+
+item set 221 
+NATIVATODOUBLE -> ToDouble ( E ) . 
+transitions ->  {}
+
+item set 222 
+BLOQUE -> { INSTRUCCIONES } . 
+transitions ->  {}
+
+item set 223 
+INSTRUCCIONES -> INSTRUCCIONES INSTRUCCION . 
+transitions ->  {}
+
+item set 224 
+INSTRUCCION -> LLAMADA ; . 
+transitions ->  {}
+
+item set 225 
+INSTRUCCION -> AUMENTO ; . 
+transitions ->  {}
+
+item set 226 
+INSTRUCCION -> DECREMENTO ; . 
+transitions ->  {}
+
+item set 227 
+PRINTLN -> println ( .LExpr ) ;
+LExpr -> .LExpr , E
+LExpr -> .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"LExpr":259,"E":149,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 228 
+PRINT -> print ( .LExpr ) ;
+LExpr -> .LExpr , E
+LExpr -> .E
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"LExpr":260,"E":149,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 229 
+LID -> id . 
+transitions ->  {}
+
+item set 230 
+RETORNO -> retorno E .;
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {";":261,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 231 
+RETORNO -> retorno ; . 
+transitions ->  {}
+
+item set 232 
+IFINST -> Rif ( .E ) BLOQUE
+IFINST -> Rif ( .E ) INSTRUCCION
+IFINST -> Rif ( .E ) BLOQUE ELSEIFINSTSS
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":262,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 233 
+SWITCHINST -> Rswitch ( .E ) { LISTACASE DEFAULTINST }
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":263,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 234 
+BREAKINST -> Rbreak ; . 
+transitions ->  {}
+
+item set 235 
+WHILEINST -> Rwhile ( .E ) BLOQUE
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":264,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 236 
+DOWHILEINST -> Rdo BLOQUE .Rwhile ( E ) ; 
+transitions ->  {"Rwhile":265}
+
+item set 237 
+CONTINUEINST -> Rcontinue ; . 
+transitions ->  {}
+
+item set 238 
+ASIGNACIONARREGLO -> ACCESOARREGLO = .E ;
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":266,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 239 
+FORINST -> Rfor ( .FOROPCIONES E ; E ) BLOQUE
+FOROPCIONES -> .ASIGNACION
+FOROPCIONES -> .DECLARACION
+ASIGNACION -> .id = E ;
+DECLARACION -> .TIPO LID ;
+DECLARACION -> .TIPO LID = E ;
+TIPO -> .tint
+TIPO -> .tdouble
+TIPO -> .tboolean
+TIPO -> .tstring
+TIPO -> .tchar
+TIPO -> .id
+TIPO -> .tvoid 
+transitions ->  {"FOROPCIONES":267,"ASIGNACION":268,"DECLARACION":269,"id":9,"TIPO":270,"tint":10,"tdouble":11,"tboolean":12,"tstring":13,"tchar":14,"tvoid":15}
+
+item set 240 
+FORINST -> Rfor id .Rin E BLOQUE 
+transitions ->  {"Rin":271}
+
+item set 241 
+DECLARACCIONARREGLO -> TIPO [ ] id = EXPARREGLO ; . 
+transitions ->  {}
+
+item set 242 
+EXPARREGLO -> [ LExprArreglo .]
+LExprArreglo -> LExprArreglo ., E
+LExprArreglo -> LExprArreglo ., EXPARREGLO 
+transitions ->  {"]":272,",":273}
+
+item set 243 
+LExprArreglo -> E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 244 
+LExprArreglo -> EXPARREGLO . 
+transitions ->  {}
+
+item set 245 
+E -> E ? E : E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 246 
+LOWERCADENA -> E . caracterlower ( ) . 
+transitions ->  {}
+
+item set 247 
+UPPERCADENA -> E . caracterupper ( ) . 
+transitions ->  {}
+
+item set 248 
+LENGTHCADENA -> E . caracterlength ( ) . 
+transitions ->  {}
+
+item set 249 
+PORCIONCADENA -> E . caracterporcion ( E ., E )
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {",":274,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 250 
+POSICIONCADENA -> E . caracterposicion ( E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":275,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 251 
+E -> pow ( E , E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":276,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 252 
+LExpr -> LExpr , E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 253 
+LINDICES -> [ INICIOA : FINA .] 
+transitions ->  {"]":277}
+
+item set 254 
+FINA -> E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 255 
+FINA -> Rend . 
+transitions ->  {}
+
+item set 256 
+PARSEBOOL -> tboolean . parse ( E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":278,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 257 
+PARSEDOUBLE -> tdouble . parse ( E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":279,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 258 
+PARSEINT -> tint . parse ( E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":280,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 259 
+PRINTLN -> println ( LExpr .) ;
+LExpr -> LExpr ., E 
+transitions ->  {")":281,",":211}
+
+item set 260 
+PRINT -> print ( LExpr .) ;
+LExpr -> LExpr ., E 
+transitions ->  {")":282,",":211}
+
+item set 261 
+RETORNO -> retorno E ; . 
+transitions ->  {}
+
+item set 262 
+IFINST -> Rif ( E .) BLOQUE
+IFINST -> Rif ( E .) INSTRUCCION
+IFINST -> Rif ( E .) BLOQUE ELSEIFINSTSS
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":283,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 263 
+SWITCHINST -> Rswitch ( E .) { LISTACASE DEFAULTINST }
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":284,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 264 
+WHILEINST -> Rwhile ( E .) BLOQUE
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":285,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 265 
+DOWHILEINST -> Rdo BLOQUE Rwhile .( E ) ; 
+transitions ->  {"(":286}
+
+item set 266 
+ASIGNACIONARREGLO -> ACCESOARREGLO = E .;
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {";":287,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 267 
+FORINST -> Rfor ( FOROPCIONES .E ; E ) BLOQUE
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":288,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 268 
+FOROPCIONES -> ASIGNACION . 
+transitions ->  {}
+
+item set 269 
+FOROPCIONES -> DECLARACION . 
+transitions ->  {}
+
+item set 270 
+DECLARACION -> TIPO .LID ;
+DECLARACION -> TIPO .LID = E ;
+LID -> .LID , id
+LID -> .id 
+transitions ->  {"LID":19,"id":229}
+
+item set 271 
+FORINST -> Rfor id Rin .E BLOQUE
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":289,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 272 
+EXPARREGLO -> [ LExprArreglo ] . 
+transitions ->  {}
+
+item set 273 
+LExprArreglo -> LExprArreglo , .E
+LExprArreglo -> LExprArreglo , .EXPARREGLO
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+EXPARREGLO -> .[ LExprArreglo ]
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":290,"EXPARREGLO":291,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"[":198,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 274 
+PORCIONCADENA -> E . caracterporcion ( E , .E )
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":292,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 275 
+POSICIONCADENA -> E . caracterposicion ( E ) . 
+transitions ->  {}
+
+item set 276 
+E -> pow ( E , E ) . 
+transitions ->  {}
+
+item set 277 
+LINDICES -> [ INICIOA : FINA ] . 
+transitions ->  {}
+
+item set 278 
+PARSEBOOL -> tboolean . parse ( E ) . 
+transitions ->  {}
+
+item set 279 
+PARSEDOUBLE -> tdouble . parse ( E ) . 
+transitions ->  {}
+
+item set 280 
+PARSEINT -> tint . parse ( E ) . 
+transitions ->  {}
+
+item set 281 
+PRINTLN -> println ( LExpr ) .; 
+transitions ->  {";":293}
+
+item set 282 
+PRINT -> print ( LExpr ) .; 
+transitions ->  {";":294}
+
+item set 283 
+IFINST -> Rif ( E ) .BLOQUE
+IFINST -> Rif ( E ) .INSTRUCCION
+IFINST -> Rif ( E ) .BLOQUE ELSEIFINSTSS
+BLOQUE -> .{ INSTRUCCIONES }
+INSTRUCCION -> .PRINTLN
+INSTRUCCION -> .PRINT
+INSTRUCCION -> .LLAMADA ;
+INSTRUCCION -> .ASIGNACION
+INSTRUCCION -> .DECLARACION
+INSTRUCCION -> .RETORNO
+INSTRUCCION -> .IFINST
+INSTRUCCION -> .SWITCHINST
+INSTRUCCION -> .BREAKINST
+INSTRUCCION -> .WHILEINST
+INSTRUCCION -> .DOWHILEINST
+INSTRUCCION -> .AUMENTO ;
+INSTRUCCION -> .DECREMENTO ;
+INSTRUCCION -> .CONTINUEINST
+INSTRUCCION -> .ASIGNACIONARREGLO
+INSTRUCCION -> .DECLARACCIONARREGLO
+INSTRUCCION -> .FORINST
+INSTRUCCION -> .error
+PRINTLN -> .println ( LExpr ) ;
+PRINT -> .print ( LExpr ) ;
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+ASIGNACION -> .id = E ;
+DECLARACION -> .TIPO LID ;
+DECLARACION -> .TIPO LID = E ;
+RETORNO -> .retorno E ;
+RETORNO -> .retorno ;
+IFINST -> .Rif ( E ) BLOQUE
+IFINST -> .Rif ( E ) INSTRUCCION
+IFINST -> .Rif ( E ) BLOQUE ELSEIFINSTSS
+SWITCHINST -> .Rswitch ( E ) { LISTACASE DEFAULTINST }
+BREAKINST -> .Rbreak ;
+WHILEINST -> .Rwhile ( E ) BLOQUE
+DOWHILEINST -> .Rdo BLOQUE Rwhile ( E ) ;
+AUMENTO -> .id ++
+DECREMENTO -> .id --
+CONTINUEINST -> .Rcontinue ;
+ASIGNACIONARREGLO -> .ACCESOARREGLO = E ;
+DECLARACCIONARREGLO -> .TIPO [ ] id = EXPARREGLO ;
+FORINST -> .Rfor ( FOROPCIONES E ; E ) BLOQUE
+FORINST -> .Rfor id Rin E BLOQUE
+TIPO -> .tint
+TIPO -> .tdouble
+TIPO -> .tboolean
+TIPO -> .tstring
+TIPO -> .tchar
+TIPO -> .id
+TIPO -> .tvoid
+ACCESOARREGLO -> .id LINDICES 
+transitions ->  {"BLOQUE":295,"INSTRUCCION":296,"{":116,"PRINTLN":166,"PRINT":167,"LLAMADA":168,"ASIGNACION":169,"DECLARACION":170,"RETORNO":171,"IFINST":172,"SWITCHINST":173,"BREAKINST":174,"WHILEINST":175,"DOWHILEINST":176,"AUMENTO":177,"DECREMENTO":178,"CONTINUEINST":179,"ASIGNACIONARREGLO":180,"DECLARACCIONARREGLO":181,"FORINST":182,"error":183,"println":184,"print":185,"id":186,"TIPO":187,"retorno":188,"Rif":189,"Rswitch":190,"Rbreak":191,"Rwhile":192,"Rdo":193,"Rcontinue":194,"ACCESOARREGLO":195,"Rfor":196,"tint":10,"tdouble":11,"tboolean":12,"tstring":13,"tchar":14,"tvoid":15}
+
+item set 284 
+SWITCHINST -> Rswitch ( E ) .{ LISTACASE DEFAULTINST } 
+transitions ->  {"{":297}
+
+item set 285 
+WHILEINST -> Rwhile ( E ) .BLOQUE
+BLOQUE -> .{ INSTRUCCIONES } 
+transitions ->  {"BLOQUE":298,"{":116}
+
+item set 286 
+DOWHILEINST -> Rdo BLOQUE Rwhile ( .E ) ;
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":299,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 287 
+ASIGNACIONARREGLO -> ACCESOARREGLO = E ; . 
+transitions ->  {}
+
+item set 288 
+FORINST -> Rfor ( FOROPCIONES E .; E ) BLOQUE
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {";":300,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 289 
+FORINST -> Rfor id Rin E .BLOQUE
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E )
+BLOQUE -> .{ INSTRUCCIONES } 
+transitions ->  {"BLOQUE":301,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91,"{":116}
+
+item set 290 
+LExprArreglo -> LExprArreglo , E .
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 291 
+LExprArreglo -> LExprArreglo , EXPARREGLO . 
+transitions ->  {}
+
+item set 292 
+PORCIONCADENA -> E . caracterporcion ( E , E .)
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":302,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 293 
+PRINTLN -> println ( LExpr ) ; . 
+transitions ->  {}
+
+item set 294 
+PRINT -> print ( LExpr ) ; . 
+transitions ->  {}
+
+item set 295 
+IFINST -> Rif ( E ) BLOQUE .
+IFINST -> Rif ( E ) BLOQUE .ELSEIFINSTSS
+ELSEIFINSTSS -> .ELSEIFINST ELSEIFINSTSS
+ELSEIFINSTSS -> .ELSEFINAL ELSEIFINSTSS
+ELSEIFINSTSS -> .ELSEIFINST
+ELSEIFINSTSS -> .ELSEFINAL
+ELSEIFINST -> .Relse Rif ( E ) BLOQUE
+ELSEFINAL -> .Relse BLOQUE 
+transitions ->  {"ELSEIFINSTSS":303,"ELSEIFINST":304,"ELSEFINAL":305,"Relse":306}
+
+item set 296 
+IFINST -> Rif ( E ) INSTRUCCION . 
+transitions ->  {}
+
+item set 297 
+SWITCHINST -> Rswitch ( E ) { .LISTACASE DEFAULTINST }
+LISTACASE -> .LISTACASE CASE
+LISTACASE -> .CASE
+CASE -> .Rcase E : INSTRUCCIONES 
+transitions ->  {"LISTACASE":307,"CASE":308,"Rcase":309}
+
+item set 298 
+WHILEINST -> Rwhile ( E ) BLOQUE . 
+transitions ->  {}
+
+item set 299 
+DOWHILEINST -> Rdo BLOQUE Rwhile ( E .) ;
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":310,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 300 
+FORINST -> Rfor ( FOROPCIONES E ; .E ) BLOQUE
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":311,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 301 
+FORINST -> Rfor id Rin E BLOQUE . 
+transitions ->  {}
+
+item set 302 
+PORCIONCADENA -> E . caracterporcion ( E , E ) . 
+transitions ->  {}
+
+item set 303 
+IFINST -> Rif ( E ) BLOQUE ELSEIFINSTSS . 
+transitions ->  {}
+
+item set 304 
+ELSEIFINSTSS -> ELSEIFINST .ELSEIFINSTSS
+ELSEIFINSTSS -> ELSEIFINST .
+ELSEIFINSTSS -> .ELSEIFINST ELSEIFINSTSS
+ELSEIFINSTSS -> .ELSEFINAL ELSEIFINSTSS
+ELSEIFINSTSS -> .ELSEIFINST
+ELSEIFINSTSS -> .ELSEFINAL
+ELSEIFINST -> .Relse Rif ( E ) BLOQUE
+ELSEFINAL -> .Relse BLOQUE 
+transitions ->  {"ELSEIFINSTSS":312,"ELSEIFINST":304,"ELSEFINAL":305,"Relse":306}
+
+item set 305 
+ELSEIFINSTSS -> ELSEFINAL .ELSEIFINSTSS
+ELSEIFINSTSS -> ELSEFINAL .
+ELSEIFINSTSS -> .ELSEIFINST ELSEIFINSTSS
+ELSEIFINSTSS -> .ELSEFINAL ELSEIFINSTSS
+ELSEIFINSTSS -> .ELSEIFINST
+ELSEIFINSTSS -> .ELSEFINAL
+ELSEIFINST -> .Relse Rif ( E ) BLOQUE
+ELSEFINAL -> .Relse BLOQUE 
+transitions ->  {"ELSEIFINSTSS":313,"ELSEIFINST":304,"ELSEFINAL":305,"Relse":306}
+
+item set 306 
+ELSEIFINST -> Relse .Rif ( E ) BLOQUE
+ELSEFINAL -> Relse .BLOQUE
+BLOQUE -> .{ INSTRUCCIONES } 
+transitions ->  {"Rif":314,"BLOQUE":315,"{":116}
+
+item set 307 
+SWITCHINST -> Rswitch ( E ) { LISTACASE .DEFAULTINST }
+LISTACASE -> LISTACASE .CASE
+DEFAULTINST -> .Rdefault : INSTRUCCIONES
+DEFAULTINST -> .
+CASE -> .Rcase E : INSTRUCCIONES 
+transitions ->  {"DEFAULTINST":316,"CASE":317,"Rdefault":318,"Rcase":309}
+
+item set 308 
+LISTACASE -> CASE . 
+transitions ->  {}
+
+item set 309 
+CASE -> Rcase .E : INSTRUCCIONES
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":319,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 310 
+DOWHILEINST -> Rdo BLOQUE Rwhile ( E ) .; 
+transitions ->  {";":320}
+
+item set 311 
+FORINST -> Rfor ( FOROPCIONES E ; E .) BLOQUE
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":321,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 312 
+ELSEIFINSTSS -> ELSEIFINST ELSEIFINSTSS . 
+transitions ->  {}
+
+item set 313 
+ELSEIFINSTSS -> ELSEFINAL ELSEIFINSTSS . 
+transitions ->  {}
+
+item set 314 
+ELSEIFINST -> Relse Rif .( E ) BLOQUE 
+transitions ->  {"(":322}
+
+item set 315 
+ELSEFINAL -> Relse BLOQUE . 
+transitions ->  {}
+
+item set 316 
+SWITCHINST -> Rswitch ( E ) { LISTACASE DEFAULTINST .} 
+transitions ->  {"}":323}
+
+item set 317 
+LISTACASE -> LISTACASE CASE . 
+transitions ->  {}
+
+item set 318 
+DEFAULTINST -> Rdefault .: INSTRUCCIONES 
+transitions ->  {":":324}
+
+item set 319 
+CASE -> Rcase E .: INSTRUCCIONES
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {":":325,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 320 
+DOWHILEINST -> Rdo BLOQUE Rwhile ( E ) ; . 
+transitions ->  {}
+
+item set 321 
+FORINST -> Rfor ( FOROPCIONES E ; E ) .BLOQUE
+BLOQUE -> .{ INSTRUCCIONES } 
+transitions ->  {"BLOQUE":326,"{":116}
+
+item set 322 
+ELSEIFINST -> Relse Rif ( .E ) BLOQUE
+E -> .( E )
+E -> .E + E
+E -> .E - E
+E -> .E * E
+E -> .E / E
+E -> .E % E
+E -> .pow ( E , E )
+E -> .sqrt ( E )
+E -> .sin ( E )
+E -> .cos ( E )
+E -> .tan ( E )
+E -> .- E
+E -> .E >= E
+E -> .E <= E
+E -> .E != E
+E -> .E == E
+E -> .E > E
+E -> .E < E
+E -> .E || E
+E -> .E && E
+E -> .! E
+E -> .E & E
+E -> .E ^ E
+E -> .E ? E : E
+E -> .entero
+E -> .double
+E -> .id
+E -> .texto
+E -> .caracter
+E -> .nulo
+E -> .verdadero
+E -> .falso
+E -> .tipode ( E )
+E -> .PARSEBOOL
+E -> .PARSEDOUBLE
+E -> .PARSEINT
+E -> .NATIVATOINT
+E -> .NATIVATOSTRING
+E -> .NATIVATODOUBLE
+E -> .LLAMADA
+E -> .LOWERCADENA
+E -> .UPPERCADENA
+E -> .LENGTHCADENA
+E -> .PORCIONCADENA
+E -> .POSICIONCADENA
+E -> .ACCESOARREGLO
+E -> .AUMENTO
+E -> .DECREMENTO
+PARSEBOOL -> .tboolean . parse ( E )
+PARSEDOUBLE -> .tdouble . parse ( E )
+PARSEINT -> .tint . parse ( E )
+NATIVATOINT -> .ToInt ( E )
+NATIVATOSTRING -> .tstring ( E )
+NATIVATODOUBLE -> .ToDouble ( E )
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+LOWERCADENA -> .E . caracterlower ( )
+UPPERCADENA -> .E . caracterupper ( )
+LENGTHCADENA -> .E . caracterlength ( )
+PORCIONCADENA -> .E . caracterporcion ( E , E )
+POSICIONCADENA -> .E . caracterposicion ( E )
+ACCESOARREGLO -> .id LINDICES
+AUMENTO -> .id ++
+DECREMENTO -> .id -- 
+transitions ->  {"E":327,"(":28,"pow":29,"sqrt":30,"sin":31,"cos":32,"tan":33,"-":34,"!":35,"entero":36,"double":37,"id":38,"texto":39,"caracter":40,"nulo":41,"verdadero":42,"falso":43,"tipode":44,"PARSEBOOL":45,"PARSEDOUBLE":46,"PARSEINT":47,"NATIVATOINT":48,"NATIVATOSTRING":49,"NATIVATODOUBLE":50,"LLAMADA":51,"LOWERCADENA":52,"UPPERCADENA":53,"LENGTHCADENA":54,"PORCIONCADENA":55,"POSICIONCADENA":56,"ACCESOARREGLO":57,"AUMENTO":58,"DECREMENTO":59,"tboolean":60,"tdouble":61,"tint":62,"ToInt":63,"tstring":64,"ToDouble":65}
+
+item set 323 
+SWITCHINST -> Rswitch ( E ) { LISTACASE DEFAULTINST } . 
+transitions ->  {}
+
+item set 324 
+DEFAULTINST -> Rdefault : .INSTRUCCIONES
+INSTRUCCIONES -> .INSTRUCCIONES INSTRUCCION
+INSTRUCCIONES -> .INSTRUCCION
+INSTRUCCION -> .PRINTLN
+INSTRUCCION -> .PRINT
+INSTRUCCION -> .LLAMADA ;
+INSTRUCCION -> .ASIGNACION
+INSTRUCCION -> .DECLARACION
+INSTRUCCION -> .RETORNO
+INSTRUCCION -> .IFINST
+INSTRUCCION -> .SWITCHINST
+INSTRUCCION -> .BREAKINST
+INSTRUCCION -> .WHILEINST
+INSTRUCCION -> .DOWHILEINST
+INSTRUCCION -> .AUMENTO ;
+INSTRUCCION -> .DECREMENTO ;
+INSTRUCCION -> .CONTINUEINST
+INSTRUCCION -> .ASIGNACIONARREGLO
+INSTRUCCION -> .DECLARACCIONARREGLO
+INSTRUCCION -> .FORINST
+INSTRUCCION -> .error
+PRINTLN -> .println ( LExpr ) ;
+PRINT -> .print ( LExpr ) ;
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+ASIGNACION -> .id = E ;
+DECLARACION -> .TIPO LID ;
+DECLARACION -> .TIPO LID = E ;
+RETORNO -> .retorno E ;
+RETORNO -> .retorno ;
+IFINST -> .Rif ( E ) BLOQUE
+IFINST -> .Rif ( E ) INSTRUCCION
+IFINST -> .Rif ( E ) BLOQUE ELSEIFINSTSS
+SWITCHINST -> .Rswitch ( E ) { LISTACASE DEFAULTINST }
+BREAKINST -> .Rbreak ;
+WHILEINST -> .Rwhile ( E ) BLOQUE
+DOWHILEINST -> .Rdo BLOQUE Rwhile ( E ) ;
+AUMENTO -> .id ++
+DECREMENTO -> .id --
+CONTINUEINST -> .Rcontinue ;
+ASIGNACIONARREGLO -> .ACCESOARREGLO = E ;
+DECLARACCIONARREGLO -> .TIPO [ ] id = EXPARREGLO ;
+FORINST -> .Rfor ( FOROPCIONES E ; E ) BLOQUE
+FORINST -> .Rfor id Rin E BLOQUE
+TIPO -> .tint
+TIPO -> .tdouble
+TIPO -> .tboolean
+TIPO -> .tstring
+TIPO -> .tchar
+TIPO -> .id
+TIPO -> .tvoid
+ACCESOARREGLO -> .id LINDICES 
+transitions ->  {"INSTRUCCIONES":328,"INSTRUCCION":165,"PRINTLN":166,"PRINT":167,"LLAMADA":168,"ASIGNACION":169,"DECLARACION":170,"RETORNO":171,"IFINST":172,"SWITCHINST":173,"BREAKINST":174,"WHILEINST":175,"DOWHILEINST":176,"AUMENTO":177,"DECREMENTO":178,"CONTINUEINST":179,"ASIGNACIONARREGLO":180,"DECLARACCIONARREGLO":181,"FORINST":182,"error":183,"println":184,"print":185,"id":186,"TIPO":187,"retorno":188,"Rif":189,"Rswitch":190,"Rbreak":191,"Rwhile":192,"Rdo":193,"Rcontinue":194,"ACCESOARREGLO":195,"Rfor":196,"tint":10,"tdouble":11,"tboolean":12,"tstring":13,"tchar":14,"tvoid":15}
+
+item set 325 
+CASE -> Rcase E : .INSTRUCCIONES
+INSTRUCCIONES -> .INSTRUCCIONES INSTRUCCION
+INSTRUCCIONES -> .INSTRUCCION
+INSTRUCCION -> .PRINTLN
+INSTRUCCION -> .PRINT
+INSTRUCCION -> .LLAMADA ;
+INSTRUCCION -> .ASIGNACION
+INSTRUCCION -> .DECLARACION
+INSTRUCCION -> .RETORNO
+INSTRUCCION -> .IFINST
+INSTRUCCION -> .SWITCHINST
+INSTRUCCION -> .BREAKINST
+INSTRUCCION -> .WHILEINST
+INSTRUCCION -> .DOWHILEINST
+INSTRUCCION -> .AUMENTO ;
+INSTRUCCION -> .DECREMENTO ;
+INSTRUCCION -> .CONTINUEINST
+INSTRUCCION -> .ASIGNACIONARREGLO
+INSTRUCCION -> .DECLARACCIONARREGLO
+INSTRUCCION -> .FORINST
+INSTRUCCION -> .error
+PRINTLN -> .println ( LExpr ) ;
+PRINT -> .print ( LExpr ) ;
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+ASIGNACION -> .id = E ;
+DECLARACION -> .TIPO LID ;
+DECLARACION -> .TIPO LID = E ;
+RETORNO -> .retorno E ;
+RETORNO -> .retorno ;
+IFINST -> .Rif ( E ) BLOQUE
+IFINST -> .Rif ( E ) INSTRUCCION
+IFINST -> .Rif ( E ) BLOQUE ELSEIFINSTSS
+SWITCHINST -> .Rswitch ( E ) { LISTACASE DEFAULTINST }
+BREAKINST -> .Rbreak ;
+WHILEINST -> .Rwhile ( E ) BLOQUE
+DOWHILEINST -> .Rdo BLOQUE Rwhile ( E ) ;
+AUMENTO -> .id ++
+DECREMENTO -> .id --
+CONTINUEINST -> .Rcontinue ;
+ASIGNACIONARREGLO -> .ACCESOARREGLO = E ;
+DECLARACCIONARREGLO -> .TIPO [ ] id = EXPARREGLO ;
+FORINST -> .Rfor ( FOROPCIONES E ; E ) BLOQUE
+FORINST -> .Rfor id Rin E BLOQUE
+TIPO -> .tint
+TIPO -> .tdouble
+TIPO -> .tboolean
+TIPO -> .tstring
+TIPO -> .tchar
+TIPO -> .id
+TIPO -> .tvoid
+ACCESOARREGLO -> .id LINDICES 
+transitions ->  {"INSTRUCCIONES":329,"INSTRUCCION":165,"PRINTLN":166,"PRINT":167,"LLAMADA":168,"ASIGNACION":169,"DECLARACION":170,"RETORNO":171,"IFINST":172,"SWITCHINST":173,"BREAKINST":174,"WHILEINST":175,"DOWHILEINST":176,"AUMENTO":177,"DECREMENTO":178,"CONTINUEINST":179,"ASIGNACIONARREGLO":180,"DECLARACCIONARREGLO":181,"FORINST":182,"error":183,"println":184,"print":185,"id":186,"TIPO":187,"retorno":188,"Rif":189,"Rswitch":190,"Rbreak":191,"Rwhile":192,"Rdo":193,"Rcontinue":194,"ACCESOARREGLO":195,"Rfor":196,"tint":10,"tdouble":11,"tboolean":12,"tstring":13,"tchar":14,"tvoid":15}
+
+item set 326 
+FORINST -> Rfor ( FOROPCIONES E ; E ) BLOQUE . 
+transitions ->  {}
+
+item set 327 
+ELSEIFINST -> Relse Rif ( E .) BLOQUE
+E -> E .+ E
+E -> E .- E
+E -> E .* E
+E -> E ./ E
+E -> E .% E
+E -> E .>= E
+E -> E .<= E
+E -> E .!= E
+E -> E .== E
+E -> E .> E
+E -> E .< E
+E -> E .|| E
+E -> E .&& E
+E -> E .& E
+E -> E .^ E
+E -> E .? E : E
+LOWERCADENA -> E .. caracterlower ( )
+UPPERCADENA -> E .. caracterupper ( )
+LENGTHCADENA -> E .. caracterlength ( )
+PORCIONCADENA -> E .. caracterporcion ( E , E )
+POSICIONCADENA -> E .. caracterposicion ( E ) 
+transitions ->  {")":330,"+":75,"-":76,"*":77,"/":78,"%":79,">=":80,"<=":81,"!=":82,"==":83,">":84,"<":85,"||":86,"&&":87,"&":88,"^":89,"?":90,".":91}
+
+item set 328 
+DEFAULTINST -> Rdefault : INSTRUCCIONES .
+INSTRUCCIONES -> INSTRUCCIONES .INSTRUCCION
+INSTRUCCION -> .PRINTLN
+INSTRUCCION -> .PRINT
+INSTRUCCION -> .LLAMADA ;
+INSTRUCCION -> .ASIGNACION
+INSTRUCCION -> .DECLARACION
+INSTRUCCION -> .RETORNO
+INSTRUCCION -> .IFINST
+INSTRUCCION -> .SWITCHINST
+INSTRUCCION -> .BREAKINST
+INSTRUCCION -> .WHILEINST
+INSTRUCCION -> .DOWHILEINST
+INSTRUCCION -> .AUMENTO ;
+INSTRUCCION -> .DECREMENTO ;
+INSTRUCCION -> .CONTINUEINST
+INSTRUCCION -> .ASIGNACIONARREGLO
+INSTRUCCION -> .DECLARACCIONARREGLO
+INSTRUCCION -> .FORINST
+INSTRUCCION -> .error
+PRINTLN -> .println ( LExpr ) ;
+PRINT -> .print ( LExpr ) ;
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+ASIGNACION -> .id = E ;
+DECLARACION -> .TIPO LID ;
+DECLARACION -> .TIPO LID = E ;
+RETORNO -> .retorno E ;
+RETORNO -> .retorno ;
+IFINST -> .Rif ( E ) BLOQUE
+IFINST -> .Rif ( E ) INSTRUCCION
+IFINST -> .Rif ( E ) BLOQUE ELSEIFINSTSS
+SWITCHINST -> .Rswitch ( E ) { LISTACASE DEFAULTINST }
+BREAKINST -> .Rbreak ;
+WHILEINST -> .Rwhile ( E ) BLOQUE
+DOWHILEINST -> .Rdo BLOQUE Rwhile ( E ) ;
+AUMENTO -> .id ++
+DECREMENTO -> .id --
+CONTINUEINST -> .Rcontinue ;
+ASIGNACIONARREGLO -> .ACCESOARREGLO = E ;
+DECLARACCIONARREGLO -> .TIPO [ ] id = EXPARREGLO ;
+FORINST -> .Rfor ( FOROPCIONES E ; E ) BLOQUE
+FORINST -> .Rfor id Rin E BLOQUE
+TIPO -> .tint
+TIPO -> .tdouble
+TIPO -> .tboolean
+TIPO -> .tstring
+TIPO -> .tchar
+TIPO -> .id
+TIPO -> .tvoid
+ACCESOARREGLO -> .id LINDICES 
+transitions ->  {"INSTRUCCION":223,"PRINTLN":166,"PRINT":167,"LLAMADA":168,"ASIGNACION":169,"DECLARACION":170,"RETORNO":171,"IFINST":172,"SWITCHINST":173,"BREAKINST":174,"WHILEINST":175,"DOWHILEINST":176,"AUMENTO":177,"DECREMENTO":178,"CONTINUEINST":179,"ASIGNACIONARREGLO":180,"DECLARACCIONARREGLO":181,"FORINST":182,"error":183,"println":184,"print":185,"id":186,"TIPO":187,"retorno":188,"Rif":189,"Rswitch":190,"Rbreak":191,"Rwhile":192,"Rdo":193,"Rcontinue":194,"ACCESOARREGLO":195,"Rfor":196,"tint":10,"tdouble":11,"tboolean":12,"tstring":13,"tchar":14,"tvoid":15}
+
+item set 329 
+CASE -> Rcase E : INSTRUCCIONES .
+INSTRUCCIONES -> INSTRUCCIONES .INSTRUCCION
+INSTRUCCION -> .PRINTLN
+INSTRUCCION -> .PRINT
+INSTRUCCION -> .LLAMADA ;
+INSTRUCCION -> .ASIGNACION
+INSTRUCCION -> .DECLARACION
+INSTRUCCION -> .RETORNO
+INSTRUCCION -> .IFINST
+INSTRUCCION -> .SWITCHINST
+INSTRUCCION -> .BREAKINST
+INSTRUCCION -> .WHILEINST
+INSTRUCCION -> .DOWHILEINST
+INSTRUCCION -> .AUMENTO ;
+INSTRUCCION -> .DECREMENTO ;
+INSTRUCCION -> .CONTINUEINST
+INSTRUCCION -> .ASIGNACIONARREGLO
+INSTRUCCION -> .DECLARACCIONARREGLO
+INSTRUCCION -> .FORINST
+INSTRUCCION -> .error
+PRINTLN -> .println ( LExpr ) ;
+PRINT -> .print ( LExpr ) ;
+LLAMADA -> .id ( )
+LLAMADA -> .id ( LExpr )
+ASIGNACION -> .id = E ;
+DECLARACION -> .TIPO LID ;
+DECLARACION -> .TIPO LID = E ;
+RETORNO -> .retorno E ;
+RETORNO -> .retorno ;
+IFINST -> .Rif ( E ) BLOQUE
+IFINST -> .Rif ( E ) INSTRUCCION
+IFINST -> .Rif ( E ) BLOQUE ELSEIFINSTSS
+SWITCHINST -> .Rswitch ( E ) { LISTACASE DEFAULTINST }
+BREAKINST -> .Rbreak ;
+WHILEINST -> .Rwhile ( E ) BLOQUE
+DOWHILEINST -> .Rdo BLOQUE Rwhile ( E ) ;
+AUMENTO -> .id ++
+DECREMENTO -> .id --
+CONTINUEINST -> .Rcontinue ;
+ASIGNACIONARREGLO -> .ACCESOARREGLO = E ;
+DECLARACCIONARREGLO -> .TIPO [ ] id = EXPARREGLO ;
+FORINST -> .Rfor ( FOROPCIONES E ; E ) BLOQUE
+FORINST -> .Rfor id Rin E BLOQUE
+TIPO -> .tint
+TIPO -> .tdouble
+TIPO -> .tboolean
+TIPO -> .tstring
+TIPO -> .tchar
+TIPO -> .id
+TIPO -> .tvoid
+ACCESOARREGLO -> .id LINDICES 
+transitions ->  {"INSTRUCCION":223,"PRINTLN":166,"PRINT":167,"LLAMADA":168,"ASIGNACION":169,"DECLARACION":170,"RETORNO":171,"IFINST":172,"SWITCHINST":173,"BREAKINST":174,"WHILEINST":175,"DOWHILEINST":176,"AUMENTO":177,"DECREMENTO":178,"CONTINUEINST":179,"ASIGNACIONARREGLO":180,"DECLARACCIONARREGLO":181,"FORINST":182,"error":183,"println":184,"print":185,"id":186,"TIPO":187,"retorno":188,"Rif":189,"Rswitch":190,"Rbreak":191,"Rwhile":192,"Rdo":193,"Rcontinue":194,"ACCESOARREGLO":195,"Rfor":196,"tint":10,"tdouble":11,"tboolean":12,"tstring":13,"tchar":14,"tvoid":15}
+
+item set 330 
+ELSEIFINST -> Relse Rif ( E ) .BLOQUE
+BLOQUE -> .{ INSTRUCCIONES } 
+transitions ->  {"BLOQUE":331,"{":116}
+
+item set 331 
+ELSEIFINST -> Relse Rif ( E ) BLOQUE . 
+transitions ->  {}
+332 states.
+Building lookahead grammar.
+Computing lookaheads.
+Building parse table.
+Conflict at state: 186, token: [
+  reduce by rule: TIPO -> id
+  shift token (then go to state 105)
+
+1 Conflict(s) found in grammar.
+Done.
