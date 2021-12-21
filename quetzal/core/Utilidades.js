@@ -119,7 +119,6 @@ class Utilidades
                 cadenaSalida += ', t'+i.toString();
             }
             cadenaSalida += ';// temporales\n';            
-
             
             this.consolaSalida.forEach(function(linea){
                 cadenaSalida = cadenaSalida == ''? (linea):(cadenaSalida+linea);

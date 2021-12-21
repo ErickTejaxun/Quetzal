@@ -4834,6 +4834,52 @@ class Si
                 return;
             }
         }
+        this.generar3D = function(entorno)
+        {
+            var valorCondicion = this.condicion.generar3D(entorno);
+            var tipoCondicion = this.condicion.getTipo(entorno);
+            if(tipoCondicion.esBoolean())
+            {
+                if(Utils.tenemosEtiquetas(valorCondicion))
+                {
+                    var LSalida = Utils.generarEtiqueta();
+                    Utils.imprimirConsola(valorCondicion.LV+':\n');
+                    this.bloque.generar3D(entorno);
+                    Utils.imprimirConsola('goto '+LSalida+';\n');
+                    Utils.imprimirConsola(valorCondicion.LF+':\n');
+                    if(this.sinosi != null && this.sinosi != undefined)
+                    {
+                        this.sinosi.generar3D(entorno);
+                    }
+                    Utils.imprimirConsola(LSalida+':\n');
+                }
+                else
+                {
+                    this.LV = Utils.generarTemporal();
+                    this.LF = Utils.generarTemporal();
+                    var LSalida = Utils.generarEtiqueta();
+                    Utils.imprimirConsola('if('+valorCondicion+'==1) goto '+this.LV+';\n');
+                    Utils.imprimirConsola('goto '+this.LF+';\n');
+
+                    Utils.imprimirConsola(this.LV+':\n');
+                    this.bloque.generar3D(entorno);
+                    Utils.imprimirConsola('goto '+LSalida+';\n');
+                    Utils.imprimirConsola(this.LF+':\n');
+                    if(this.sinosi != null && this.sinosi != undefined)
+                    {
+                        this.sinosi.generar3D(entorno);
+                    }
+                    Utils.imprimirConsola(LSalida+':\n');
+
+                }
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'IF','Se espera en la condición una expresión de tipo boolean. Se ha recibido un '+tipoCondicion.getNombreTipo());
+                return;                
+            }
+
+        }
     }
 }
 
