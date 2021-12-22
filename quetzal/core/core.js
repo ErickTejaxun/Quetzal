@@ -77,6 +77,7 @@ class Simbolo
         this.tipo = tipo;
         this.valor = valor;
         this.rol = '';
+        this.arregloTamanio = 0;
 
         this.getTipo = function()
         {
@@ -3854,6 +3855,7 @@ class AccesoArreglo
                             {
                                 if(valorIndice<=(valorExpresion.length-1))
                                 {
+                                                                        
                                     return  valorExpresion[valorIndice].valor;
                                 }
                                 else
@@ -3908,7 +3910,102 @@ class AccesoArreglo
                 //console.log(subArreglo);
                 return subArreglo;
             }
-        }
+        }        
+        
+
+
+        this.generar3D = function(entorno)
+        {
+            if(this.listaIndices instanceof Array)
+            // Esto significa que está de la forma id [x][y][z]
+            {
+                //var tipoExpresion = this.expresion.getTipo(entorno);
+                //var valorExpresion = this.expresion.getValor(entorno);
+                if(this.expresion instanceof ExpVariable)
+                {
+                    var id = this.expresion.id;
+                    var simboloBuscado = entorno.getSimbolo(id);
+                    if(simboloBuscado.rol == 'ARREGLO')
+                    {
+                        var t0 = Utils.generarTemporal();
+                        Utils.imprimirConsola(t0+'=P+'+simboloBuscado.posicion+'; // Dirección arreglo '+id+'\n');                        
+                        var indiceExpresion = 0;
+                        for(indiceExpresion =0 ; indiceExpresion < this.listaIndices.length; indiceExpresion++)
+                        {
+                            var expresionActual = this.listaIndices[indiceExpresion];
+                            var tipoIndice = expresionActual.getTipo(entorno);
+                            if(tipoIndice.esNumerico())
+                            {
+                                var t1 = Utils.generarTemporal();
+                                var t2 = Utils.generarTemporal();
+                                var t3 = Utils.generarTemporal();
+                                var t4 = Utils.generarTemporal();
+                                var L1 = Utils.generarEtiqueta();
+                                var L2 = Utils.generarEtiqueta();
+                                var L3 = Utils.generarEtiqueta();
+                                var valorIndice = expresionActual.getValor(entorno);
+                                Utils.imprimirConsola('if('+valorIndice+'>=0) goto '+L1+';\n');
+                                Utils.imprimirConsola('goto '+L2+';\n');
+                                Utils.imprimirConsola(L1+':\n');
+                                Utils.imprimirConsola(t1+'='+t0+'+'+valorIndice+';\n');
+                                Utils.imprimirConsola(t2+'=heap[(int)'+t1+'];\n');                                
+                                Utils.imprimirConsola('goto '+L3+'; // Salida\n');
+                                Utils.imprimirConsola(L2+':\n');
+                                var NodoMensaje = new ExpString(this.linea, this.columna, "No se aceptan indices negativos");
+                                var inicioCadena = NodoMensaje.generar3D(entorno);
+                                Utils.generarCodigoParaImprimirLn(inicioCadena,entorno);                                
+                                Utils.imprimirConsola(t2+'='+Utils.obtenerFinCadena()+';\n');
+                                Utils.imprimirConsola(L3+':\n');
+                                return t2;
+                            }   
+                            else
+                            {
+                                Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','Se esperaba una expresion númerica.');
+                                return;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','La variable '+id +' no es un arreglo.');
+                        return;    
+                    }
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','La expresion no corresponde a un arreglo');
+                    return;
+                }
+            }
+            else
+            // Significa que buscamos un framgento
+            {
+                var limites = this.listaIndices.getValor(entorno);                              
+                var index = limites.limiteInferior; 
+                var valorExpresion = this.expresion.getValor(entorno);
+                limites.limiteSuperior = limites.limiteSuperior == -1 ? valorExpresion.length-1:limites.limiteSuperior;               
+                if(limites.limiteInferior<0)
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','El limite inferior tiene que ser mayor a 0.');
+                    index = 0;
+                }                                               
+                if(limites.limiteSuperior>valorExpresion.length)
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','Limite superior excedido. Máximo ' + this.expresion.length +'. Recibido '+limites.limiteSuperior);
+                    superior = this.expresion.length-1;
+                }                        
+                var superior = limites.limiteSuperior ==-1 ?  this.expresion.length-1 : limites.limiteSuperior;
+                var subArreglo = new Array;
+                var valorExpresion = this.expresion.getValor(entorno);
+                for(index = index; index <= superior ; index++)
+                {
+                    subArreglo.push(valorExpresion[index]);
+                }                
+                //console.log(subArreglo);
+                return subArreglo;
+            }
+        }        
     }
 }
 
@@ -5554,6 +5651,79 @@ class DeclaracionArreglo
                 }                
             }
         }
+        
+        this.generar3D = function(entorno)
+        {
+            //var simboloPosible = entorno.getSimbolo(this.id);
+            var simboloPosible = entorno.tabla.get(this.id);
+            if(simboloPosible==null || simboloPosible == undefined)
+            {
+                var nuevoArreglo = new Simbolo(this.linea, this.columna, this.id, this.tipo, null);
+                nuevoArreglo.rol = 'ARREGLO';
+                entorno.registrarSimbolo(nuevoArreglo);
+                var t0 = Utils.generarTemporal();
+                var t1 = Utils.generarTemporal();
+                Utils.imprimirConsola(t0+'=P+'+nuevoArreglo.getPosicion()+';//Direccion arreglo '+nuevoArreglo.id+'\n');
+                Utils.imprimirConsola('stack[(int)'+t0+']=H; // Inicio del nuevo arreglo \n')
+                Utils.imprimirConsola(t1+'=H;//Inicio arreglo '+nuevoArreglo.id+'\n');
+                Utils.imprimirConsola('H=H+'+String(this.arregloExpresion.length)+'; // Reservando espacio en el heap para el arreglo\n');
+                
+                var index = 0;                
+                for(index = 0 ; index<this.arregloExpresion.length; index++)
+                {
+                    //t0 es el inicio del arreglo en el heap
+                    this.codigoElemento3D(entorno, tipo, this.arregloExpresion[index],index,t0);
+
+                }                
+                nuevoArreglo.arregloTamanio = this.arregloExpresion.length;                
+            }
+            else
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración Arreglo','Ya existe un símbolo con el identificador '+this.id);
+                return;
+            }
+        }  
+        
+        //Generamos un nuevo símbolo con el valor nuevo del arreglo.
+        this.codigoElemento3D = function(entorno,tipo, expresionActual,indice,inicio)
+        {            
+            if(expresionActual instanceof Array)
+            {
+                var index = 0;                
+                for(index = 0 ; index<expresionActual.length; index++)
+                {
+                    var expresion = expresionActual[index];
+                    var tipoExpresion = expresion.getTipo(entorno);
+                    if(tipoExpresion.esIgual(itpo))
+                    {
+                        var t0 = Utils.generarTemporal();
+                        Utils.imprimirConsola(t0+'='+inicio+'+'+String(indice)+'; // Dirección elemento '+String(indice)+'\n');
+                        var valorExpresion = expresion.generar3D(entorno);                        
+                        Utils.imprimirConsola('heap[(int)'+t0+']='+valorExpresion+';\n');
+                    }
+                    else
+                    {
+                        Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración Arreglo','Se esperaba un valor de tipo '+tipo.getNombreTipo());                        
+                    }                    
+                } 
+            }
+            else
+            {
+                var tipoActual = expresionActual.getTipo(entorno);
+                if(tipoActual.esIgual(this.tipo))
+                {
+                    var t0 = Utils.generarTemporal();                                      
+                    Utils.imprimirConsola(t0+'='+inicio+'+'+String(indice)+'; // Dirección elemento '+String(indice)+'\n');
+                    var valorActual = expresionActual.generar3D(entorno);  
+                    Utils.imprimirConsola('heap[(int)'+t0+']='+valorActual+';\n');                    
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración Arreglo','El valor en el índice '+indice +' no coincide con el tipo declarado. '+this.tipo.getNombreTipo());
+                    return;                        
+                }                
+            }
+        }        
     }
 }
 

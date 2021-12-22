@@ -269,13 +269,16 @@
                     listaErrores.forEach(item => {
                         tablaErrores.row.add([contador, item.id, item.getCadenaTipo(),item.descripcion, item.linea, item.columna, item.fecha, item.archivo]);
                     });  
-                    tablaErrores.draw();                
+                    tablaErrores.draw();    
+                    reporteSimbolos(Utils.listaEntornos);             
                 }            
                 else
                 {
                     toastr.success('Ejecución exitosa');
+                    reporteSimbolos(Utils.listaEntornos); 
                 }
                 editorOutput.setValue(cadenaSalida); 
+                reporteSimbolos(Utils.listaEntornos); 
             }
             else
             {
@@ -294,11 +297,13 @@
                 listaErrores.forEach(item => {
                     tablaErrores.row.add([contador, item.id, item.getCadenaTipo(),item.descripcion, item.linea, item.columna, item.fecha, item.archivo]);
                 });  
-                tablaErrores.draw();             
+                tablaErrores.draw();     
+                reporteSimbolos(Utils.listaEntornos);         
             }            
             else
             {
                 toastr.success('Ejecución exitosa');
+                reporteSimbolos(Utils.listaEntornos); 
             }            
             console.log(error);
         }              

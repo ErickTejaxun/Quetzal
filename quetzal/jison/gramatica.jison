@@ -187,7 +187,7 @@ INSTRUCCIONG :
 			  FUNCION { $$ = $1;}
 			| ASIGNACION  {$$ = $1;}
 			| DECLARACION  {$$ = $1;}	
-			| DECLARACCIONARREGLO {$$ = $1;}		  
+			| DECLARACIONARREGLO {$$ = $1;}		  
 			  
 			  /*Declaracion y Struct*/
 ;
@@ -218,7 +218,7 @@ INSTRUCCION:  PRINTLN { $$ = $1;}
             | AUMENTO ';' {$$ =$1;}
             | DECREMENTO ';' {$$ =$1;}
             | CONTINUEINST {$$ =$1;}			
-			| DECLARACCIONARREGLO {$$ = $1;}
+			| DECLARACIONARREGLO {$$ = $1;}
 			| FORINST {$$=$1;}	
 			| PUSH 		{$$=$1;}
 			| error { 	
@@ -244,7 +244,7 @@ LID : LID ',' id {$$  =$1; $$.push($3);}
 	| id { $$ = new Array; $$.push($1); }
 ;
 
-DECLARACCIONARREGLO : TIPO '[' ']' id '=' EXPARREGLO ';' {$$ = new DeclaracionArreglo(@1.first_line-1,@1.first_column-1,$1,$4,$6);}
+DECLARACIONARREGLO : TIPO '[' ']' id '=' EXPARREGLO ';' {$$ = new DeclaracionArreglo(@1.first_line-1,@1.first_column-1,$1,$4,$6);}
 ;
 
 EXPARREGLO: '[' LExprArreglo  ']' { $$ =$2;}
