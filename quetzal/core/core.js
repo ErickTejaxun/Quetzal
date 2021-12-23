@@ -4273,6 +4273,40 @@ class Aumento
             }
 
         }
+
+        this.generar3D = function(entorno)
+        {
+            var tipoExpresion = this.getTipo(entorno);
+            if(!tipoExpresion.esError())
+            {
+                if(this.expresion instanceof ExpVariable)
+                {
+                    var t0 = Utils.generarTemporal();
+                    var t1 = Utils.generarTemporal();
+                    var t2 = Utils.generarTemporal();
+                    //var valorExpresion = this.expresion.getValor(entorno);
+                    var variableBuscada = entorno.getSimbolo(expresion.id);
+                    Utils.imprimirConsola(t0+'=P+'+variableBuscada.posicion+';// Dirección variable\n');
+                    Utils.imprimirConsola(t1+'=stack[(int)'+t0+'];// Valor de la variable\n');
+                    Utils.imprimirConsola(t2+'='+t1+'+1;// Aumento valor '+ expresion.id+'++\n');
+                    Utils.imprimirConsola('stack[(int)'+t0+']='+t2+';// Asignacion nuevo valor\n');
+                    
+                }
+                else
+                {
+                    //var valorExpresion = this.expresion.getValor(entorno);
+                    //return valorExpresion + 1;
+                }
+
+            }
+            else
+            {
+                var tipo = this.expresion.getTipo(entorno);
+                Utils.registrarErrorSemantico(this.linea, this.columna, '++','Se esperaba un tipo entero.'+ tipo.getNombreTipo());
+                return;
+            }
+
+        }        
     }
 }
 
@@ -4321,7 +4355,7 @@ class Decremento
             else
             {
                 var tipo = this.expresion.getTipo(entorno);
-                Utils.registrarErrorSemantico(this.linea, this.columna, '++','Se esperaba un tipo entero.'+ tipo.getNombreTipo());
+                Utils.registrarErrorSemantico(this.linea, this.columna, '--','Se esperaba un tipo entero.'+ tipo.getNombreTipo());
                 return 0; 
             }
 
@@ -4349,11 +4383,44 @@ class Decremento
             else
             {
                 var tipo = this.expresion.getTipo(entorno);
-                Utils.registrarErrorSemantico(this.linea, this.columna, '++','Se esperaba un tipo entero.'+ tipo.getNombreTipo());
+                Utils.registrarErrorSemantico(this.linea, this.columna, '--','Se esperaba un tipo entero.'+ tipo.getNombreTipo());
                 return 0;
             }
 
         }
+        this.generar3D = function(entorno)
+        {
+            var tipoExpresion = this.getTipo(entorno);
+            if(!tipoExpresion.esError())
+            {
+                if(expresion instanceof ExpVariable)
+                {
+                    var t0 = Utils.generarTemporal();
+                    var t1 = Utils.generarTemporal();
+                    var t2 = Utils.generarTemporal();                    
+                    //var valorExpresion = this.expresion.getValor(entorno);
+                    var variableBuscada = entorno.getSimbolo(expresion.id);
+                    Utils.imprimirConsola(t0+'=P+'+variableBuscada.posicion+';// Dirección variable\n');
+                    Utils.imprimirConsola(t1+'=stack[(int)'+t0+'];// Valor de la variable\n');
+                    Utils.imprimirConsola(t2+'='+t1+'-1;// Aumento valor'+ expresion.id+'\n');
+                    Utils.imprimirConsola('stack[(int)'+t0+']='+t2+';// Asignacion nuevo valor\n');
+                    
+                }
+                else
+                {
+                    //var valorExpresion = this.expresion.getValor(entorno);
+                    //return valorExpresion + 1;
+                }
+
+            }
+            else
+            {
+                var tipo = this.expresion.getTipo(entorno);
+                Utils.registrarErrorSemantico(this.linea, this.columna, '++','Se esperaba un tipo entero.'+ tipo.getNombreTipo());
+                return;
+            }
+
+        }         
     }
 }
 
@@ -4448,6 +4515,23 @@ class Funcion
                 Utils.imprimirConsola('INIT_global_variables();\n');
                 Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno del global a actual\n');
             }
+            else
+            {
+                var cadenaTemporalesLocales = "float";
+                for(var i=Utils.contadorTemporales; i< Utils.contadorTemporales + 100; i++)
+                {
+                    if(cadenaTemporalesLocales=="float")
+                    {
+                        cadenaTemporalesLocales = cadenaTemporalesLocales + ' t'+i;
+                    }
+                    else
+                    {
+                        cadenaTemporalesLocales = cadenaTemporalesLocales + ', t'+i;
+                    }                                        
+                }
+                cadenaTemporalesLocales = cadenaTemporalesLocales + ';\n';
+                Utils.imprimirConsola(cadenaTemporalesLocales)
+            }
             /*Antes de ejecutar las instrucciones tenemos que almacenar los parámetros en el entorno*/
             var entornoActual = new Entorno(entorno.getEntornoGlobal());
             this.parametrosFormales.forEach(parametro => {
@@ -4462,6 +4546,8 @@ class Funcion
                     Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración parametros','Ya se ha declarado un parámetro/variable con el nombre '+parametro.id);                    
                 }
             });
+            // Por último guardamos el entorno actual en el símbolo funcion
+            nuevaFuncion.setEntornoFuncion(entornoActual);            
             this.bloqueInstrucciones.generar3D(entornoActual);
             Utils.imprimirConsola(EtiquetaSalida+'://Salida\n');
             if(this.id=='main')
@@ -4471,8 +4557,7 @@ class Funcion
             }            
             Utils.imprimirConsola('return;\n');
             Utils.imprimirConsola('}//Fin main\n');  
-            // Por último guardamos el entorno actual en el símbolo funcion
-            nuevaFuncion.setEntornoFuncion(entornoActual);
+
         }
     }
 }
@@ -5643,7 +5728,7 @@ class ForInst
         }
         this.generar3D = function(entorno)
         {
-           /* var nuevoEntorno = new Entorno(entorno);
+            var nuevoEntorno = new Entorno(entorno);
             this.declarion_asignacion.generar3D(nuevoEntorno);
             var tipoCondicion = this.condicion.getTipo(nuevoEntorno);
             if(!tipoCondicion.esBoolean())
@@ -5672,12 +5757,25 @@ class ForInst
             Utils.imprimirConsola('if('+t100+'==1) goto '+LVWhile+';\n');
             Utils.imprimirConsola('goto '+LFWhile+';\n');
             Utils.imprimirConsola(LVWhile+': // Bloque de instrucciones\n');
-            this.bloque.generar3D(entorno);
+            this.bloque.generar3D(nuevoEntorno);
             this.aumento_disminucion.generar3D(nuevoEntorno);
-            this.condicion.generar3D(nuevoEntorno);             
-            Utils.imprimirConsola('goto '+LWhile+';\n');
-            Utils.imprimirConsola(LFWhile+':\n');  
-            */
+            condicion = this.condicion.generar3D(nuevoEntorno);  
+            if(Utils.tenemosEtiquetas(condicion))
+            {   
+                var t100 = Utils.generarTemporal();
+                var LS = Utils.generarEtiqueta();
+                Utils.imprimirConsola(condicion.LV+':\n');
+                Utils.imprimirConsola(t100+'=1;\n');
+                Utils.imprimirConsola('goto '+LS+';\n');
+                Utils.imprimirConsola(condicion.LF+':\n');
+                Utils.imprimirConsola(t100+'=0;\n');
+                Utils.imprimirConsola(LS+':\n'); 
+                condicion = t100;                   
+            }            
+            Utils.imprimirConsola('if('+t100+'==1) goto '+LWhile+';\n');
+            //Utils.imprimirConsola('goto '+LWhile+'; // Inicio del ciclo for\n');
+            Utils.imprimirConsola(LFWhile+': // Salida del for actual\n');  
+            
 
 
 
