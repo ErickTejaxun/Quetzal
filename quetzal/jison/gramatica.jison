@@ -206,7 +206,7 @@ INSTRUCCIONES :
 INSTRUCCION:  PRINTLN { $$ = $1;}
 			| PRINT { $$ = $1;}	
 			| LLAMADA ';' {$$ =$1;}	
-			| ASIGNACIONARREGLO
+			| ASIGNACIONARREGLO {$$ =$1;}
 			| ASIGNACION  {$$ = $1;}
 			| DECLARACION {$$ = $1;}
 			| RETORNO {$$ = $1;}
@@ -232,7 +232,7 @@ PUSH :  E '.' Rpush '(' E ')' ';' { $$ = new Push(@1.first_line-1,@1.first_colum
 ASIGNACION : id '=' E ';' { $$ = new Asignacion(@1.first_line-1,@1.first_column-1,$1,$3); }					
 ;
 
-ASIGNACIONARREGLO : ACCESOARREGLO '=' E ';' {} 
+ASIGNACIONARREGLO : ACCESOARREGLO '=' E ';' {$$ = new AsignacionArreglo(@1.first_line-1,@1.first_column-1,$1,$3);}
 ;
 
 DECLARACION : TIPO LID  ';' { $$ = new Declaracion(@1.first_line-1,@1.first_column-1,$1,$2,null);}

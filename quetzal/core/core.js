@@ -6133,6 +6133,111 @@ class DeclaracionArreglo
     }
 }
 
+
+class AsignacionArreglo
+
+{
+    constructor(linea, columna, expresion, expre )
+    {
+        this.linea=linea;
+        this.columna=columna;
+        this.expresion = expresion.expresion;
+        this.listaIndices= expresion.listaIndices;
+        this.expre = expre;
+
+        this.getTipo = function(entorno)
+        {
+            return this.expresion.getTipo(entorno);
+        }
+
+        this.ejecutar = function(entorno)
+        {
+            if(this.listaIndices instanceof Array)
+                // Esto significa que está de la forma id [x][y][z]
+            {
+                //var tipoExpresion = this.expresion.getTipo(entorno);
+                var valorExpresion = this.expresion.getValor(entorno);
+                if(valorExpresion instanceof Array)
+                {
+                    // a[0][2][3];
+                    var indiceExpresion = 0;
+                    for(indiceExpresion =0 ; indiceExpresion < this.listaIndices.length; indiceExpresion++)
+                    {
+                        var expresionActual = this.listaIndices[indiceExpresion];
+                        var tipoIndice = expresionActual.getTipo(entorno);
+                        if(tipoIndice.esNumerico())
+                        {
+                            var valorIndice = expresionActual.getValor(entorno);
+                            if(valorIndice>=0)
+                            {
+                                if(valorIndice<=(valorExpresion.length-1))
+                                {
+                                    var condicion = this.expre.getValor(entorno);
+                                    valorExpresion[valorIndice].valor = condicion;
+                                    return condicion;
+                                }
+                                else
+                                {
+                                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','Indice mayor al tamaño del arreglo.');
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','No es posible usar indices negativos.');
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','Se esperaba una expresion númerica.');
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso vector','La expresion no corresponde a un arreglo');
+                    return;
+                }
+            }
+            else
+                // Significa que buscamos un framgento
+            {
+                var limites = this.listaIndices.getValor(entorno);
+                var index = limites.limiteInferior;
+                var valorExpresion = this.expresion.getValor(entorno);
+                limites.limiteSuperior = limites.limiteSuperior == -1 ? valorExpresion.length-1:limites.limiteSuperior;
+                if(limites.limiteInferior<0)
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','El limite inferior tiene que ser mayor a 0.');
+                    index = 0;
+                }
+                if(limites.limiteSuperior>valorExpresion.length)
+                {
+                    Utils.registrarErrorSemantico(this.linea, this.columna, 'Acceso a vector','Limite superior excedido. Máximo ' + this.expresion.length +'. Recibido '+limites.limiteSuperior);
+                    superior = this.expresion.length-1;
+                }
+                var superior = limites.limiteSuperior ==-1 ?  this.expresion.length-1 : limites.limiteSuperior;
+                var subArreglo = new Array;
+                var valorExpresion = this.expresion.getValor(entorno);
+                for(index = index; index <= superior ; index++)
+                {
+                    subArreglo.push(valorExpresion[index]);
+                }
+                //console.log(subArreglo);
+                return subArreglo;
+            }
+        }
+
+
+
+        this.generar3D = function(entorno)
+        {
+        }
+    }
+}
+
 class Pop 
 {
     constructor(linea, columna, expresion)
@@ -6175,8 +6280,6 @@ class Pop
         }
     }
 }
-
-
 
 class Push 
 {
