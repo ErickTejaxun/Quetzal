@@ -4515,6 +4515,23 @@ class Funcion
                 Utils.imprimirConsola('INIT_global_variables();\n');
                 Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno del global a actual\n');
             }
+            else
+            {
+                var cadenaTemporalesLocales = "float";
+                for(var i=Utils.contadorTemporales; i< Utils.contadorTemporales + 100; i++)
+                {
+                    if(cadenaTemporalesLocales=="float")
+                    {
+                        cadenaTemporalesLocales = cadenaTemporalesLocales + ' t'+i;
+                    }
+                    else
+                    {
+                        cadenaTemporalesLocales = cadenaTemporalesLocales + ', t'+i;
+                    }                                        
+                }
+                cadenaTemporalesLocales = cadenaTemporalesLocales + ';\n';
+                Utils.imprimirConsola(cadenaTemporalesLocales)
+            }
             /*Antes de ejecutar las instrucciones tenemos que almacenar los parámetros en el entorno*/
             var entornoActual = new Entorno(entorno.getEntornoGlobal());
             this.parametrosFormales.forEach(parametro => {
@@ -4529,6 +4546,8 @@ class Funcion
                     Utils.registrarErrorSemantico(this.linea, this.columna, 'Declaración parametros','Ya se ha declarado un parámetro/variable con el nombre '+parametro.id);                    
                 }
             });
+            // Por último guardamos el entorno actual en el símbolo funcion
+            nuevaFuncion.setEntornoFuncion(entornoActual);            
             this.bloqueInstrucciones.generar3D(entornoActual);
             Utils.imprimirConsola(EtiquetaSalida+'://Salida\n');
             if(this.id=='main')
@@ -4538,8 +4557,7 @@ class Funcion
             }            
             Utils.imprimirConsola('return;\n');
             Utils.imprimirConsola('}//Fin main\n');  
-            // Por último guardamos el entorno actual en el símbolo funcion
-            nuevaFuncion.setEntornoFuncion(entornoActual);
+
         }
     }
 }

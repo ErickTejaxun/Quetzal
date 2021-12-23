@@ -37,7 +37,7 @@ void main()
     println("");
 
     println("==============FACTORIAL==============================");
-    println(recursiva_sencilla(15-1));
+    println(recursiva_sencilla(10));
     println("===============ACKERMAN==============================");
     println(recusiva1(3, 3));  //2045
     println("===============HANOI=================================");
