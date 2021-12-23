@@ -1,0 +1,5 @@
+void main()
+{
+    string pruebasNativas = "ComPiLaDoReS2 TesT";
+    println(pruebasNativas.subString(0,11).toUppercase()," ",pruebasNativas.caracterOfPosition(12), " ", pruebasNativas.subString(14,pruebasNativas.length()).toLowercase());  // COMPILADORES 2 test
+}

@@ -2506,6 +2506,19 @@ class LengthCadena
             }
             else
             {
+                if(this.expresion instanceof ExpVariable)
+                {
+                    var variableBuscada = entorno.getSimbolo(this.expresion.id);
+                    if(variableBuscada.rol == 'ARREGLO')
+                    {
+                        return variableBuscada.arregloTamanio;
+                    }
+                    else
+                    {
+                        Utils.registrarErrorSemantico(this.linea, this.columna, 'length ', 'Variable '+ this.expresion.id +' no es un arreglo');
+                        return;
+                    }
+                }
                 Utils.registrarErrorSemantico(this.linea, this.columna, 'length ', 'Se esperaba un valor de tipo String y se ha recibido uno de tipo '+tipoExpresion.getNombreTipo());
                 return;
             }
@@ -5316,36 +5329,20 @@ class SwitchInst
         this.generar3D = function(entorno)
         {
             var condicion = this.expresion.generar3D(entorno);
-            if(condicion != null && condicion != undefined){
-
+            
+            if(condicion != null && condicion != undefined)
+            {
+                
                 var hay_break = false;
                 var continuar = false;
 
                 var index = 0;
-                for(index = 0 ; index < this.lista_cases.length; index++){
-                    var caso = this.lista_cases[index];
-                    caso.condicion = condicion;
-                    caso.continuar = continuar;
-
-                    var resultado = caso.ejecutar(entorno);
-
-                    continuar = caso.continuar; //ya coincidio pero no habia break
-
-                    if(resultado != null){//coincide
-                        if(resultado instanceof BreakInst){
-                            hay_break = true;
-                            break;
-                        }else if(resultado instanceof Return){
-                            return resultado;
-                        }
-                    }
-                    //no coincide
+                for(index = 0 ; index < this.lista_cases.length; index++)
+                {
+                    var caso = this.lista_cases[index];                    
+                    var resultado = caso.generar3D(entorno);                    
                 }
-
-                if(!hay_break){//ejecuta default
-                    return this.default_inst.ejecutar(entorno);
-                }
-
+              
 
             }else{
                 Utils.registrarErrorSemantico(this.linea, this.columna, 'instruccion switch','error al obtener el valor de la expresion','');
@@ -5382,7 +5379,22 @@ class CaseInst
         this.generar3D = function(entorno)
         {
             var valor_case = this.expresion.generar3D(entorno);
-            Utils.imprimirConsola('//switch-case\n');         
+            if(Utils.tenemosEtiquetas(valor_case))
+            {
+                var t100 = Utils.generarTemporal();
+                var LS = Utils.generarEtiqueta();
+                Utils.imprimirConsola(valorI.LV+':\n');
+                Utils.imprimirConsola(t100+'=1;\n');
+                Utils.imprimirConsola('goto '+LS+';\n');
+                Utils.imprimirConsola(valorI.LF+':\n');
+                Utils.imprimirConsola(t100+'=0;\n');
+                Utils.imprimirConsola(LS+':\n'); 
+                valor_case = t100;               
+            }
+            var LV = Utils.generarEtiqueta();            
+            Utils.imprimirConsola('if('+valor_case+'==0) goto '+LV+';\n');
+            this.bloque.generar3D(entorno);
+            Utils.imprimirConsola(LV+':\n');                        
         }
     }
 }
@@ -5631,7 +5643,68 @@ class ForInst
         }
         this.generar3D = function(entorno)
         {
+           /* var nuevoEntorno = new Entorno(entorno);
+            this.declarion_asignacion.generar3D(nuevoEntorno);
+            var tipoCondicion = this.condicion.getTipo(nuevoEntorno);
+            if(!tipoCondicion.esBoolean())
+            {
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'For','La condición debe ser de tipo boolean. Recibido '+tipoCondicion.getNombreTipo());
+                return;
+            }
+            
+            var LWhile = Utils.generarEtiqueta();
+            Utils.imprimirConsola(LWhile+':\n');
+            var condicion = this.condicion.generar3D(nuevoEntorno);                
+            if(Utils.tenemosEtiquetas(condicion))
+            {   
+                var t100 = Utils.generarTemporal();
+                var LS = Utils.generarEtiqueta();
+                Utils.imprimirConsola(condicion.LV+':\n');
+                Utils.imprimirConsola(t100+'=1;\n');
+                Utils.imprimirConsola('goto '+LS+';\n');
+                Utils.imprimirConsola(condicion.LF+':\n');
+                Utils.imprimirConsola(t100+'=0;\n');
+                Utils.imprimirConsola(LS+':\n'); 
+                condicion = t100;                   
+            }
+            var LVWhile = Utils.generarEtiqueta();
+            var LFWhile = Utils.generarEtiqueta();                
+            Utils.imprimirConsola('if('+t100+'==1) goto '+LVWhile+';\n');
+            Utils.imprimirConsola('goto '+LFWhile+';\n');
+            Utils.imprimirConsola(LVWhile+': // Bloque de instrucciones\n');
+            this.bloque.generar3D(entorno);
+            this.aumento_disminucion.generar3D(nuevoEntorno);
+            this.condicion.generar3D(nuevoEntorno);             
+            Utils.imprimirConsola('goto '+LWhile+';\n');
+            Utils.imprimirConsola(LFWhile+':\n');  
+            */
 
+
+
+
+            /*
+            while(valorCondicion)
+            {
+                var entornoTemporal = new Entorno(nuevoEntorno,false);
+                // Induce un nuevo entorno ? 
+                var posibleRetorno = this.bloque.ejecutar(entornoTemporal);
+                if(posibleRetorno!= null && posibleRetorno!= undefined)
+                {
+                    if(posibleRetorno instanceof Retorno)
+                    {
+                        return posibleRetorno;
+                    }else if(posibleRetorno instanceof BreakInst){
+                        break;
+                    }else if(posibleRetorno instanceof ContinueInst){
+                        this.aumento_disminucion.getValor(entornoTemporal);
+                        valorCondicion = this.condicion.getValor(entornoTemporal);
+                        continue;
+                    }
+
+                }                
+                this.aumento_disminucion.getValor(nuevoEntorno);
+                valorCondicion = this.condicion.getValor(nuevoEntorno);                
+            }*/
         }
     }
 }
