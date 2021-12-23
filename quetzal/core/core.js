@@ -595,9 +595,19 @@ class ExpVariable
                     //return varBuscada.valor;
                     var t0 = Utils.generarTemporal();
                     var t1 = Utils.generarTemporal();
-
-                    Utils.imprimirConsola(t0+'=P+'+varBuscada.posicion.toString()+';//Direccion variable '+this.id+'\n');
-                    Utils.imprimirConsola(t1+'=stack[(int)'+t0+'];\n');                          
+                    var variableLocal = entorno.tabla.get(this.id);                    
+                    if(variableLocal == null || variableLocal == undefined)
+                    {
+                        var t2 = Utils.generarTemporal();
+                        Utils.imprimirConsola(t2+'=0;// Simulación cambio a entorno global\n');
+                        Utils.imprimirConsola(t0+'='+t2+'+'+varBuscada.posicion.toString()+';//Direccion variable '+this.id+'\n');
+                        Utils.imprimirConsola(t1+'=stack[(int)'+t0+'];\n');                           
+                    }
+                    else
+                    {
+                        Utils.imprimirConsola(t0+'=P+'+varBuscada.posicion.toString()+';//Direccion variable '+this.id+'\n');
+                        Utils.imprimirConsola(t1+'=stack[(int)'+t0+'];\n');   
+                    }                         
                     return t1;
                 } 
             }            
@@ -799,31 +809,70 @@ class Concatenar
                 }
                 else if (tipoD.esBoolean())
                 {
-                    var t0 =Utils.generarTemporal();       
-                    var t1 =Utils.generarTemporal();
-                    var t2 =Utils.generarTemporal();
-                    var t3 =Utils.generarTemporal();
-                    var t4 =Utils.generarTemporal();       
-                    var t5 =Utils.generarTemporal();
-                    var t6 =Utils.generarTemporal();                    
-                    
-                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
-                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
-                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorD+'; // Paso valor parametro 1\n');                    
-                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
-                    Utils.imprimirConsola('BooleanToString_Nativa();\n');
-                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
-                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
-                    Utils.imprimirConsola(t3+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulación de cambio de entorno\n');
-                    Utils.imprimirConsola(t4+'='+t3+'+1; // Dirección del primer parámetro\n');
-                    Utils.imprimirConsola('stack[(int)'+t4+']='+valorI+'; // Paso cadena 1\n');
-                    Utils.imprimirConsola(t5+'='+t3+'+2;// Dirección del segundo parámetro\n');
-                    Utils.imprimirConsola('stack[(int)'+t5+']='+t2+'; // Paso cadena 2\n');
-                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
-                    Utils.imprimirConsola('Nativa_Concatenar_Cadenas();\n');
-                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
-                    Utils.imprimirConsola(t6+'=stack[(int)'+t3+']; // Valor de retorno.\n');  
-                    return t6;
+                    if(Utils.tenemosEtiquetas(valorD))
+                    {
+                        var t100 = Utils.generarTemporal();
+                        var LS = Utils.generarEtiqueta();
+                        Utils.imprimirConsola(valorD.LV+':\n');
+                        Utils.imprimirConsola(t100+'=1;\n');
+                        Utils.imprimirConsola('goto '+LS+';\n');
+                        Utils.imprimirConsola(valorD.LF+':\n');
+                        Utils.imprimirConsola(t100+'=0;\n');
+                        Utils.imprimirConsola(LS+':\n');
+                        var t0 =Utils.generarTemporal();       
+                        var t1 =Utils.generarTemporal();
+                        var t2 =Utils.generarTemporal();
+                        var t3 =Utils.generarTemporal();
+                        var t4 =Utils.generarTemporal();       
+                        var t5 =Utils.generarTemporal();
+                        var t6 =Utils.generarTemporal();                    
+                        
+                        Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                        Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                        Utils.imprimirConsola('stack[(int)'+t1+']='+t100+'; // Paso valor parametro 1\n');                    
+                        Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                        Utils.imprimirConsola('BooleanToString_Nativa();\n');
+                        Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                        Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                        Utils.imprimirConsola(t3+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulación de cambio de entorno\n');
+                        Utils.imprimirConsola(t4+'='+t3+'+1; // Dirección del primer parámetro\n');
+                        Utils.imprimirConsola('stack[(int)'+t4+']='+valorI+'; // Paso cadena 1\n');
+                        Utils.imprimirConsola(t5+'='+t3+'+2;// Dirección del segundo parámetro\n');
+                        Utils.imprimirConsola('stack[(int)'+t5+']='+t2+'; // Paso cadena 2\n');
+                        Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                        Utils.imprimirConsola('Nativa_Concatenar_Cadenas();\n');
+                        Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                        Utils.imprimirConsola(t6+'=stack[(int)'+t3+']; // Valor de retorno.\n');  
+                        return t6;
+                    }
+                    else
+                    {
+                        var t0 =Utils.generarTemporal();       
+                        var t1 =Utils.generarTemporal();
+                        var t2 =Utils.generarTemporal();
+                        var t3 =Utils.generarTemporal();
+                        var t4 =Utils.generarTemporal();       
+                        var t5 =Utils.generarTemporal();
+                        var t6 =Utils.generarTemporal();                    
+                        
+                        Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                        Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                        Utils.imprimirConsola('stack[(int)'+t1+']='+valorD+'; // Paso valor parametro 1\n');                    
+                        Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                        Utils.imprimirConsola('BooleanToString_Nativa();\n');
+                        Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                        Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                        Utils.imprimirConsola(t3+'=P+'+entorno.getStringTamanioEntorno()+'; // Simulación de cambio de entorno\n');
+                        Utils.imprimirConsola(t4+'='+t3+'+1; // Dirección del primer parámetro\n');
+                        Utils.imprimirConsola('stack[(int)'+t4+']='+valorI+'; // Paso cadena 1\n');
+                        Utils.imprimirConsola(t5+'='+t3+'+2;// Dirección del segundo parámetro\n');
+                        Utils.imprimirConsola('stack[(int)'+t5+']='+t2+'; // Paso cadena 2\n');
+                        Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                        Utils.imprimirConsola('Nativa_Concatenar_Cadenas();\n');
+                        Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno\n');
+                        Utils.imprimirConsola(t6+'=stack[(int)'+t3+']; // Valor de retorno.\n');  
+                        return t6;
+                    }
                 }   
                 else if (tipoD.esNulo())
                 {
@@ -900,18 +949,47 @@ class Concatenar
                 }
                 else if (tipoI.esBoolean())
                 {
-                    var t0 =Utils.generarTemporal();       
-                    var t1 =Utils.generarTemporal();
-                    var t2 =Utils.generarTemporal();                   
-                    
-                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
-                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
-                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+'; // Paso valor parametro 1\n');                    
-                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
-                    Utils.imprimirConsola('BooleanToString_Nativa();\n');
-                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
-                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
-                    valorI = t2;
+
+                    if(Utils.tenemosEtiquetas(valorI))
+                    {
+                        var t100 = Utils.generarTemporal();
+                        var LS = Utils.generarEtiqueta();
+                        Utils.imprimirConsola(valorI.LV+':\n');
+                        Utils.imprimirConsola(t100+'=1;\n');
+                        Utils.imprimirConsola('goto '+LS+';\n');
+                        Utils.imprimirConsola(valorI.LF+':\n');
+                        Utils.imprimirConsola(t100+'=0;\n');
+                        Utils.imprimirConsola(LS+':\n');
+
+                        var t0 =Utils.generarTemporal();       
+                        var t1 =Utils.generarTemporal();
+                        var t2 =Utils.generarTemporal();                   
+                        
+                        Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                        Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                        Utils.imprimirConsola('stack[(int)'+t1+']='+t100+'; // Paso valor parametro 1\n');                    
+                        Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                        Utils.imprimirConsola('BooleanToString_Nativa();\n');
+                        Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                        Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                        valorI = t2;
+                    }                    
+                    else
+                    {
+                        var t0 =Utils.generarTemporal();       
+                        var t1 =Utils.generarTemporal();
+                        var t2 =Utils.generarTemporal();                   
+                        
+                        Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                        Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                        Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+'; // Paso valor parametro 1\n');                    
+                        Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                        Utils.imprimirConsola('BooleanToString_Nativa();\n');
+                        Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                        Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                        valorI = t2;
+                    }
+
                 }
                 else if (tipoI.esNulo())
                 {
@@ -1412,8 +1490,8 @@ class Resta
         this.generar3D = function(entorno)
         {
             var tipo = this.getTipo(entorno);
-            var valorI = this.expresionI.getValor(entorno);
-            var valorD = this.expresionD.getValor(entorno);
+            var valorI = this.expresionI.generar3D(entorno);
+            var valorD = this.expresionD.generar3D(entorno);
             
             var t0 = Utils.generarTemporal();
 
@@ -2308,14 +2386,14 @@ class PorcionCadena
             var tipoExpresion = this.expresion.getTipo(entorno);
             if(tipoExpresion.esCadena())
             {
-                var cadena = this.expresion.getValor(entorno);
+                var cadena = this.expresion.generar3D(entorno);
                 var tipoExpresionPosicion = this.expresionPosicion.getTipo(entorno);
                 var tipoExpresionPosicion2 = this.expresionPosicion2.getTipo(entorno);
 
                 if(tipoExpresionPosicion.esNumerico() && tipoExpresionPosicion2.esNumerico())
                 {
-                    var posicion = this.expresionPosicion.getValor(entorno);
-                    var posicion2 = this.expresionPosicion2.getValor(entorno);
+                    var posicion = this.expresionPosicion.generar3D(entorno);
+                    var posicion2 = this.expresionPosicion2.generar3D(entorno);
                     var t2 = Utils.generarTemporal();
                     var t3 = Utils.generarTemporal();
                     var t0 = Utils.generarTemporal();
@@ -2703,19 +2781,48 @@ class NativaToString
             }
             else if (tipoI.esBoolean())
             {
-                var t0 =Utils.generarTemporal();       
-                var t1 =Utils.generarTemporal();
-                var t2 =Utils.generarTemporal();                   
-                
-                Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
-                Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
-                Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+'; // Paso valor parametro 1\n');                    
-                Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
-                Utils.imprimirConsola('BooleanToString_Nativa();\n');
-                Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
-                Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
-                valorI = t2;
-                return valorI;
+                if(Utils.tenemosEtiquetas(valorI))
+                {
+                    var t100 = Utils.generarTemporal();
+                    var LS = Utils.generarEtiqueta();
+                    Utils.imprimirConsola(valorI.LV+':\n');
+                    Utils.imprimirConsola(t100+'=1;\n');
+                    Utils.imprimirConsola('goto '+LS+';\n');
+                    Utils.imprimirConsola(valorI.LF+':\n');
+                    Utils.imprimirConsola(t100+'=0;\n');
+                    Utils.imprimirConsola(LS+':\n');
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();                   
+                    
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+t100+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('BooleanToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                    valorI = t2;
+                    return valorI;
+
+                }
+                else
+                {
+                    var t0 =Utils.generarTemporal();       
+                    var t1 =Utils.generarTemporal();
+                    var t2 =Utils.generarTemporal();                   
+                    
+                    Utils.imprimirConsola(t0+'=P+'+entorno.getStringTamanioEntorno()+';// Simulación de cambio de entorno\n');
+                    Utils.imprimirConsola(t1+'='+t0+'+1;// Direccion parametro 1\n');
+                    Utils.imprimirConsola('stack[(int)'+t1+']='+valorI+'; // Paso valor parametro 1\n');                    
+                    Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola('BooleanToString_Nativa();\n');
+                    Utils.imprimirConsola('P=P-'+entorno.getStringTamanioEntorno()+';\n');
+                    Utils.imprimirConsola(t2+'=stack[(int)'+t0+'];// Obtener valor de retorno.\n');                    
+                    valorI = t2;
+                    return valorI;
+                }
+
             }     
             // Falta arreglos e instancias        
         }
@@ -3092,6 +3199,31 @@ class Igualdad
                 this.LF = Utils.generarEtiqueta();
                 var valorI = this.expresionI.generar3D(entorno);
                 var valorD = this.expresionD.generar3D(entorno);
+
+                if(Utils.tenemosEtiquetas(valorI))
+                {
+                    var t100 = Utils.generarTemporal();
+                    var LS = Utils.generarEtiqueta();
+                    Utils.imprimirConsola(valorI.LV+':\n');
+                    Utils.imprimirConsola(t100+'=1;\n');
+                    Utils.imprimirConsola('goto '+LS+';\n');
+                    Utils.imprimirConsola(valorI.LF+':\n');
+                    Utils.imprimirConsola(t100+'=0;\n');
+                    Utils.imprimirConsola(LS+':\n');  
+                    valorI = t100;                  
+                }
+                if(Utils.tenemosEtiquetas(valorD))
+                {
+                    var t100 = Utils.generarTemporal();
+                    var LS = Utils.generarEtiqueta();
+                    Utils.imprimirConsola(valorD.LV+':\n');
+                    Utils.imprimirConsola(t100+'=1;\n');
+                    Utils.imprimirConsola('goto '+LS+';\n');
+                    Utils.imprimirConsola(valorD.LF+':\n');
+                    Utils.imprimirConsola(t100+'=0;\n');
+                    Utils.imprimirConsola(LS+':\n');
+                    valorD = t100;
+                }                 
                 
                 Utils.imprimirConsola('if('+valorI+'=='+valorD+') goto '+this.LV+'; \n');
                 Utils.imprimirConsola('goto '+this.LF+'; \n');
@@ -3201,11 +3333,35 @@ class Diferenciacion
             }
             else if(tipoI.esBoolean() && tipoD.esBoolean())
             {
+
                 this.LV = Utils.generarEtiqueta();
                 this.LF = Utils.generarEtiqueta();
                 var valorI = this.expresionI.generar3D(entorno);
                 var valorD = this.expresionD.generar3D(entorno);
-                
+                if(Utils.tenemosEtiquetas(valorI))
+                {
+                    var t100 = Utils.generarTemporal();
+                    var LS = Utils.generarEtiqueta();
+                    Utils.imprimirConsola(valorI.LV+':\n');
+                    Utils.imprimirConsola(t100+'=1;\n');
+                    Utils.imprimirConsola('goto '+LS+';\n');
+                    Utils.imprimirConsola(valorI.LF+':\n');
+                    Utils.imprimirConsola(t100+'=0;\n');
+                    Utils.imprimirConsola(LS+':\n');  
+                    valorI = t100;                  
+                }
+                if(Utils.tenemosEtiquetas(valorD))
+                {
+                    var t100 = Utils.generarTemporal();
+                    var LS = Utils.generarEtiqueta();
+                    Utils.imprimirConsola(valorD.LV+':\n');
+                    Utils.imprimirConsola(t100+'=1;\n');
+                    Utils.imprimirConsola('goto '+LS+';\n');
+                    Utils.imprimirConsola(valorD.LF+':\n');
+                    Utils.imprimirConsola(t100+'=0;\n');
+                    Utils.imprimirConsola(LS+':\n');
+                    valorD = t100;
+                }
                 Utils.imprimirConsola('if('+valorI+'!='+valorD+') goto '+this.LV+'; \n');
                 Utils.imprimirConsola('goto '+this.LF+'; \n');
                 return this;
@@ -3927,8 +4083,18 @@ class AccesoArreglo
                     var simboloBuscado = entorno.getSimbolo(id);
                     if(simboloBuscado.rol == 'ARREGLO')
                     {
+                        var simboloLocal = entorno.tabla.get(id);
+                        var Pinicial = 'P';
+                        if(simboloLocal == null)
+                        {
+                            // Esto significa que la vriable no es local.
+                            Pinicial = '0';                            
+                        }
+
                         var t0 = Utils.generarTemporal();
-                        Utils.imprimirConsola(t0+'=P+'+simboloBuscado.posicion+'; // Dirección arreglo '+id+'\n');                        
+                        //Utils.imprimirConsola(t0+'=P+'+simboloBuscado.posicion+'; // Dirección arreglo '+id+'\n');
+                        Utils.imprimirConsola(t0+'='+Pinicial+'+'+simboloBuscado.posicion+'; // Dirección arreglo '+id+'\n');
+                        Utils.imprimirConsola(t0+'=stack[(int)'+t0+'];// Direccion inicio arreglo en heap\n');
                         var indiceExpresion = 0;
                         for(indiceExpresion =0 ; indiceExpresion < this.listaIndices.length; indiceExpresion++)
                         {
@@ -3937,15 +4103,18 @@ class AccesoArreglo
                             if(tipoIndice.esNumerico())
                             {
                                 var t1 = Utils.generarTemporal();
-                                var t2 = Utils.generarTemporal();
-                                var t3 = Utils.generarTemporal();
-                                var t4 = Utils.generarTemporal();
+                                var t2 = Utils.generarTemporal();                                
+                                var L0 = Utils.generarEtiqueta();
                                 var L1 = Utils.generarEtiqueta();
                                 var L2 = Utils.generarEtiqueta();
                                 var L3 = Utils.generarEtiqueta();
-                                var valorIndice = expresionActual.getValor(entorno);
-                                Utils.imprimirConsola('if('+valorIndice+'>=0) goto '+L1+';\n');
+                                var L4 = Utils.generarEtiqueta();
+                                var valorIndice = expresionActual.generar3D(entorno);
+                                Utils.imprimirConsola('if('+valorIndice+'>=0) goto '+L0+'; // Verificamos si el indice no es un negativo\n');
                                 Utils.imprimirConsola('goto '+L2+';\n');
+                                Utils.imprimirConsola(L0+':\n');
+                                Utils.imprimirConsola('if('+valorIndice+'<'+simboloBuscado.arregloTamanio+') goto '+L1+'; // Verificamos que el indice no salga\n');
+                                Utils.imprimirConsola('goto '+L4+';\n');
                                 Utils.imprimirConsola(L1+':\n');
                                 Utils.imprimirConsola(t1+'='+t0+'+'+valorIndice+';\n');
                                 Utils.imprimirConsola(t2+'=heap[(int)'+t1+'];\n');                                
@@ -3953,6 +4122,11 @@ class AccesoArreglo
                                 Utils.imprimirConsola(L2+':\n');
                                 var NodoMensaje = new ExpString(this.linea, this.columna, "No se aceptan indices negativos");
                                 var inicioCadena = NodoMensaje.generar3D(entorno);
+                                Utils.imprimirConsola(t2+'='+Utils.obtenerFinCadena()+';\n');
+                                Utils.imprimirConsola('goto '+L3+'; // Salida\n');                                
+                                Utils.imprimirConsola(L4+':\n');
+                                var NodoMensaje = new ExpString(this.linea, this.columna, "Indice fuera del arreglo . Linea "+this.linea );
+                                var inicioCadena = NodoMensaje.generar3D(entorno);                                
                                 Utils.generarCodigoParaImprimirLn(inicioCadena,entorno);                                
                                 Utils.imprimirConsola(t2+'='+Utils.obtenerFinCadena()+';\n');
                                 Utils.imprimirConsola(L3+':\n');
@@ -4259,6 +4433,7 @@ class Funcion
             if(this.id=='main')
             {
                 Utils.imprimirConsola('INIT_global_variables();\n');
+                Utils.imprimirConsola('P=P+'+entorno.getStringTamanioEntorno()+'; // Cambio de entorno del global a actual\n');
             }
             /*Antes de ejecutar las instrucciones tenemos que almacenar los parámetros en el entorno*/
             var entornoActual = new Entorno(entorno.getEntornoGlobal());
@@ -4276,6 +4451,11 @@ class Funcion
             });
             this.bloqueInstrucciones.generar3D(entornoActual);
             Utils.imprimirConsola(EtiquetaSalida+'://Salida\n');
+            if(this.id=='main')
+            {
+                Utils.imprimirConsola('//for(int i =0; i<300; i++){\n');
+                Utils.imprimirConsola('//printf("%d\t%d\t%c %c", i, (int)heap[i],(int)heap[i],10);}\n');
+            }            
             Utils.imprimirConsola('return;\n');
             Utils.imprimirConsola('}//Fin main\n');  
             // Por último guardamos el entorno actual en el símbolo funcion
@@ -4738,15 +4918,15 @@ class Declaracion
                         if(simboloTmp == null || simboloTmp == undefined)
                         {
                             var valorInicial = '';
-                            if(tipo.esCadena())
+                            if(this.tipo.esCadena())
                             {
                                 valorInicial = null;
                             }
-                            else if (tipo.esNumerico())
+                            else if (this.tipo.esNumerico())
                             {
                                 valorInicial = 0;
                             }
-                            else if (tipo.esBoolean())
+                            else if (this.tipo.esBoolean())
                             {
                                 valorInicial = 0; // Falso por defecto
                             }
@@ -4772,14 +4952,34 @@ class Declaracion
                 {
                     this.listaId.forEach( id =>
                         {
-                            var simboloTmp = entorno.getSimbolo(id);
+                            if(id=='val4')
+                            {
+                                console.log("Mensaje");
+                            }
+                            var simboloTmp = entorno.tabla.get(id);
                             if(simboloTmp == null || simboloTmp == undefined)
                             {
                                 var nuevoVariable = new Simbolo(this.linea, this.columna, id, this.tipo, null);
                                 entorno.registrarSimbolo(nuevoVariable);
 
                                 var t0 = Utils.generarTemporal();
+
                                 Utils.imprimirConsola(t0+'=P+'+nuevoVariable.posicion.toString()+'; //Direccion local variable '+id+'\n');
+                                if(tipoExpresion.esBoolean())
+                                {
+                                    if(Utils.tenemosEtiquetas(valorExpresion))
+                                    {
+                                        var t100 = Utils.generarTemporal();
+                                        var LS = Utils.generarEtiqueta();
+                                        Utils.imprimirConsola(valorExpresion.LV+':\n');
+                                        Utils.imprimirConsola(t100+'=1;\n');
+                                        Utils.imprimirConsola('goto '+LS+';\n');
+                                        Utils.imprimirConsola(valorExpresion.LF+':\n');
+                                        Utils.imprimirConsola(t100+'=0;\n');
+                                        Utils.imprimirConsola(LS+':\n');
+                                        valorExpresion = t100;
+                                    }
+                                }
                                 Utils.imprimirConsola('stack[(int)'+t0+']='+valorExpresion+';\n');                                
                             }
                             else
@@ -4800,16 +5000,16 @@ class Declaracion
                         var simboloTmp = entorno.getSimbolo(id);
                         if(simboloTmp == null || simboloTmp == undefined)
                         {
-                            var valorInicial = '';
-                            if(tipo.esCadena())
+                            var valorInicial = 0;
+                            if(this.tipo.esCadena())
                             {
                                 valorInicial = Utils.obtenerFinCadena();
                             }
-                            else if (tipo.esNumerico())
+                            else if (this.tipo.esNumerico())
                             {
                                 valorInicial = 0;
                             }
-                            else if (tipo.esBoolean())
+                            else if (this.tipo.esBoolean())
                             {
                                 valorInicial = 0; // Falso por defecto
                             }
@@ -4817,8 +5017,8 @@ class Declaracion
                             entorno.registrarSimbolo(nuevoVariable);
 
                             var t0 = Utils.generarTemporal();
-                            Utils.imprimirConsola(t0+'=P+'+nuevoVariable.posicion.toString()+';\n');
-                            Utils.imprimirConsola('stack[(int)'+t0+']='+valorInicial+';\n');
+                            Utils.imprimirConsola(t0+'=P+'+nuevoVariable.posicion.toString()+'; // Direccion '+id+'\n');
+                            Utils.imprimirConsola('stack[(int)'+t0+']='+valorInicial+';//Valor variable '+id+'\n');
                         }
                         else
                         {
@@ -4891,18 +5091,57 @@ class Asignacion
                 {
                     // Si son iguales no hay problema
                     var valorExpresion = this.expresion.generar3D(entorno);
-                    var t0 = Utils.generarTemporal();
-                    Utils.imprimirConsola(t0+'=P+'+VarBuscada.posicion.toString()+';\n');
-                    Utils.imprimirConsola('stack[(int)'+t0+']='+valorExpresion+';\n');                    
+                    var variableLocal = entorno.tabla.get(this.id);
+                    if(VarBuscada.tipo.esBoolean())
+                    {
+                        if(Utils.tenemosEtiquetas(valorExpresion))
+                        {
+                            var t100 = Utils.generarTemporal();
+                            var LS = Utils.generarEtiqueta();
+                            Utils.imprimirConsola(valorExpresion.LV+':\n');
+                            Utils.imprimirConsola(t100+'=1;\n');
+                            Utils.imprimirConsola('goto '+LS+';\n');
+                            Utils.imprimirConsola(valorExpresion.LF+':\n');
+                            Utils.imprimirConsola(t100+'=0;\n');
+                            Utils.imprimirConsola(LS+':\n');
+                            valorExpresion = t100;
+                        }
+                    }
+                    if(variableLocal != null)
+                    {
+                        var t0 = Utils.generarTemporal();
+                        Utils.imprimirConsola(t0+'=P+'+VarBuscada.posicion.toString()+';\n');
+                        Utils.imprimirConsola('stack[(int)'+t0+']='+valorExpresion+';\n');
+                    }
+                    else
+                    {
+                        /*var t0 = Utils.generarTemporal();
+                        var t1 = Utils.generarTemporal();
+                        Utils.imprimirConsola(t1+'=P-'+entorno.getStringTamanioEntorno()+';// Simular cambio de entorno global\n');
+                        Utils.imprimirConsola(t0+'='+VarBuscada.posicion.toString()+';\n');*/
+                        Utils.imprimirConsola('stack[(int)'+VarBuscada.posicion.toString()+']='+valorExpresion+';\n');
+                    }
 
                 }
                 else if (VarBuscada.tipo.esNumerico() && tipoExpresion.esNumerico())
                 {
                     // Verificar si los tipos son compatibles
                     var valorExpresion = this.expresion.generar3D(entorno);
-                    var t0 = Utils.generarTemporal();
-                    Utils.imprimirConsola(t0+'=P+'+VarBuscada.posicion.toString()+';\n');
-                    Utils.imprimirConsola('stack[(int)'+t0+']='+valorExpresion+';\n'); 
+
+                    if(variableLocal != null)
+                    {
+                        var t0 = Utils.generarTemporal();
+                        Utils.imprimirConsola(t0+'=P+'+VarBuscada.posicion.toString()+';\n');
+                        Utils.imprimirConsola('stack[(int)'+t0+']='+valorExpresion+';\n'); 
+                    }
+                    else
+                    {
+                        var t0 = Utils.generarTemporal();
+                        var t1 = Utils.generarTemporal();
+                        Utils.imprimirConsola(t1+'=P-'+entorno.getStringTamanioEntorno()+';// Simular cambio de entorno global\n');                        
+                        Utils.imprimirConsola(t0+'='+t1+'+'+VarBuscada.posicion.toString()+';\n');
+                        Utils.imprimirConsola('stack[(int)'+t0+']='+valorExpresion+';\n'); 
+                    }                    
                 }
                 else
                 {
@@ -5672,7 +5911,7 @@ class DeclaracionArreglo
                 for(index = 0 ; index<this.arregloExpresion.length; index++)
                 {
                     //t0 es el inicio del arreglo en el heap
-                    this.codigoElemento3D(entorno, tipo, this.arregloExpresion[index],index,t0);
+                    this.codigoElemento3D(entorno, tipo, this.arregloExpresion[index],index,t1);
 
                 }                
                 nuevoArreglo.arregloTamanio = this.arregloExpresion.length;                
