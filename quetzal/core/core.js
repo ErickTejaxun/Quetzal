@@ -5315,6 +5315,42 @@ class SwitchInst
 
         this.generar3D = function(entorno)
         {
+            var condicion = this.expresion.generar3D(entorno);
+            if(condicion != null && condicion != undefined){
+
+                var hay_break = false;
+                var continuar = false;
+
+                var index = 0;
+                for(index = 0 ; index < this.lista_cases.length; index++){
+                    var caso = this.lista_cases[index];
+                    caso.condicion = condicion;
+                    caso.continuar = continuar;
+
+                    var resultado = caso.ejecutar(entorno);
+
+                    continuar = caso.continuar; //ya coincidio pero no habia break
+
+                    if(resultado != null){//coincide
+                        if(resultado instanceof BreakInst){
+                            hay_break = true;
+                            break;
+                        }else if(resultado instanceof Return){
+                            return resultado;
+                        }
+                    }
+                    //no coincide
+                }
+
+                if(!hay_break){//ejecuta default
+                    return this.default_inst.ejecutar(entorno);
+                }
+
+
+            }else{
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'instruccion switch','error al obtener el valor de la expresion','');
+                return;
+            }            
         }
     }
 }
@@ -5345,6 +5381,8 @@ class CaseInst
 
         this.generar3D = function(entorno)
         {
+            var valor_case = this.expresion.generar3D(entorno);
+            Utils.imprimirConsola('//switch-case\n');         
         }
     }
 }
@@ -5442,6 +5480,37 @@ class WhileInst
 
         this.generar3D = function(entorno)
         {
+            
+            var tipo = this.expresion.getTipo(entorno);
+            if(tipo.esBoolean())
+            {                
+                var LWhile = Utils.generarEtiqueta();
+                Utils.imprimirConsola(LWhile+':\n');
+                var condicion = this.expresion.generar3D(entorno);                
+                if(Utils.tenemosEtiquetas(condicion))
+                {   
+                    var t100 = Utils.generarTemporal();
+                    var LS = Utils.generarEtiqueta();
+                    Utils.imprimirConsola(condicion.LV+':\n');
+                    Utils.imprimirConsola(t100+'=1;\n');
+                    Utils.imprimirConsola('goto '+LS+';\n');
+                    Utils.imprimirConsola(condicion.LF+':\n');
+                    Utils.imprimirConsola(t100+'=0;\n');
+                    Utils.imprimirConsola(LS+':\n'); 
+                    condicion = t100;                   
+                }
+                var LVWhile = Utils.generarEtiqueta();
+                var LFWhile = Utils.generarEtiqueta();                
+                Utils.imprimirConsola('if('+t100+'==1) goto '+LVWhile+';\n');
+                Utils.imprimirConsola('goto '+LFWhile+';\n');
+                Utils.imprimirConsola(LVWhile+': // Bloque de instrucciones\n');
+                this.bloque.generar3D(entorno);
+                Utils.imprimirConsola('goto '+LWhile+';\n');
+                Utils.imprimirConsola(LFWhile+':\n');
+            }else{
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'instruccion while','Se esperaba una expresion booleana','');
+                return;
+            }            
         }
     }
 }
@@ -5484,7 +5553,32 @@ class DoWhileInst
         }
 
         this.generar3D = function(entorno)
-        {
+        {            
+            var tipo = this.expresion.getTipo(entorno);
+
+            if(tipo.esBoolean()){                            
+                var LWhile = Utils.generarEtiqueta();
+                Utils.imprimirConsola(LWhile+':\n');
+                this.bloque.generar3D(entorno);
+                var condicion = this.expresion.generar3D(entorno);
+                if(Utils.tenemosEtiquetas(condicion))
+                {   
+                    var t100 = Utils.generarTemporal();
+                    var LS = Utils.generarEtiqueta();
+                    Utils.imprimirConsola(condicion.LV+':\n');
+                    Utils.imprimirConsola(t100+'=1;\n');
+                    Utils.imprimirConsola('goto '+LS+';\n');
+                    Utils.imprimirConsola(condicion.LF+':\n');
+                    Utils.imprimirConsola(t100+'=0;\n');
+                    Utils.imprimirConsola(LS+':\n'); 
+                    condicion = t100;                   
+                }    
+                var LVWhile = Utils.generarEtiqueta();                
+                Utils.imprimirConsola('if('+t100+'==1) goto '+LWhile+';\n');
+            }else{
+                Utils.registrarErrorSemantico(this.linea, this.columna, 'instruccion while','Se esperaba una expresion booleana','');
+                return;
+            }            
         }
     }
 }
