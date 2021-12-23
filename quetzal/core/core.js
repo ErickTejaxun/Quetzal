@@ -1332,7 +1332,7 @@ class Ternario
                 var L1 = Utils.generarEtiqueta();
                 var L2 = Utils.generarEtiqueta();
                 //Generar etiquetas
-                Utils.imprimirConsola('if('+valorCondicion+'==1) goto '+L1+';\n');
+                Utils.imprimirConsola('if('+valorCondicion+'==1) goto '+L1+'; // Ternario\n');
                 Utils.imprimirConsola('goto '+L2+';\n');
 
                 var t0 = Utils.generarTemporal();                
